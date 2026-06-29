@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { createAdminAuthRouter } from "./auth/adminAuth.js";
 import { createCustomerAuthRouter } from "./auth/customerAuth.js";
 import { createContactRouter } from "./contact/routes.js";
+import { createAdminMembersRouter } from "./members/routes.js";
 import { createOrdersRouter } from "./orders/routes.js";
 import { createAdminProductsRouter, createPublicProductsRouter } from "./products/routes.js";
 import { securityHeaders } from "./security/headers.js";
@@ -32,6 +33,7 @@ export function createApp({ distPath = defaultDistPath } = {}) {
   app.use("/api/auth", createCustomerAuthRouter());
   app.use("/api/admin", createAdminAuthRouter());
   app.use("/api/admin", createAdminProductsRouter());
+  app.use("/api/admin", createAdminMembersRouter());
   app.use("/api", createOrdersRouter());
   app.use("/api", createCheckoutRouter());
   app.use("/api", createContactRouter());

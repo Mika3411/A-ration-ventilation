@@ -3,13 +3,17 @@ import express from "express";
 import { requireAdmin } from "../auth/adminAuth.js";
 import { cleanSingleLine } from "../helpers.js";
 import {
+  createCategory,
   createProduct,
+  deleteCategory,
+  getAdminCategories,
   deleteProduct,
   getAdminProducts,
-  getCategoriesFromProducts,
+  getPublicCategories,
   getPublicProducts,
   handleProductMutationError,
   normalizeProductInput,
+  renameCategory,
   updateProduct,
 } from "./service.js";
 
@@ -18,8 +22,8 @@ export function createPublicProductsRouter() {
 
   router.get("/products", async (_request, response) => {
     try {
-      const products = await getPublicProducts();
-      response.status(200).json({ products });
+      const [products, categories] = await Promise.all([getPublicProducts(), getPublicCategories()]);
+      response.status(200).json({ products, categories });
     } catch (error) {
       console.error("Public product lookup failed:", error);
       response.status(500).json({ error: "Impossible de charger la boutique." });
@@ -34,10 +38,10 @@ export function createAdminProductsRouter() {
 
   router.get("/products", requireAdmin, async (_request, response) => {
     try {
-      const products = await getAdminProducts();
+      const [products, categories] = await Promise.all([getAdminProducts(), getAdminCategories()]);
       response.status(200).json({
         products,
-        categories: getCategoriesFromProducts(products),
+        categories,
       });
     } catch (error) {
       console.error("Admin product lookup failed:", error);
@@ -86,6 +90,55 @@ export function createAdminProductsRouter() {
     } catch (error) {
       console.error("Product deletion failed:", error);
       response.status(500).json({ error: "Impossible de supprimer le produit." });
+    }
+  });
+
+  router.get("/categories", requireAdmin, async (_request, response) => {
+    try {
+      const categories = await getAdminCategories();
+      response.status(200).json({ categories });
+    } catch (error) {
+      console.error("Admin category lookup failed:", error);
+      response.status(500).json({ error: "Impossible de charger les catégories." });
+    }
+  });
+
+  router.post("/categories", requireAdmin, async (request, response) => {
+    try {
+      const category = await createCategory(request.body);
+      response.status(201).json({ category });
+    } catch (error) {
+      handleProductMutationError(error, response, "Impossible de créer la catégorie.");
+    }
+  });
+
+  router.put("/categories", requireAdmin, async (request, response) => {
+    try {
+      const category = await renameCategory(request.body);
+
+      if (!category) {
+        response.status(404).json({ error: "Catégorie introuvable." });
+        return;
+      }
+
+      response.status(200).json({ category });
+    } catch (error) {
+      handleProductMutationError(error, response, "Impossible de renommer la catégorie.");
+    }
+  });
+
+  router.delete("/categories", requireAdmin, async (request, response) => {
+    try {
+      const deleted = await deleteCategory(request.body);
+
+      if (!deleted) {
+        response.status(404).json({ error: "Catégorie introuvable." });
+        return;
+      }
+
+      response.status(200).json({ ok: true });
+    } catch (error) {
+      handleProductMutationError(error, response, "Impossible de supprimer la catégorie.");
     }
   });
 

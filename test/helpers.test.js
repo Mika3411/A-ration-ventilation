@@ -10,7 +10,8 @@ import {
   normalizeEmail,
   slugify,
 } from "../server/helpers.js";
-import { normalizeProductInput } from "../server/products/service.js";
+import { normalizeMemberInput } from "../server/members/service.js";
+import { normalizeCategoryInput, normalizeProductInput } from "../server/products/service.js";
 
 test("slugify normalise les accents, espaces et ponctuations", () => {
   assert.equal(slugify(" Ventilateurs axiaux Ø 400 ! "), "ventilateurs-axiaux-400");
@@ -83,5 +84,49 @@ test("normalizeProductInput rejette les entrées invalides", () => {
         imageUrl: "ftp://example.com/fan.jpg",
       }),
     /URL de l'image/i,
+  );
+});
+
+test("normalizeCategoryInput nettoie et valide une catégorie", () => {
+  assert.deepEqual(normalizeCategoryInput({ name: "  Ventilation spéciale  " }), {
+    name: "Ventilation spéciale",
+  });
+  assert.deepEqual(normalizeCategoryInput({ category: "  Extraction cuisine\npro  " }), {
+    name: "Extraction cuisine pro",
+  });
+  assert.throws(() => normalizeCategoryInput({ name: "   " }), /nom de la catégorie/i);
+});
+
+test("normalizeMemberInput nettoie et valide un membre", () => {
+  assert.deepEqual(
+    normalizeMemberInput({
+      firstName: "  Marie ",
+      lastName: " Martin\nDurand ",
+      company: " Atelier Ventilation ",
+      phone: " 01 02 03 04 05 ",
+      email: "  MARIE@example.COM ",
+    }),
+    {
+      firstName: "Marie",
+      lastName: "Martin Durand",
+      company: "Atelier Ventilation",
+      phone: "01 02 03 04 05",
+      email: "marie@example.com",
+    },
+  );
+});
+
+test("normalizeMemberInput rejette les membres invalides", () => {
+  assert.throws(
+    () => normalizeMemberInput({ lastName: "Martin", email: "marie@example.com" }),
+    /prénom/i,
+  );
+  assert.throws(
+    () => normalizeMemberInput({ firstName: "Marie", email: "marie@example.com" }),
+    /nom/i,
+  );
+  assert.throws(
+    () => normalizeMemberInput({ firstName: "Marie", lastName: "Martin", email: "marie" }),
+    /email valide/i,
   );
 });

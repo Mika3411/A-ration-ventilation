@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { defaultProducts, getProductCategories, getProductFromPath, normalizeProducts } from "./data/products.js";
+import {
+  defaultProducts,
+  getProductCategories,
+  getProductFromPath,
+  normalizeCategories,
+  normalizeProducts,
+} from "./data/products.js";
 
 import { pageTitles } from "./data/site.js";
 
@@ -17,6 +23,7 @@ import { useRouter } from "./router/useRouter.js";
 export default function App() {
   const { currentPath, navigate } = useRouter();
   const [products, setProducts] = useState(defaultProducts);
+  const [categories, setCategories] = useState(() => normalizeCategories(null, defaultProducts));
   const [cartItems, setCartItems] = useState(readStoredCartItems);
   const [checkoutStatus, setCheckoutStatus] = useState("idle");
   const [checkoutMessage, setCheckoutMessage] = useState("");
@@ -26,7 +33,7 @@ export default function App() {
     () => new Map(products.map((product) => [product.slug, product])),
     [products],
   );
-  const productCategories = useMemo(() => getProductCategories(products), [products]);
+  const productCategories = useMemo(() => getProductCategories(products, categories), [categories, products]);
   const cartLines = useMemo(() => getCartLines(products, cartItems), [cartItems, products]);
   const cartCount = useMemo(
     () => Object.values(cartItems).reduce((total, quantity) => total + quantity, 0),
@@ -42,9 +49,12 @@ export default function App() {
         throw new Error(payload.error || "Impossible de charger les produits.");
       }
 
-      setProducts(normalizeProducts(payload.products));
+      const loadedProducts = normalizeProducts(payload.products);
+      setProducts(loadedProducts);
+      setCategories(normalizeCategories(payload.categories, loadedProducts));
     } catch {
       setProducts(defaultProducts);
+      setCategories(normalizeCategories(null, defaultProducts));
     }
   }
 

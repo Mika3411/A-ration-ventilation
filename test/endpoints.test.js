@@ -38,6 +38,7 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
 
     assert.equal(response.status, 200);
     assert.equal(Array.isArray(body.products), true);
+    assert.equal(Array.isArray(body.categories), true);
     assert.equal(body.products.length, 4);
     assert.deepEqual(
       body.products.map((product) => product.slug),
@@ -49,6 +50,8 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
       ],
     );
     assert.equal(body.products[0].price, "249 €");
+    assert.ok(body.categories.includes("Ventilation industrielle"));
+    assert.ok(body.categories.includes("Ventilateurs axiaux"));
   });
 });
 

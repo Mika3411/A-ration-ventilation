@@ -106,6 +106,13 @@ export function normalizeProducts(productsToNormalize) {
   return productsToNormalize.map(normalizeProduct).filter((product) => product.slug && product.name);
 }
 
+export function normalizeCategories(categoriesToNormalize, products = defaultProducts) {
+  const sourceCategories = Array.isArray(categoriesToNormalize) ? categoriesToNormalize : categories;
+  return Array.from(new Set([...sourceCategories, ...products.map((product) => product.category)]))
+    .filter(Boolean)
+    .sort((first, second) => first.localeCompare(second, "fr"));
+}
+
 export function getProductPath(product) {
   return `/boutique/${product.slug}`;
 }
@@ -117,8 +124,6 @@ export function getProductFromPath(pathname, products) {
   return products.find((product) => product.slug === slug);
 }
 
-export function getProductCategories(products) {
-  return Array.from(new Set([...categories, ...products.map((product) => product.category)]))
-    .filter(Boolean)
-    .sort((first, second) => first.localeCompare(second, "fr"));
+export function getProductCategories(products, categoryList = categories) {
+  return normalizeCategories(categoryList, products);
 }

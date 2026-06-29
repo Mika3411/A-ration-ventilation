@@ -1,6 +1,6 @@
 import pg from "pg";
 
-import { defaultShopProducts } from "./products/defaultProducts.js";
+import { defaultShopCategories, defaultShopProducts } from "./products/defaultProducts.js";
 
 const { Pool } = pg;
 
@@ -81,6 +81,19 @@ async function initializeDatabase() {
   `);
 
   await dbPool.query(`
+    CREATE TABLE IF NOT EXISTS shop_categories (
+      id BIGSERIAL PRIMARY KEY,
+      name TEXT NOT NULL UNIQUE,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
+    CREATE INDEX IF NOT EXISTS shop_categories_sort_idx
+      ON shop_categories (sort_order, name);
+  `);
+
+  await dbPool.query(`
     CREATE TABLE IF NOT EXISTS orders (
       id BIGSERIAL PRIMARY KEY,
       public_id TEXT NOT NULL UNIQUE,
@@ -139,4 +152,23 @@ async function initializeDatabase() {
       ],
     );
   }
+
+  for (const [index, category] of defaultShopCategories.entries()) {
+    await dbPool.query(
+      `
+        INSERT INTO shop_categories (name, sort_order)
+        VALUES ($1, $2)
+        ON CONFLICT (name) DO NOTHING
+      `,
+      [category, (index + 1) * 10],
+    );
+  }
+
+  await dbPool.query(`
+    INSERT INTO shop_categories (name, sort_order)
+    SELECT DISTINCT category, 1000
+    FROM shop_products
+    WHERE category <> ''
+    ON CONFLICT (name) DO NOTHING
+  `);
 }

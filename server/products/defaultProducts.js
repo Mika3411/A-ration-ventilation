@@ -49,4 +49,22 @@ export const defaultShopProducts = [
   },
 ];
 
+export const defaultShopCategories = Array.from(
+  new Set([
+    "Accessoires",
+    "Grille de ventilation plafond",
+    "Moteurs électriques 220/380",
+    "Pompes à eau",
+    "Portes d'entrée et blindées",
+    "Regulateurs",
+    "Ventilateurs axiaux",
+    "Ventilateurs de canaux",
+    "Ventilateurs de centrifuges",
+    "Ventilateurs de restaurant",
+    "Ventilateurs de salle de bains",
+    "Ventilateurs de toiture",
+    ...defaultShopProducts.map((product) => product.category),
+  ]),
+);
+
 export const allowedImageKeys = new Set(["axialFan", "ductFan", "ceilingGrille", "speedController"]);
