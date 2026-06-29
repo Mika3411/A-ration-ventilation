@@ -132,9 +132,9 @@ test("nettoyage des champs utilisateur", () => {
   assert.equal(escapeHtml(`<b class="x">A&B</b>`), "&lt;b class=&quot;x&quot;&gt;A&amp;B&lt;/b&gt;");
 });
 
-test("formatEuroAmount formate les centimes en euros entiers", () => {
+test("formatEuroAmount formate les euros sans arrondir les centimes", () => {
   assert.equal(formatEuroAmount(24900), "249 €");
-  assert.equal(formatEuroAmount(123456), "1 235 €");
+  assert.equal(formatEuroAmount(123456), "1 234,56 €");
 });
 
 test("normalizeProductInput nettoie et valide un produit admin", () => {
@@ -146,6 +146,17 @@ test("normalizeProductInput nettoie et valide un produit admin", () => {
     imageKey: "axialFan",
     imageUrl: " https://example.com/fan.webp ",
     imageData: "data:image/png;base64,aGVsbG8=",
+    options: [
+      {
+        label: " 200 ",
+        amount: "9203",
+        bgn: " 180,00 BGN ",
+        description: " Modèle compact ",
+        value: "diametre-200",
+      },
+      { label: "250", amount: "10226" },
+      { label: "", amount: "" },
+    ],
     featured: true,
     active: false,
     sortOrder: "30",
@@ -156,6 +167,26 @@ test("normalizeProductInput nettoie et valide un produit admin", () => {
     category: "Extraction",
     description: "Ligne 1\nLigne 2",
     amount: 12900,
+    options: [
+      {
+        label: "200",
+        value: "diametre-200",
+        slug: "ventilateur-mural-200",
+        amount: 9203,
+        price: "92,03 €",
+        bgn: "180,00 BGN",
+        description: "Modèle compact",
+      },
+      {
+        label: "250",
+        value: "250",
+        slug: "ventilateur-mural-250",
+        amount: 10226,
+        price: "102,26 €",
+        bgn: "",
+        description: "",
+      },
+    ],
     imageKey: "axialFan",
     imageUrl: "https://example.com/fan.webp",
     imageData: "data:image/png;base64,aGVsbG8=",
@@ -213,6 +244,26 @@ test("normalizeProductInput rejette les entrées invalides", () => {
         imageData: `data:image/png;base64,${"a".repeat(1_500_001)}`,
       }),
     /1 Mo/i,
+  );
+  assert.throws(
+    () =>
+      normalizeProductInput({
+        name: "Fan",
+        category: "Extraction",
+        amount: "1000",
+        options: [{ amount: "1200" }],
+      }),
+    /libellé de chaque variante/i,
+  );
+  assert.throws(
+    () =>
+      normalizeProductInput({
+        name: "Fan",
+        category: "Extraction",
+        amount: "1000",
+        options: [{ label: "200", amount: "-1" }],
+      }),
+    /prix de chaque variante/i,
   );
 });
 

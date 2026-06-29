@@ -10,6 +10,19 @@ import {
 
 const products = [
   { slug: "ventilateurs-axiaux", name: "Ventilateurs axiaux", amount: 24900 },
+  {
+    slug: "ventilateur-de-canal-yka",
+    name: "Ventilateur de canal YKA",
+    amount: 7669,
+    options: [
+      {
+        label: "150-B",
+        slug: "ventilateur-de-canal-yka-150-b",
+        amount: 8436,
+        price: "84,36 €",
+      },
+    ],
+  },
   { slug: "regulateurs", name: "Régulateurs", amount: 12900 },
 ];
 
@@ -45,6 +58,25 @@ test("getCheckoutItems ne garde que slug et quantity", () => {
   assert.deepEqual(getCheckoutItems(products, { "ventilateurs-axiaux": 1, regulateurs: 3 }), [
     { slug: "ventilateurs-axiaux", quantity: 1 },
     { slug: "regulateurs", quantity: 3 },
+  ]);
+});
+
+test("getCartLines transforme une option produit en ligne achetable", () => {
+  assert.deepEqual(getCartLines(products, { "ventilateur-de-canal-yka-150-b": 2 }), [
+    {
+      product: {
+        slug: "ventilateur-de-canal-yka-150-b",
+        name: "Ventilateur de canal YKA 150-B",
+        amount: 8436,
+        price: "84,36 €",
+        text: undefined,
+        description: undefined,
+        parentSlug: "ventilateur-de-canal-yka",
+        optionLabel: "150-B",
+      },
+      quantity: 2,
+      lineTotal: 16872,
+    },
   ]);
 });
 

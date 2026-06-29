@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Search, ShoppingCart } from "lucide-react";
 
+import { getCategoryPath, slugifyCategory } from "../data/categories.js";
 import { getProductPath } from "../data/products.js";
-import { PageHero } from "../layout/PageHero.jsx";
 import { RouteLink } from "../layout/Layout.jsx";
+import { getProductCartQuantity } from "../panier/cart.js";
 
 const catalogProductsPerPage = 8;
 
@@ -14,7 +15,8 @@ export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigat
     return (featured.length ? featured : products).slice(0, 3);
   }, [products]);
   const activeProduct = featuredProducts[activeIndex];
-  const activeQuantity = activeProduct ? cartItems[activeProduct.slug] || 0 : 0;
+  const activeQuantity = getProductCartQuantity(activeProduct, cartItems);
+  const activeProductHasOptions = Boolean(activeProduct?.options?.length);
 
   useEffect(() => {
     setActiveIndex(0);
@@ -79,14 +81,26 @@ export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigat
                 )}
               </div>
               <div className="featured-action-row">
-                <button
-                  className="button button-primary"
-                  type="button"
-                  onClick={() => onAddToCart(activeProduct.slug)}
-                >
-                  <ShoppingCart size={18} />
-                  Ajouter au panier
-                </button>
+                {activeProductHasOptions ? (
+                  <RouteLink
+                    className="button button-primary"
+                    currentPath={currentPath}
+                    onNavigate={onNavigate}
+                    path={getProductPath(activeProduct)}
+                  >
+                    Choisir une option
+                    <ArrowRight size={18} />
+                  </RouteLink>
+                ) : (
+                  <button
+                    className="button button-primary"
+                    type="button"
+                    onClick={() => onAddToCart(activeProduct.slug)}
+                  >
+                    <ShoppingCart size={18} />
+                    Ajouter au panier
+                  </button>
+                )}
                 <RouteLink
                   className="button button-dark"
                   currentPath={currentPath}
@@ -120,10 +134,13 @@ export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigat
 }
 
 export function ProductCard({ currentPath, onNavigate, product }) {
+  const optionCount = product.options?.length || 0;
+  const priceLabel = optionCount ? `Dès ${product.price}` : product.price;
+
   return (
     <RouteLink
       className="product-card"
-      ariaLabel={`${product.name}, ${product.price}`}
+      ariaLabel={`${product.name}, ${priceLabel}`}
       currentPath={currentPath}
       onNavigate={onNavigate}
       path={getProductPath(product)}
@@ -133,9 +150,14 @@ export function ProductCard({ currentPath, onNavigate, product }) {
       </div>
       <div className="product-summary">
         <h3>{product.name}</h3>
-        <p className="product-card-price" aria-label={`Prix ${product.price}`}>
-          {product.price}
+        <p className="product-card-price" aria-label={`Prix ${priceLabel}`}>
+          {priceLabel}
         </p>
+        {optionCount > 0 && (
+          <p className="product-card-options">
+            {optionCount} modèle{optionCount > 1 ? "s" : ""}
+          </p>
+        )}
       </div>
     </RouteLink>
   );
@@ -175,18 +197,31 @@ export function ProductPreview({ currentPath, onNavigate, products }) {
   );
 }
 
-export function Catalog({ categories: productCategories, currentPath, onNavigate, products }) {
-  const [activeCategory, setActiveCategory] = useState("Toutes");
+export function Catalog({
+  categories: productCategories,
+  currentPath,
+  onNavigate,
+  products,
+  selectedCategory = "",
+}) {
+  const activeCategory = selectedCategory && productCategories.includes(selectedCategory)
+    ? selectedCategory
+    : "Toutes";
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
 
   const filteredProducts = useMemo(() => {
     const normalized = query.trim().toLowerCase();
+    const activeCategorySlug = slugifyCategory(activeCategory);
+
     return products.filter((product) => {
-      const matchesCategory = activeCategory === "Toutes" || product.category === activeCategory;
+      const matchesCategory =
+        activeCategory === "Toutes" ||
+        slugifyCategory(product.category) === activeCategorySlug ||
+        slugifyCategory(product.name) === activeCategorySlug;
       const matchesQuery =
         !normalized ||
-        `${product.name} ${product.category} ${product.text} ${product.price}`
+        `${product.name} ${product.category} ${product.text} ${product.price} ${getProductOptionSearchText(product)}`
           .toLowerCase()
           .includes(normalized);
 
@@ -245,14 +280,15 @@ export function Catalog({ categories: productCategories, currentPath, onNavigate
             <ul>
               {["Toutes", ...productCategories].map((category) => (
                 <li key={category}>
-                  <button
+                  <RouteLink
                     className={activeCategory === category ? "is-selected" : ""}
-                    type="button"
-                    onClick={() => setActiveCategory(category)}
+                    currentPath={currentPath}
+                    onNavigate={onNavigate}
+                    path={category === "Toutes" ? "/boutique" : getCategoryPath(category)}
                   >
                     <ChevronRight size={16} />
                     {category}
-                  </button>
+                  </RouteLink>
                 </li>
               ))}
             </ul>
@@ -309,7 +345,21 @@ export function Catalog({ categories: productCategories, currentPath, onNavigate
 }
 
 export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavigate, product }) {
-  const quantity = cartItems[product.slug] || 0;
+  const productOptions = Array.isArray(product.options) ? product.options : [];
+  const hasOptions = productOptions.length > 0;
+  const [selectedOptionSlug, setSelectedOptionSlug] = useState(
+    productOptions[0]?.slug || product.slug,
+  );
+  const selectedOption = hasOptions
+    ? productOptions.find((option) => option.slug === selectedOptionSlug) || productOptions[0]
+    : null;
+  const selectedCartSlug = selectedOption?.slug || product.slug;
+  const displayedPrice = selectedOption?.price || product.price;
+  const quantity = cartItems[selectedCartSlug] || 0;
+
+  useEffect(() => {
+    setSelectedOptionSlug(productOptions[0]?.slug || product.slug);
+  }, [product.slug, productOptions.length]);
 
   return (
     <section className="section product-detail-section">
@@ -330,15 +380,36 @@ export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavig
           <span className="product-detail-category">{product.category}</span>
           <h1>{product.name}</h1>
           <p className="product-detail-description">{product.text}</p>
-          <p className="product-detail-price" aria-label={`À partir de ${product.price}`}>
-            <span>À partir de&nbsp;</span>
-            <strong>{product.price}</strong>
+          {hasOptions && (
+            <label className="product-option-field">
+              <span>Modèle</span>
+              <select
+                value={selectedCartSlug}
+                onChange={(event) => setSelectedOptionSlug(event.target.value)}
+              >
+                {productOptions.map((option) => (
+                  <option value={option.slug} key={option.slug}>
+                    {option.label} - {option.price}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <p
+            className="product-detail-price"
+            aria-label={hasOptions ? `Prix du modèle ${displayedPrice}` : `À partir de ${displayedPrice}`}
+          >
+            <span>{hasOptions ? "Prix du modèle" : "À partir de"}</span>
+            <strong>{displayedPrice}</strong>
           </p>
+          {selectedOption?.bgn && (
+            <p className="product-option-note">Prix catalogue : {selectedOption.bgn}</p>
+          )}
           <div className="product-detail-actions">
             <button
               className="button button-primary product-detail-cart-button"
               type="button"
-              onClick={() => onAddToCart(product.slug)}
+              onClick={() => onAddToCart(selectedCartSlug)}
             >
               <ShoppingCart size={18} />
               Ajouter au panier
@@ -359,19 +430,28 @@ export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavig
   );
 }
 
-export function BoutiquePage({ categories: productCategories, currentPath, onNavigate, products }) {
+function getProductOptionSearchText(product) {
+  if (!Array.isArray(product.options)) return "";
+
+  return product.options
+    .map((option) => `${option.label} ${option.price} ${option.bgn}`)
+    .join(" ");
+}
+
+export function BoutiquePage({
+  categories: productCategories,
+  currentPath,
+  onNavigate,
+  products,
+  selectedCategory = "",
+}) {
   return (
-    <>
-      <PageHero
-        title="Boutique"
-        text="Ventilateurs, moteurs, accessoires, grilles et régulateurs pour vos installations professionnelles."
-      />
-      <Catalog
-        categories={productCategories}
-        currentPath={currentPath}
-        onNavigate={onNavigate}
-        products={products}
-      />
-    </>
+    <Catalog
+      categories={productCategories}
+      currentPath={currentPath}
+      onNavigate={onNavigate}
+      products={products}
+      selectedCategory={selectedCategory}
+    />
   );
 }

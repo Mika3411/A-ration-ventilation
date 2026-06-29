@@ -824,6 +824,7 @@ button {
 }
 
 .catalog-section {
+  padding-top: clamp(30px, 4vw, 48px);
   background:
     linear-gradient(180deg, rgba(255, 122, 31, 0.09) 0%, rgba(8, 7, 6, 0) 36%),
     #0b0807;
@@ -947,11 +948,15 @@ button {
   text-align: left;
 }
 
+.category-list a.is-active,
+.category-list a.is-selected,
 .category-list button.is-selected {
   color: var(--ink);
   font-weight: 900;
 }
 
+.category-list a.is-active svg,
+.category-list a.is-selected svg,
 .category-list button.is-selected svg {
   color: var(--orange);
 }
@@ -1027,6 +1032,13 @@ button {
   white-space: nowrap;
 }
 
+.product-card-options {
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 850;
+}
+
 .product-detail-section {
   background:
     linear-gradient(180deg, rgba(255, 122, 31, 0.09) 0%, rgba(8, 7, 6, 0) 42%),
@@ -1092,6 +1104,35 @@ button {
   line-height: 1.7;
 }
 
+.product-option-field {
+  display: grid;
+  gap: 8px;
+  max-width: 380px;
+}
+
+.product-option-field span {
+  color: var(--orange);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.product-option-field select {
+  min-height: 54px;
+  width: 100%;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 850;
+}
+
+.product-option-field select:focus {
+  border-color: var(--orange);
+  outline: 3px solid rgba(255, 122, 31, 0.2);
+}
+
 .product-detail-price {
   display: grid;
   gap: 4px;
@@ -1110,6 +1151,12 @@ button {
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
+}
+
+.product-option-note {
+  margin: -8px 0 0;
+  color: var(--muted);
+  font-weight: 800;
 }
 
 .product-detail-actions {
@@ -2148,6 +2195,94 @@ button {
   min-height: auto;
   padding: 12px;
   cursor: pointer;
+}
+
+.admin-variant-section {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--soft);
+}
+
+.admin-variant-head,
+.admin-variant-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-variant-head > div {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-variant-head span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.admin-variant-head strong,
+.admin-variant-card-head strong {
+  color: var(--ink);
+}
+
+.admin-variant-head button,
+.admin-variant-card-head button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.admin-variant-head button {
+  padding: 0 14px;
+}
+
+.admin-variant-card-head button {
+  width: 42px;
+  padding: 0;
+}
+
+.admin-variant-card-head button svg {
+  color: #b42318;
+}
+
+.admin-variant-list {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-variant-card {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.admin-variant-grid {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.1fr) minmax(130px, 0.7fr) minmax(130px, 0.7fr) minmax(180px, 1.2fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.admin-variant-empty {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 850;
 }
 
 .admin-wide-field,
@@ -3411,8 +3546,13 @@ button {
     padding: 64px 0;
   }
 
+  .catalog-section {
+    padding-top: 30px;
+  }
+
   .catalog-head,
   .admin-form-grid,
+  .admin-variant-grid,
   .about-panel,
   .contact-intro-grid,
   .customer-dashboard-grid,
@@ -3486,6 +3626,7 @@ button {
   .admin-view-tabs,
   .admin-form-head,
   .admin-form-actions,
+  .admin-variant-head,
   .admin-toggle-row {
     display: grid;
     grid-template-columns: 1fr;

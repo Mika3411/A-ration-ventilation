@@ -93,6 +93,7 @@ export async function createProduct(productInput) {
         category,
         description,
         amount,
+        options,
         image_key,
         image_url,
         image_data,
@@ -100,7 +101,7 @@ export async function createProduct(productInput) {
         active,
         sort_order
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11, $12)
       RETURNING *
     `,
     [
@@ -109,6 +110,7 @@ export async function createProduct(productInput) {
       productInput.category,
       productInput.description,
       productInput.amount,
+      JSON.stringify(productInput.options),
       productInput.imageKey,
       productInput.imageUrl,
       productInput.imageData,
@@ -150,14 +152,15 @@ export async function updateProduct(slug, productInput) {
         category = $2,
         description = $3,
         amount = $4,
-        image_key = $5,
-        image_url = $6,
-        image_data = $7,
-        featured = $8,
-        active = $9,
-        sort_order = $10,
+        options = $5::jsonb,
+        image_key = $6,
+        image_url = $7,
+        image_data = $8,
+        featured = $9,
+        active = $10,
+        sort_order = $11,
         updated_at = NOW()
-      WHERE slug = $11
+      WHERE slug = $12
       RETURNING *
     `,
     [
@@ -165,6 +168,7 @@ export async function updateProduct(slug, productInput) {
       productInput.category,
       productInput.description,
       productInput.amount,
+      JSON.stringify(productInput.options),
       productInput.imageKey,
       productInput.imageUrl,
       productInput.imageData,
@@ -195,7 +199,8 @@ export async function normalizeCheckoutItems(rawItems) {
 
   const quantitiesBySlug = new Map();
   const products = await getPublicProducts();
-  const productBySlug = new Map(products.map((product) => [product.slug, product]));
+  const checkoutProducts = getCheckoutProducts(products);
+  const productBySlug = new Map(checkoutProducts.map((product) => [product.slug, product]));
 
   for (const item of rawItems) {
     const slug = cleanSingleLine(item?.slug, 80);
@@ -462,6 +467,7 @@ export function normalizeProductInput(body) {
   const requestedImageKey = cleanSingleLine(body?.imageKey, 40);
   const imageKey = allowedImageKeys.has(requestedImageKey) ? requestedImageKey : "ductFan";
   const amount = Number.parseInt(body?.amount, 10);
+  const options = normalizeProductInputOptions(body?.options, name);
   const sortOrder = Number.parseInt(body?.sortOrder, 10);
 
   if (!name) {
@@ -485,6 +491,7 @@ export function normalizeProductInput(body) {
     category,
     description,
     amount,
+    options,
     imageKey,
     imageUrl,
     imageData,
@@ -509,6 +516,69 @@ export function normalizeProductImageData(value) {
   }
 
   return imageData;
+}
+
+function normalizeProductInputOptions(options, productName) {
+  if (!Array.isArray(options)) return [];
+
+  const usedSlugs = new Set([slugify(productName)]);
+
+  return options
+    .map((option, index) => normalizeProductInputOption(option, productName, index, usedSlugs))
+    .filter(Boolean);
+}
+
+function normalizeProductInputOption(option, productName, index, usedSlugs) {
+  const label = cleanSingleLine(option?.label ?? option?.name, 80);
+  const amount = Number.parseInt(option?.amount, 10);
+  const bgn = cleanSingleLine(option?.bgn, 40);
+  const description = cleanMessage(option?.description, 500);
+  const value = cleanSingleLine(option?.value, 80);
+  const rawSlug = cleanSingleLine(option?.slug, 120);
+  const hasContent =
+    label ||
+    bgn ||
+    description ||
+    value ||
+    rawSlug ||
+    String(option?.amount ?? "").trim();
+
+  if (!hasContent) return null;
+
+  if (!label) {
+    throw new ProductInputError("Le libellé de chaque variante est obligatoire.");
+  }
+
+  if (!Number.isInteger(amount) || amount < 0) {
+    throw new ProductInputError("Le prix de chaque variante doit être un montant valide.");
+  }
+
+  const baseSlug = rawSlug ? slugify(rawSlug) : slugify(`${productName}-${label}`);
+  const optionSlug = getUniqueOptionSlug(baseSlug || `variante-${index + 1}`, usedSlugs);
+
+  return {
+    label,
+    value: value || slugify(label),
+    slug: optionSlug,
+    amount,
+    price: formatEuroAmount(amount),
+    bgn,
+    description,
+  };
+}
+
+function getUniqueOptionSlug(baseSlug, usedSlugs) {
+  const safeBase = baseSlug || "variante";
+  let slug = safeBase;
+  let suffix = 2;
+
+  while (usedSlugs.has(slug)) {
+    slug = `${safeBase}-${suffix}`;
+    suffix += 1;
+  }
+
+  usedSlugs.add(slug);
+  return slug;
 }
 
 export function normalizeCategoryInput(body) {
@@ -636,6 +706,7 @@ function serializeProductRow(row) {
     imageKey: row.image_key,
     imageUrl: row.image_url,
     imageData: row.image_data || "",
+    options: normalizeProductOptions(row.options),
     featured: row.featured,
     active: row.active,
     sortOrder: row.sort_order,
@@ -653,10 +724,11 @@ function serializeMemoryProduct(product) {
     description: product.description,
     text: product.description,
     amount: product.amount,
-    price: formatEuroAmount(product.amount),
+    price: product.price || formatEuroAmount(product.amount),
     imageKey: product.imageKey,
     imageUrl: product.imageUrl,
     imageData: product.imageData || "",
+    options: normalizeProductOptions(product.options),
     featured: product.featured,
     active: product.active,
     sortOrder: product.sortOrder,
@@ -667,4 +739,56 @@ function serializeMemoryProduct(product) {
 
 function sortProducts(first, second) {
   return first.sortOrder - second.sortOrder || first.name.localeCompare(second.name, "fr");
+}
+
+function getCheckoutProducts(products) {
+  return products.flatMap((product) => getCheckoutProductEntries(product));
+}
+
+function getCheckoutProductEntries(product) {
+  const options = Array.isArray(product.options) ? product.options : [];
+  if (!options.length) return [product];
+
+  return options.map((option) => {
+    const { options: _options, ...baseProduct } = product;
+    const baseDescription = product.description || product.text || "";
+    const optionDescription =
+      option.description || `${baseDescription}${baseDescription ? " " : ""}Modèle ${option.label}.`;
+
+    return {
+      ...baseProduct,
+      slug: option.slug,
+      name: `${product.name} ${option.label}`.trim(),
+      amount: option.amount,
+      price: option.price || formatEuroAmount(option.amount),
+      description: optionDescription,
+      text: optionDescription,
+      parentSlug: product.slug,
+      optionLabel: option.label,
+    };
+  });
+}
+
+function normalizeProductOptions(options) {
+  if (!Array.isArray(options)) return [];
+
+  return options.map(normalizeProductOption).filter(Boolean);
+}
+
+function normalizeProductOption(option) {
+  const amount = Number.parseInt(option?.amount, 10);
+  const label = cleanSingleLine(option?.label || option?.name, 80);
+  const slug = cleanSingleLine(option?.slug, 120);
+
+  if (!label || !slug || !Number.isInteger(amount) || amount < 0) return null;
+
+  return {
+    label,
+    value: cleanSingleLine(option?.value, 80) || slug,
+    slug,
+    amount,
+    price: cleanSingleLine(option?.price, 40) || formatEuroAmount(amount),
+    bgn: cleanSingleLine(option?.bgn, 40),
+    description: cleanMessage(option?.description, 500),
+  };
 }

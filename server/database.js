@@ -64,6 +64,7 @@ async function initializeDatabase() {
       category TEXT NOT NULL,
       description TEXT NOT NULL DEFAULT '',
       amount INTEGER NOT NULL CHECK (amount >= 0),
+      options JSONB NOT NULL DEFAULT '[]'::jsonb,
       image_key TEXT NOT NULL DEFAULT 'ductFan',
       image_url TEXT NOT NULL DEFAULT '',
       image_data TEXT NOT NULL DEFAULT '',
@@ -84,6 +85,11 @@ async function initializeDatabase() {
   await dbPool.query(`
     ALTER TABLE shop_products
     ADD COLUMN IF NOT EXISTS image_data TEXT NOT NULL DEFAULT ''
+  `);
+
+  await dbPool.query(`
+    ALTER TABLE shop_products
+    ADD COLUMN IF NOT EXISTS options JSONB NOT NULL DEFAULT '[]'::jsonb
   `);
 
   await dbPool.query(`
@@ -135,6 +141,7 @@ async function initializeDatabase() {
           category,
           description,
           amount,
+          options,
           image_key,
           image_url,
           image_data,
@@ -142,8 +149,11 @@ async function initializeDatabase() {
           active,
           sort_order
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-        ON CONFLICT (slug) DO NOTHING
+        VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11, $12)
+        ON CONFLICT (slug) DO UPDATE
+        SET options = EXCLUDED.options
+        WHERE shop_products.options = '[]'::jsonb
+          AND EXCLUDED.options <> '[]'::jsonb
       `,
       [
         product.slug,
@@ -151,6 +161,7 @@ async function initializeDatabase() {
         product.category,
         product.description,
         product.amount,
+        JSON.stringify(product.options || []),
         product.imageKey,
         product.imageUrl,
         product.imageData || "",
@@ -160,6 +171,13 @@ async function initializeDatabase() {
       ],
     );
   }
+
+  await dbPool.query(`
+    UPDATE shop_products
+    SET active = FALSE, updated_at = NOW()
+    WHERE slug LIKE 'ventilateur-de-canal-yka-%'
+      AND slug <> 'ventilateur-de-canal-yka'
+  `);
 
   for (const [index, category] of defaultShopCategories.entries()) {
     await dbPool.query(

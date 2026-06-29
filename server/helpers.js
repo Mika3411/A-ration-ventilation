@@ -1,5 +1,12 @@
 import crypto from "node:crypto";
 
+const euroAmountFormatter = new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+});
+
 export function getCookie(request, name) {
   const cookieHeader = request.get("cookie");
   if (!cookieHeader) return "";
@@ -92,7 +99,7 @@ export function cleanMessage(value, maxLength) {
 }
 
 export function formatEuroAmount(amount) {
-  return `${Math.round(amount / 100).toLocaleString("fr-FR")} €`;
+  return euroAmountFormatter.format(amount / 100).replace(/\u00a0/g, " ");
 }
 
 export function slugify(value) {

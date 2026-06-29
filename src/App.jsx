@@ -8,13 +8,21 @@ import {
   normalizeProducts,
 } from "./data/products.js";
 
-import { getPageSeo } from "./data/seo.js";
+import { getCategoryFromPath } from "./data/categories.js";
+import { getPageSeo, getStructuredData } from "./data/seo.js";
 
 import { BackToTop, Footer, Header } from "./layout/Layout.jsx";
 
 import { CartCheckout } from "./panier/Panier.jsx";
 
-import { cartStorageKey, getCartLines, getCheckoutItems, getInitialPaymentNotice, readStoredCartItems } from "./panier/cart.js";
+import {
+  cartStorageKey,
+  getCartLines,
+  getCheckoutItems,
+  getInitialPaymentNotice,
+  getPurchasableProducts,
+  readStoredCartItems,
+} from "./panier/cart.js";
 
 import { RouteView } from "./router/AppRouter.jsx";
 
@@ -30,9 +38,10 @@ export default function App() {
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [paymentNotice, setPaymentNotice] = useState(getInitialPaymentNotice);
   const [lastAddedProduct, setLastAddedProduct] = useState("");
+  const purchasableProducts = useMemo(() => getPurchasableProducts(products), [products]);
   const productBySlug = useMemo(
-    () => new Map(products.map((product) => [product.slug, product])),
-    [products],
+    () => new Map(purchasableProducts.map((product) => [product.slug, product])),
+    [purchasableProducts],
   );
   const productCategories = useMemo(() => getProductCategories(products, categories), [categories, products]);
   const cartLines = useMemo(() => getCartLines(products, cartItems), [cartItems, products]);
@@ -88,7 +97,8 @@ export default function App() {
 
   useEffect(() => {
     const currentProduct = getProductFromPath(currentPath, products);
-    const seo = getPageSeo(currentPath, currentProduct);
+    const currentCategory = getCategoryFromPath(currentPath, productCategories);
+    const seo = getPageSeo(currentPath, currentProduct, currentCategory);
     const canonicalUrl = getCanonicalUrl(currentPath);
 
     document.title = seo.title;
@@ -99,13 +109,14 @@ export default function App() {
     setMetaProperty("og:title", seo.title);
     setMetaProperty("og:description", seo.description);
     setMetaProperty("og:url", canonicalUrl);
+    setStructuredData(getStructuredData(currentPath, currentProduct, canonicalUrl, currentCategory));
 
     if (seo.robots) {
       setMetaContent("robots", seo.robots);
     } else {
       removeMetaContent("robots");
     }
-  }, [currentPath, products]);
+  }, [currentPath, productCategories, products]);
 
   function handleAddToCart(productSlug) {
     const product = productBySlug.get(productSlug);
@@ -244,6 +255,25 @@ function setLinkHref(rel, href) {
   }
 
   link.setAttribute("href", href);
+}
+
+function setStructuredData(structuredData) {
+  const selector = 'script[type="application/ld+json"][data-seo-jsonld="primary"]';
+  let script = document.querySelector(selector);
+
+  if (!structuredData) {
+    script?.remove();
+    return;
+  }
+
+  if (!script) {
+    script = document.createElement("script");
+    script.setAttribute("type", "application/ld+json");
+    script.setAttribute("data-seo-jsonld", "primary");
+    document.head.appendChild(script);
+  }
+
+  script.textContent = JSON.stringify(structuredData);
 }
 
 function removeMetaContent(name) {

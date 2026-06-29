@@ -47,6 +47,14 @@ export function createApp({ distPath = defaultDistPath } = {}) {
   app.use("/api", createCheckoutRouter());
   app.use("/api", createContactRouter());
 
+  app.use(
+    "/assets",
+    express.static(path.join(distPath, "assets"), {
+      immutable: true,
+      index: false,
+      maxAge: "1y",
+    }),
+  );
   app.use(express.static(distPath, { index: false }));
 
   app.use((request, response, next) => {

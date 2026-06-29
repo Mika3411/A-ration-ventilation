@@ -3,10 +3,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { getCategoryPath } from "../src/data/categories.js";
 import { pageSeo } from "../src/data/seo.js";
 import { escapeHtml, getRequestOrigin } from "./helpers.js";
-import { defaultShopProducts } from "./products/defaultProducts.js";
-import { getPublicProducts } from "./products/service.js";
+import { defaultShopCategories, defaultShopProducts } from "./products/defaultProducts.js";
+import { getPublicCategories, getPublicProducts } from "./products/service.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const faviconPngPath = path.join(
@@ -89,8 +90,10 @@ export async function getSitemapUrls(origin) {
   if (!origin) return [];
 
   const products = await getProductsForSitemap();
+  const categories = await getCategoriesForSitemap();
   const paths = new Set([
     ...staticSitemapPaths,
+    ...categories.map((category) => getCategoryPath(category)),
     ...products.filter((product) => product.slug).map((product) => `/boutique/${product.slug}`),
   ]);
 
@@ -102,6 +105,14 @@ async function getProductsForSitemap() {
     return await getPublicProducts();
   } catch {
     return defaultShopProducts.filter((product) => product.active !== false);
+  }
+}
+
+async function getCategoriesForSitemap() {
+  try {
+    return await getPublicCategories();
+  } catch {
+    return defaultShopCategories;
   }
 }
 

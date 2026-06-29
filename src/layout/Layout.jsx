@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, ChevronUp, Menu, ShoppingCart, X } from "lucide-react";
 
 import { brandLogoSources } from "../assets/optimizedImages.js";
+import { getCategoryPath } from "../data/categories.js";
 import { categories, legalRoutes, routes } from "../data/site.js";
 import { normalizePath } from "../router/useRouter.js";
 
@@ -22,11 +23,22 @@ export function Logo({ onNavigate }) {
   );
 }
 
-export function RouteLink({ ariaLabel, children, className, currentPath, onNavigate, path }) {
+export function RouteLink({
+  activeOnCategory = false,
+  ariaLabel,
+  children,
+  className,
+  currentPath,
+  onNavigate,
+  path,
+}) {
   const targetPath = path.startsWith("/") ? path : `/${path}`;
   const activePath = normalizePath(targetPath.split("#")[0]);
   const isActive =
-    currentPath === activePath || (activePath === "/boutique" && currentPath.startsWith("/boutique/"));
+    currentPath === activePath ||
+    (activePath === "/boutique" &&
+      (currentPath.startsWith("/boutique/") ||
+        (activeOnCategory && currentPath.startsWith("/categories/"))));
 
   return (
     <a
@@ -57,6 +69,7 @@ export function Header({ cartCount, currentPath, onNavigate }) {
         <nav className="desktop-nav" aria-label="Navigation principale">
           {routes.map((route) => (
             <RouteLink
+              activeOnCategory={route.path === "/boutique"}
               currentPath={currentPath}
               key={route.path}
               onNavigate={onNavigate}
@@ -95,6 +108,7 @@ export function Header({ cartCount, currentPath, onNavigate }) {
         <nav className="mobile-nav" aria-label="Navigation mobile">
           {routes.map((route) => (
             <RouteLink
+              activeOnCategory={route.path === "/boutique"}
               currentPath={currentPath}
               key={route.path}
               onNavigate={(event, path) => closeAndNavigate(event, path)}
@@ -142,7 +156,12 @@ export function Footer({ currentPath, onNavigate }) {
           <ul>
             {routes.map((route) => (
               <li key={route.path}>
-                <RouteLink currentPath={currentPath} onNavigate={onNavigate} path={route.path}>
+                <RouteLink
+                  activeOnCategory={route.path === "/boutique"}
+                  currentPath={currentPath}
+                  onNavigate={onNavigate}
+                  path={route.path}
+                >
                   {route.label}
                 </RouteLink>
               </li>
@@ -154,9 +173,13 @@ export function Footer({ currentPath, onNavigate }) {
           <ul>
             {categories.map((category) => (
               <li key={category}>
-                <a href="/boutique" onClick={(event) => onNavigate(event, "/boutique")}>
+                <RouteLink
+                  currentPath={currentPath}
+                  onNavigate={onNavigate}
+                  path={getCategoryPath(category)}
+                >
                   {category}
-                </a>
+                </RouteLink>
               </li>
             ))}
           </ul>

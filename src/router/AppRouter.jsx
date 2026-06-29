@@ -1,6 +1,7 @@
 import { AdminPage } from "../admin/Admin.jsx";
 import { BoutiquePage, ProductDetailPage } from "../boutique/Boutique.jsx";
 import { ContactPage } from "../contact/Contact.jsx";
+import { getCategoryFromPath, isCategoryPath } from "../data/categories.js";
 import { getProductFromPath } from "../data/products.js";
 import { CustomerPortalPage } from "../espace-client/EspaceClient.jsx";
 import {
@@ -23,6 +24,7 @@ export function RouteView({
   productsLoaded,
 }) {
   const currentProduct = getProductFromPath(currentPath, products);
+  const currentCategory = getCategoryFromPath(currentPath, productCategories);
 
   if (currentProduct) {
     return (
@@ -45,6 +47,33 @@ export function RouteView({
         products={products}
       />
     );
+  }
+
+  if (isCategoryPath(currentPath)) {
+    if (currentCategory) {
+      return (
+        <BoutiquePage
+          categories={productCategories}
+          currentPath={currentPath}
+          onNavigate={onNavigate}
+          products={products}
+          selectedCategory={currentCategory}
+        />
+      );
+    }
+
+    if (!productsLoaded) {
+      return (
+        <BoutiquePage
+          categories={productCategories}
+          currentPath="/boutique"
+          onNavigate={onNavigate}
+          products={products}
+        />
+      );
+    }
+
+    return <NotFoundPage currentPath={currentPath} onNavigate={onNavigate} />;
   }
 
   if (currentPath.startsWith("/boutique/")) {

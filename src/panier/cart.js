@@ -24,7 +24,7 @@ export function readStoredCartItems() {
 }
 
 export function getCartLines(products, cartItems) {
-  return products
+  return getPurchasableProducts(products)
     .map((product) => ({
       product,
       quantity: cartItems[product.slug] || 0,
@@ -41,6 +41,44 @@ export function getCheckoutItems(products, cartItems) {
     slug: product.slug,
     quantity,
   }));
+}
+
+export function getPurchasableProducts(products) {
+  if (!Array.isArray(products)) return [];
+
+  return products.flatMap((product) => getPurchasableProductEntries(product));
+}
+
+export function getProductCartQuantity(product, cartItems) {
+  if (!product || !cartItems) return 0;
+
+  return getPurchasableProductEntries(product).reduce(
+    (total, item) => total + (cartItems[item.slug] || 0),
+    0,
+  );
+}
+
+function getPurchasableProductEntries(product) {
+  if (!product) return [];
+
+  const options = Array.isArray(product.options) ? product.options : [];
+  if (!options.length) return [product];
+
+  return options.map((option) => {
+    const { options: _options, ...baseProduct } = product;
+
+    return {
+      ...baseProduct,
+      slug: option.slug,
+      name: `${product.name} ${option.label}`.trim(),
+      amount: option.amount,
+      price: option.price,
+      text: option.description || product.text,
+      description: option.description || product.description,
+      parentSlug: product.slug,
+      optionLabel: option.label,
+    };
+  });
 }
 
 export function getInitialPaymentNotice() {

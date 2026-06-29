@@ -47,6 +47,7 @@ const emptyAdminProductForm = {
   category: "Ventilation industrielle",
   amount: "",
   description: "",
+  options: [],
   imageKey: "ductFan",
   imageUrl: "",
   imageData: "",
@@ -77,6 +78,7 @@ function getAdminProductForm(product) {
     category: product.category,
     amount: String(product.amount / 100),
     description: product.description || product.text,
+    options: getAdminProductOptionForm(product.options),
     imageKey: product.imageKey || "ductFan",
     imageUrl: product.imageUrl || "",
     imageData: product.imageData || "",
@@ -88,14 +90,49 @@ function getAdminProductForm(product) {
   };
 }
 
-function getAdminProductPayload(form) {
-  const amount = Number.parseFloat(String(form.amount).replace(",", "."));
+function getAdminProductOptionForm(options) {
+  if (!Array.isArray(options)) return [];
 
+  return options.map((option) => ({
+    label: option.label || "",
+    amount: Number.isInteger(option.amount) ? String(option.amount / 100) : "",
+    bgn: option.bgn || "",
+    description: option.description || "",
+    slug: option.slug || "",
+    value: option.value || "",
+  }));
+}
+
+function createEmptyProductOptionForm() {
+  return {
+    label: "",
+    amount: "",
+    bgn: "",
+    description: "",
+    slug: "",
+    value: "",
+  };
+}
+
+function parseEuroAmountToCents(value) {
+  const amount = Number.parseFloat(String(value).replace(",", "."));
+  return Number.isFinite(amount) ? Math.round(amount * 100) : -1;
+}
+
+function getAdminProductPayload(form) {
   return {
     name: form.name,
     category: form.category,
-    amount: Number.isFinite(amount) ? Math.round(amount * 100) : -1,
+    amount: parseEuroAmountToCents(form.amount),
     description: form.description,
+    options: form.options.map((option) => ({
+      label: option.label,
+      amount: parseEuroAmountToCents(option.amount),
+      bgn: option.bgn,
+      description: option.description,
+      slug: option.slug,
+      value: option.value,
+    })),
     imageKey: form.imageKey,
     imageUrl: form.imageUrl,
     imageData: form.imageData,
@@ -401,6 +438,11 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
     }
 
     return categoryFilteredProducts.filter((product) => {
+      const optionSearchText = Array.isArray(product.options)
+        ? product.options
+            .map((option) => `${option.label} ${option.price} ${option.bgn} ${option.description}`)
+            .join(" ")
+        : "";
       const searchableProduct = normalizeAdminSearchValue(
         [
           product.name,
@@ -409,6 +451,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
           product.text,
           product.price,
           product.slug,
+          optionSearchText,
           product.active ? "actif" : "masque",
         ]
           .filter(Boolean)
@@ -526,6 +569,29 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
     setForm((currentForm) => ({
       ...currentForm,
       [field]: value,
+    }));
+  }
+
+  function addProductOption() {
+    setForm((currentForm) => ({
+      ...currentForm,
+      options: [...currentForm.options, createEmptyProductOptionForm()],
+    }));
+  }
+
+  function updateProductOption(index, field, value) {
+    setForm((currentForm) => ({
+      ...currentForm,
+      options: currentForm.options.map((option, optionIndex) =>
+        optionIndex === index ? { ...option, [field]: value } : option,
+      ),
+    }));
+  }
+
+  function removeProductOption(index) {
+    setForm((currentForm) => ({
+      ...currentForm,
+      options: currentForm.options.filter((_, optionIndex) => optionIndex !== index),
     }));
   }
 
@@ -816,7 +882,12 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                     <img src={product.image} alt="" />
                     <span>
                       <strong>{product.name}</strong>
-                      <small>{product.category}</small>
+                      <small>
+                        {product.category}
+                        {product.options?.length
+                          ? ` · ${product.options.length} variante${product.options.length > 1 ? "s" : ""}`
+                          : ""}
+                      </small>
                     </span>
                     <em>{product.active ? "Actif" : "Masqué"}</em>
                   </button>
@@ -967,6 +1038,96 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                     onChange={(event) => updateForm("description", event.target.value)}
                   />
                 </label>
+                <section className="admin-variant-section admin-wide-field" aria-label="Variantes produit">
+                  <div className="admin-variant-head">
+                    <div>
+                      <span>Variantes</span>
+                      <strong>
+                        {form.options.length
+                          ? `${form.options.length} variante${form.options.length > 1 ? "s" : ""}`
+                          : "Prix unique"}
+                      </strong>
+                    </div>
+                    <button type="button" onClick={addProductOption} disabled={isSaving}>
+                      <Plus size={18} />
+                      Ajouter une variante
+                    </button>
+                  </div>
+                  {form.options.length > 0 ? (
+                    <div className="admin-variant-list">
+                      {form.options.map((option, index) => (
+                        <article className="admin-variant-card" key={`${option.slug || "variant"}-${index}`}>
+                          <div className="admin-variant-card-head">
+                            <strong>Variante {index + 1}</strong>
+                            <button
+                              type="button"
+                              onClick={() => removeProductOption(index)}
+                              disabled={isSaving}
+                              aria-label={`Supprimer la variante ${index + 1}`}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                          <div className="admin-variant-grid">
+                            <label>
+                              <AdminFieldLabel
+                                label="Libellé"
+                                help="Nom court affiché dans le sélecteur de modèle, par exemple 200, 250-A ou 2,2 kW."
+                              />
+                              <input
+                                value={option.label}
+                                onChange={(event) =>
+                                  updateProductOption(index, "label", event.target.value)
+                                }
+                                required
+                              />
+                            </label>
+                            <label>
+                              <AdminFieldLabel
+                                label="Prix EUR"
+                                help="Prix de cette variante en euros. Tu peux utiliser une virgule ou un point."
+                              />
+                              <input
+                                value={option.amount}
+                                onChange={(event) =>
+                                  updateProductOption(index, "amount", event.target.value)
+                                }
+                                inputMode="decimal"
+                                required
+                              />
+                            </label>
+                            <label>
+                              <AdminFieldLabel
+                                label="Prix BGN"
+                                help="Prix indicatif en leva bulgares si tu veux garder la référence fournisseur."
+                              />
+                              <input
+                                value={option.bgn}
+                                onChange={(event) =>
+                                  updateProductOption(index, "bgn", event.target.value)
+                                }
+                              />
+                            </label>
+                            <label>
+                              <AdminFieldLabel
+                                label="Note"
+                                help="Texte court optionnel propre à cette variante."
+                              />
+                              <input
+                                value={option.description}
+                                onChange={(event) =>
+                                  updateProductOption(index, "description", event.target.value)
+                                }
+                              />
+                            </label>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="admin-variant-empty">Ce produit utilise seulement le prix principal.</p>
+                  )}
+                </section>
                 <div className="admin-toggle-row">
                   <label>
                     <input

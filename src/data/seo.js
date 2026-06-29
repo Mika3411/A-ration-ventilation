@@ -1,3 +1,19 @@
+import { businessIdentity } from "./business.js";
+import { isCategoryPath } from "./categories.js";
+
+const defaultStructuredDataSiteUrl = "https://www.aeration-ventilation.fr";
+const structuredDataExcludedPaths = new Set(["/admin", "/espace-client"]);
+const breadcrumbLabelsByPath = {
+  "/": "Accueil",
+  "/boutique": "Boutique",
+  "/a-propos": "A propos de nous",
+  "/livraison": "Livraison",
+  "/contact": "Contact",
+  "/confidentialite": "Politique de confidentialité",
+  "/conditions-generales-de-vente": "Conditions générales de vente",
+};
+const supportedStructuredDataCountries = ["France", "Belgique", "Suisse"];
+
 export const defaultSeo = {
   title: "Aération Ventilation - Ventilateurs industriels",
   description:
@@ -60,11 +76,15 @@ export const pageTitles = Object.fromEntries(
   Object.entries(pageSeo).map(([path, seo]) => [path, seo.title]),
 );
 
-export function getPageSeo(pathname, product) {
+export function getPageSeo(pathname, product, category) {
   const normalizedPath = normalizeSeoPath(pathname);
 
   if (product && normalizedPath.startsWith("/boutique/")) {
     return getProductSeo(product);
+  }
+
+  if (category && isCategoryPath(normalizedPath)) {
+    return getCategorySeo(category);
   }
 
   if (pageSeo[normalizedPath]) return pageSeo[normalizedPath];
@@ -85,6 +105,42 @@ export function getProductSeo(product) {
   };
 }
 
+export function getCategorySeo(category) {
+  const name = cleanSeoText(category, "Catégorie");
+
+  return {
+    title: `${name} - Aération Ventilation`,
+    description: truncateSeoDescription(
+      `Découvrez les produits de ventilation de la catégorie ${name} proposés par Aération Ventilation pour vos projets professionnels.`,
+    ),
+  };
+}
+
+export function getStructuredData(pathname, product, canonicalUrl, category) {
+  const normalizedPath = normalizeSeoPath(pathname);
+  const seo = getPageSeo(normalizedPath, product, category);
+
+  if (seo.robots?.includes("noindex") || !isStructuredDataRoute(normalizedPath, product, category)) {
+    return null;
+  }
+
+  const urls = getStructuredDataUrls(normalizedPath, canonicalUrl);
+  const graph = [
+    createOrganizationNode(urls.siteUrl),
+    createLocalBusinessNode(urls.siteUrl),
+    createBreadcrumbListNode(normalizedPath, product, category, urls),
+  ].filter(Boolean);
+
+  if (product && normalizedPath.startsWith("/boutique/")) {
+    graph.push(createProductNode(product, seo, urls));
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 export function normalizeSeoPath(pathname = "/") {
   const rawPath = typeof pathname === "string" && pathname ? pathname : "/";
   const pathOnly = rawPath.split(/[?#]/, 1)[0] || "/";
@@ -97,6 +153,189 @@ function cleanSeoText(value, fallback) {
   if (typeof value !== "string") return fallback;
 
   return value.replace(/\s+/g, " ").trim() || fallback;
+}
+
+function isStructuredDataRoute(pathname, product, category) {
+  if (structuredDataExcludedPaths.has(pathname)) return false;
+  if (product && pathname.startsWith("/boutique/")) return true;
+  if (category && isCategoryPath(pathname)) return true;
+
+  return Boolean(pageSeo[pathname]);
+}
+
+function getStructuredDataUrls(pathname, canonicalUrl) {
+  const canonical =
+    getAbsoluteUrl(canonicalUrl, defaultStructuredDataSiteUrl) ||
+    new URL(normalizeSeoPath(pathname), `${defaultStructuredDataSiteUrl}/`).toString();
+  const canonicalUrlObject = new URL(canonical);
+  const siteUrl = `${canonicalUrlObject.origin}/`;
+
+  return {
+    canonicalUrl: canonical,
+    siteUrl,
+  };
+}
+
+function createOrganizationNode(siteUrl) {
+  const organizationId = getOrganizationId(siteUrl);
+  const organization = {
+    "@type": "Organization",
+    "@id": organizationId,
+    name: businessIdentity.tradeName,
+    legalName: businessIdentity.companyName,
+    url: siteUrl,
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/favicon.ico", siteUrl).toString(),
+    },
+    email: businessIdentity.email,
+    identifier: businessIdentity.registrationNumber,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        email: businessIdentity.email,
+        areaServed: supportedStructuredDataCountries,
+        availableLanguage: ["fr"],
+      },
+    ],
+  };
+
+  if (businessIdentity.phone) {
+    organization.telephone = businessIdentity.phone;
+    organization.contactPoint[0].telephone = businessIdentity.phone;
+  }
+
+  return organization;
+}
+
+function createLocalBusinessNode(siteUrl) {
+  const localBusiness = {
+    "@type": "LocalBusiness",
+    "@id": new URL("#local-business", siteUrl).toString(),
+    name: businessIdentity.tradeName,
+    legalName: businessIdentity.companyName,
+    url: siteUrl,
+    image: new URL("/favicon.ico", siteUrl).toString(),
+    email: businessIdentity.email,
+    priceRange: "€€",
+    parentOrganization: {
+      "@id": getOrganizationId(siteUrl),
+    },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "UPI 1-237",
+      addressLocality: "Slaveykovo",
+      postalCode: "9247",
+      addressRegion: "Varna",
+      addressCountry: "BG",
+    },
+    areaServed: supportedStructuredDataCountries.map((country) => ({
+      "@type": "Country",
+      name: country,
+    })),
+  };
+
+  if (businessIdentity.phone) {
+    localBusiness.telephone = businessIdentity.phone;
+  }
+
+  return localBusiness;
+}
+
+function createBreadcrumbListNode(pathname, product, category, { canonicalUrl, siteUrl }) {
+  const items = [{ name: breadcrumbLabelsByPath["/"], path: "/" }];
+
+  if (product && pathname.startsWith("/boutique/")) {
+    items.push({ name: breadcrumbLabelsByPath["/boutique"], path: "/boutique" });
+    items.push({ name: cleanSeoText(product.name, "Produit"), path: pathname });
+  } else if (category && isCategoryPath(pathname)) {
+    items.push({ name: breadcrumbLabelsByPath["/boutique"], path: "/boutique" });
+    items.push({ name: cleanSeoText(category, "Catégorie"), path: pathname });
+  } else if (pathname !== "/") {
+    items.push({
+      name: breadcrumbLabelsByPath[pathname] || getPageSeo(pathname).title,
+      path: pathname,
+    });
+  }
+
+  return {
+    "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl.replace(/#.*$/, "")}#breadcrumb`,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: index === items.length - 1 ? canonicalUrl : new URL(item.path, siteUrl).toString(),
+    })),
+  };
+}
+
+function createProductNode(product, seo, { canonicalUrl, siteUrl }) {
+  const name = cleanSeoText(product?.name, "Produit");
+  const imageUrl = getProductImageUrl(product, siteUrl);
+  const amount = Number.parseInt(product?.amount, 10);
+  const productNode = {
+    "@type": "Product",
+    "@id": `${canonicalUrl.replace(/#.*$/, "")}#product`,
+    name,
+    description: seo.description,
+    sku: cleanSeoText(product?.slug, name),
+    category: cleanSeoText(product?.category, "Ventilation"),
+    brand: {
+      "@type": "Brand",
+      name: businessIdentity.tradeName,
+    },
+    url: canonicalUrl,
+  };
+
+  if (imageUrl) {
+    productNode.image = [imageUrl];
+  }
+
+  if (Number.isInteger(amount) && amount >= 0) {
+    productNode.offers = {
+      "@type": "Offer",
+      url: canonicalUrl,
+      priceCurrency: "EUR",
+      price: (amount / 100).toFixed(2),
+      availability:
+        product?.active === false
+          ? "https://schema.org/OutOfStock"
+          : "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: {
+        "@id": getOrganizationId(siteUrl),
+      },
+    };
+  }
+
+  return productNode;
+}
+
+function getProductImageUrl(product, siteUrl) {
+  const imageUrl = cleanSeoText(product?.imageUrl || product?.image, "");
+  if (!imageUrl || imageUrl.startsWith("data:")) return "";
+
+  return getAbsoluteUrl(imageUrl, siteUrl);
+}
+
+function getOrganizationId(siteUrl) {
+  return new URL("#organization", siteUrl).toString();
+}
+
+function getAbsoluteUrl(value, baseUrl) {
+  const urlValue = cleanSeoText(value, "");
+  if (!urlValue) return "";
+
+  try {
+    const url = new URL(urlValue, baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`);
+    if (!["http:", "https:"].includes(url.protocol)) return "";
+
+    return url.toString();
+  } catch {
+    return "";
+  }
 }
 
 function truncateSeoDescription(value, maxLength = 165) {
