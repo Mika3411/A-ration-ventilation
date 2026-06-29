@@ -10,6 +10,8 @@ import { createOrdersRouter } from "./orders/routes.js";
 import { adminCsrfProtection } from "./security/csrf.js";
 import { createAdminProductsRouter, createPublicProductsRouter } from "./products/routes.js";
 import { securityHeaders } from "./security/headers.js";
+import { createSeoFilesRouter } from "./seoFiles.js";
+import { sendIndexHtmlWithSeo } from "./seo.js";
 import { createCheckoutRouter, createStripeWebhookRouter } from "./stripe/routes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -30,6 +32,8 @@ export function createApp({ distPath = defaultDistPath } = {}) {
     response.status(200).json({ ok: true });
   });
 
+  app.use(createSeoFilesRouter());
+
   app.use("/api", createPublicProductsRouter());
   app.use("/api/admin", adminCsrfProtection);
   app.use("/api/admin/products", parseJsonIfNeeded(adminImageJsonParser));
@@ -43,7 +47,7 @@ export function createApp({ distPath = defaultDistPath } = {}) {
   app.use("/api", createCheckoutRouter());
   app.use("/api", createContactRouter());
 
-  app.use(express.static(distPath));
+  app.use(express.static(distPath, { index: false }));
 
   app.use((request, response, next) => {
     if (request.method !== "GET") {
@@ -51,9 +55,7 @@ export function createApp({ distPath = defaultDistPath } = {}) {
       return;
     }
 
-    response.sendFile(path.join(distPath, "index.html"), (error) => {
-      if (error) next(error);
-    });
+    sendIndexHtmlWithSeo(request, response, next, distPath);
   });
 
   app.use((error, _request, response, _next) => {

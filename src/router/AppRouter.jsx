@@ -3,7 +3,14 @@ import { BoutiquePage, ProductDetailPage } from "../boutique/Boutique.jsx";
 import { ContactPage } from "../contact/Contact.jsx";
 import { getProductFromPath } from "../data/products.js";
 import { CustomerPortalPage } from "../espace-client/EspaceClient.jsx";
-import { AboutPage, DeliveryPage, HomePage } from "../pages/ContentPages.jsx";
+import {
+  AboutPage,
+  DeliveryPage,
+  HomePage,
+  NotFoundPage,
+  PrivacyPage,
+  TermsPage,
+} from "../pages/ContentPages.jsx";
 
 export function RouteView({
   cartItems,
@@ -13,6 +20,7 @@ export function RouteView({
   onNavigate,
   onProductsChanged,
   products,
+  productsLoaded,
 }) {
   const currentProduct = getProductFromPath(currentPath, products);
 
@@ -40,14 +48,18 @@ export function RouteView({
   }
 
   if (currentPath.startsWith("/boutique/")) {
-    return (
-      <BoutiquePage
-        categories={productCategories}
-        currentPath="/boutique"
-        onNavigate={onNavigate}
-        products={products}
-      />
-    );
+    if (!productsLoaded) {
+      return (
+        <BoutiquePage
+          categories={productCategories}
+          currentPath="/boutique"
+          onNavigate={onNavigate}
+          products={products}
+        />
+      );
+    }
+
+    return <NotFoundPage currentPath={currentPath} onNavigate={onNavigate} />;
   }
 
   if (currentPath === "/a-propos") {
@@ -62,6 +74,14 @@ export function RouteView({
     return <ContactPage />;
   }
 
+  if (currentPath === "/confidentialite") {
+    return <PrivacyPage />;
+  }
+
+  if (currentPath === "/conditions-generales-de-vente") {
+    return <TermsPage currentPath={currentPath} onNavigate={onNavigate} />;
+  }
+
   if (currentPath === "/espace-client") {
     return <CustomerPortalPage currentPath={currentPath} onNavigate={onNavigate} />;
   }
@@ -70,13 +90,17 @@ export function RouteView({
     return <AdminPage onProductsChanged={onProductsChanged} />;
   }
 
-  return (
-    <HomePage
-      cartItems={cartItems}
-      currentPath={currentPath}
-      onAddToCart={onAddToCart}
-      onNavigate={onNavigate}
-      products={products}
-    />
-  );
+  if (currentPath === "/") {
+    return (
+      <HomePage
+        cartItems={cartItems}
+        currentPath={currentPath}
+        onAddToCart={onAddToCart}
+        onNavigate={onNavigate}
+        products={products}
+      />
+    );
+  }
+
+  return <NotFoundPage currentPath={currentPath} onNavigate={onNavigate} />;
 }

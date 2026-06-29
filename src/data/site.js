@@ -1,5 +1,7 @@
 import { Fan, FileCheck2, Globe2, HardHat, Settings, ShieldCheck, Truck, Wrench } from "lucide-react";
 
+export { pageTitles } from "./seo.js";
+
 export const routes = [
   { label: "Accueil", path: "/" },
   { label: "Boutique", path: "/boutique" },
@@ -9,14 +11,25 @@ export const routes = [
   { label: "Espace client", path: "/espace-client" },
 ];
 
-export const pageTitles = {
-  "/": "Aération Ventilation - Ventilateurs industriels",
-  "/boutique": "Boutique - Aération Ventilation",
-  "/a-propos": "A Propos De Nous - Aération Ventilation",
-  "/livraison": "Livraison - Aération Ventilation",
-  "/contact": "Contact - Aération Ventilation",
-  "/espace-client": "Espace client - Aération Ventilation",
-  "/admin": "Administration boutique - Aération Ventilation",
+export const legalRoutes = [
+  { label: "Confidentialité", path: "/confidentialite" },
+  { label: "Conditions générales de vente", path: "/conditions-generales-de-vente" },
+];
+
+export const legalIdentity = {
+  companyName: "DIXESTWEST Ltd",
+  tradeName: "Aération Ventilation",
+  legalForm: "EOOD, société unipersonnelle à responsabilité limitée",
+  country: "Bulgarie",
+  email: "contact@aeration-ventilation.fr",
+  phone: "+09 876 543 210",
+  address:
+    "UPI 1-237, village de Slaveykovo, 9247, municipalité de Provadiya, région de Varna, Bulgarie",
+  registrationNumber: "EIK 208231623",
+  vatNumber: "À compléter",
+  publicationDirector: "Cédric Sanjuan",
+  host: "À compléter",
+  mediator: "À compléter",
 };
 
 export const googleMapsEmbedUrl =

@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { routes } from "../data/site.js";
-
 export function normalizePath(pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
-  if (routes.some((route) => route.path === cleanPath)) return cleanPath;
-  if (cleanPath === "/admin") return cleanPath;
-  return cleanPath.startsWith("/boutique/") ? cleanPath : "/";
+  return cleanPath;
 }
 
 export function useRouter() {

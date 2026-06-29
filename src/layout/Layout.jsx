@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, ChevronUp, Menu, Phone, ShoppingCart, X } from "lucide-react";
 
 import { brandLogoSources } from "../assets/optimizedImages.js";
-import { categories, routes } from "../data/site.js";
+import { categories, legalRoutes, routes } from "../data/site.js";
 import { normalizePath } from "../router/useRouter.js";
 
 export function Logo({ onNavigate }) {
@@ -186,7 +186,21 @@ export function Footer({ currentPath, onNavigate }) {
           </ul>
         </div>
       </div>
-      <div className="footer-bottom">© 2026 Aération Ventilation. Tous droits réservés.</div>
+      <div className="footer-bottom">
+        <span>© 2026 Aération Ventilation. Tous droits réservés.</span>
+        <nav className="footer-legal-links" aria-label="Informations légales">
+          {legalRoutes.map((route) => (
+            <RouteLink
+              currentPath={currentPath}
+              key={route.path}
+              onNavigate={onNavigate}
+              path={route.path}
+            >
+              {route.label}
+            </RouteLink>
+          ))}
+        </nav>
+      </div>
     </footer>
   );
 }

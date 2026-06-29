@@ -8,7 +8,7 @@ import {
   normalizeProducts,
 } from "./data/products.js";
 
-import { pageTitles } from "./data/site.js";
+import { getPageSeo } from "./data/seo.js";
 
 import { BackToTop, Footer, Header } from "./layout/Layout.jsx";
 
@@ -23,6 +23,7 @@ import { useRouter } from "./router/useRouter.js";
 export default function App() {
   const { currentPath, navigate } = useRouter();
   const [products, setProducts] = useState(defaultProducts);
+  const [productsLoaded, setProductsLoaded] = useState(false);
   const [categories, setCategories] = useState(() => normalizeCategories(null, defaultProducts));
   const [cartItems, setCartItems] = useState(readStoredCartItems);
   const [checkoutStatus, setCheckoutStatus] = useState("idle");
@@ -55,6 +56,8 @@ export default function App() {
     } catch {
       setProducts(defaultProducts);
       setCategories(normalizeCategories(null, defaultProducts));
+    } finally {
+      setProductsLoaded(true);
     }
   }
 
@@ -85,9 +88,23 @@ export default function App() {
 
   useEffect(() => {
     const currentProduct = getProductFromPath(currentPath, products);
-    document.title = currentProduct
-      ? `${currentProduct.name} - Aération Ventilation`
-      : pageTitles[currentPath] || pageTitles["/"];
+    const seo = getPageSeo(currentPath, currentProduct);
+    const canonicalUrl = getCanonicalUrl(currentPath);
+
+    document.title = seo.title;
+    setLinkHref("canonical", canonicalUrl);
+    setMetaContent("description", seo.description);
+    setMetaContent("twitter:title", seo.title);
+    setMetaContent("twitter:description", seo.description);
+    setMetaProperty("og:title", seo.title);
+    setMetaProperty("og:description", seo.description);
+    setMetaProperty("og:url", canonicalUrl);
+
+    if (seo.robots) {
+      setMetaContent("robots", seo.robots);
+    } else {
+      removeMetaContent("robots");
+    }
   }, [currentPath, products]);
 
   function handleAddToCart(productSlug) {
@@ -184,10 +201,58 @@ export default function App() {
           onNavigate={navigate}
           onProductsChanged={refreshProducts}
           products={products}
+          productsLoaded={productsLoaded}
         />
       </main>
       <Footer currentPath={currentPath} onNavigate={navigate} />
       <BackToTop />
     </>
   );
+}
+
+function setMetaContent(name, content) {
+  let meta = document.querySelector(`meta[name="${name}"]`);
+
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.setAttribute("name", name);
+    document.head.appendChild(meta);
+  }
+
+  meta.setAttribute("content", content);
+}
+
+function setMetaProperty(property, content) {
+  let meta = document.querySelector(`meta[property="${property}"]`);
+
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.setAttribute("property", property);
+    document.head.appendChild(meta);
+  }
+
+  meta.setAttribute("content", content);
+}
+
+function setLinkHref(rel, href) {
+  let link = document.querySelector(`link[rel="${rel}"]`);
+
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", rel);
+    document.head.appendChild(link);
+  }
+
+  link.setAttribute("href", href);
+}
+
+function removeMetaContent(name) {
+  document.querySelector(`meta[name="${name}"]`)?.remove();
+}
+
+function getCanonicalUrl(pathname) {
+  const currentCanonical = document.querySelector('link[rel="canonical"]')?.href;
+  const origin = currentCanonical ? new URL(currentCanonical).origin : window.location.origin;
+
+  return new URL(pathname, `${origin}/`).toString();
 }
