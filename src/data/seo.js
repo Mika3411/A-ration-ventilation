@@ -31,7 +31,7 @@ export const pageSeo = {
   "/contact": {
     title: "Contact - Aération Ventilation",
     description:
-      "Contactez Aération Ventilation pour un devis, un conseil technique ou une question sur vos équipements de ventilation.",
+      "Envoyez les informations utiles sur votre installation de ventilation et recevez une réponse écrite d'Aération Ventilation.",
   },
   "/espace-client": {
     title: "Espace client - Aération Ventilation",

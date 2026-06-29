@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, ChevronUp, Menu, Phone, ShoppingCart, X } from "lucide-react";
+import { ArrowRight, ChevronUp, Menu, ShoppingCart, X } from "lucide-react";
 
 import { brandLogoSources } from "../assets/optimizedImages.js";
 import { categories, legalRoutes, routes } from "../data/site.js";
@@ -67,10 +67,6 @@ export function Header({ cartCount, currentPath, onNavigate }) {
           ))}
         </nav>
         <div className="header-actions">
-          <a className="phone-link" href="tel:+09876543210" aria-label="Appeler Aération Ventilation">
-            <Phone size={18} />
-            +09 876 543 210
-          </a>
           <div className="cart-indicator" aria-label={`Panier : ${cartLabel}`}>
             <ShoppingCart size={18} />
             <span>Panier</span>

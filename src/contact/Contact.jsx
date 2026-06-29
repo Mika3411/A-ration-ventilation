@@ -1,7 +1,8 @@
 import { useState } from "react";
 
-import { ArrowRight, CheckCircle2, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, CheckCircle2, FileText, Mail, MapPin } from "lucide-react";
 
+import { businessIdentity } from "../data/business.js";
 import { googleMapsEmbedUrl } from "../data/site.js";
 
 import { PageHero } from "../layout/PageHero.jsx";
@@ -50,19 +51,20 @@ export function QuoteSection() {
     <section id="devis" className="section quote-section">
       <div className="container quote-panel">
         <div className="quote-copy">
-          <h2>Parlez-nous de votre installation</h2>
+          <h2>Recevez une réponse claire par écrit</h2>
           <p>
-            Débit d'air, contraintes du bâtiment, destination de livraison : envoyez les premiers
-            éléments et l'équipe revient vers vous avec une proposition adaptée.
+            Indiquez le type d'équipement recherché, les dimensions utiles, le débit attendu ou
+            quelques photos de l'installation. Nous revenons vers vous avec une réponse exploitable,
+            sans appel inutile.
           </p>
           <div className="quote-points">
             <span>
               <CheckCircle2 size={18} />
-              Réponse personnalisée
+              Échanges par écrit
             </span>
             <span>
               <CheckCircle2 size={18} />
-              Livraison 3 à 4 semaines
+              Livraison incluse dans le prix
             </span>
           </div>
         </div>
@@ -123,13 +125,13 @@ export function ContactIntro() {
       <div className="container contact-intro-grid">
         <article>
           <MapPin size={36} />
-          <h2>Nous trouver</h2>
-          <p>France</p>
+          <h2>Adresse</h2>
+          <p>{businessIdentity.address}</p>
         </article>
         <article>
-          <Phone size={36} />
-          <h2>Nous appeler</h2>
-          <p>+09 876 543 210</p>
+          <FileText size={36} />
+          <h2>Devis</h2>
+          <p>Un descriptif précis suffit pour recevoir une première réponse</p>
         </article>
         <article>
           <Mail size={36} />
@@ -146,23 +148,20 @@ export function GoogleMapSection() {
     <section className="map-section" aria-labelledby="map-title">
       <div className="container map-layout">
         <div className="map-copy">
-          <h2 id="map-title">Nous situer</h2>
+          <h2 id="map-title">Adresse de la société</h2>
           <p>
-            Aération Ventilation accompagne les projets en France, Belgique et Suisse. La carte
-            permet de localiser rapidement la zone de recherche et de préparer votre demande.
+            Le site est exploité par DIXESTWEST Ltd, société immatriculée en Bulgarie. Les demandes,
+            devis et suivis de commande sont traités par écrit afin de garder des informations
+            claires sur chaque projet.
           </p>
           <div className="map-contact-list">
             <span>
               <MapPin size={20} />
-              France
-            </span>
-            <span>
-              <Phone size={20} />
-              +09 876 543 210
+              {businessIdentity.address}
             </span>
             <span>
               <Mail size={20} />
-              contact@aeration-ventilation.fr
+              {businessIdentity.email}
             </span>
           </div>
         </div>
@@ -186,18 +185,18 @@ export function ContactBand() {
       <div className="container contact-grid">
         <div>
           <MapPin size={34} />
-          <span>Nous trouver</span>
-          <strong>France</strong>
+          <span>Adresse</span>
+          <strong>DIXESTWEST Ltd, Bulgarie</strong>
         </div>
         <div>
-          <Phone size={34} />
-          <span>Nous appeler</span>
-          <strong>+09 876 543 210</strong>
+          <FileText size={34} />
+          <span>Devis</span>
+          <strong>Formulaire de contact</strong>
         </div>
         <div>
           <Mail size={34} />
           <span>Email</span>
-          <strong>contact@aeration-ventilation.fr</strong>
+          <strong>{businessIdentity.email}</strong>
         </div>
       </div>
     </section>
@@ -209,7 +208,7 @@ export function ContactPage() {
     <>
       <PageHero
         title="Contact"
-        text="Décrivez votre besoin, demandez un devis ou contactez directement l'équipe Aération Ventilation."
+        text="Envoyez les informations utiles sur votre installation et recevez une réponse écrite."
       />
       <ContactIntro />
       <GoogleMapSection />

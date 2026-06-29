@@ -268,7 +268,9 @@ export function PrivacyPage() {
                   { label: "Pays d'établissement", value: legalIdentity.country },
                   { label: "Adresse du siège", value: legalIdentity.address },
                   { label: "Email", value: legalIdentity.email },
-                  { label: "Téléphone", value: legalIdentity.phone },
+                  ...(legalIdentity.phone
+                    ? [{ label: "Téléphone", value: legalIdentity.phone }]
+                    : []),
                 ]}
               />
             </LegalArticle>
@@ -432,7 +434,9 @@ export function TermsPage({ currentPath, onNavigate }) {
                   },
                   { label: "Numéro de TVA", value: legalIdentity.vatNumber, pending: true },
                   { label: "Email", value: legalIdentity.email },
-                  { label: "Téléphone", value: legalIdentity.phone },
+                  ...(legalIdentity.phone
+                    ? [{ label: "Téléphone", value: legalIdentity.phone }]
+                    : []),
                   {
                     label: "Directeur de publication",
                     value: legalIdentity.publicationDirector,

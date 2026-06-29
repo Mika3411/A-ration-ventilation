@@ -1,5 +1,7 @@
 import { Fan, FileCheck2, Globe2, HardHat, Settings, ShieldCheck, Truck, Wrench } from "lucide-react";
 
+import { businessIdentity } from "./business.js";
+
 export { pageTitles } from "./seo.js";
 
 export const routes = [
@@ -16,24 +18,10 @@ export const legalRoutes = [
   { label: "Conditions générales de vente", path: "/conditions-generales-de-vente" },
 ];
 
-export const legalIdentity = {
-  companyName: "DIXESTWEST Ltd",
-  tradeName: "Aération Ventilation",
-  legalForm: "EOOD, société unipersonnelle à responsabilité limitée",
-  country: "Bulgarie",
-  email: "contact@aeration-ventilation.fr",
-  phone: "+09 876 543 210",
-  address:
-    "UPI 1-237, village de Slaveykovo, 9247, municipalité de Provadiya, région de Varna, Bulgarie",
-  registrationNumber: "EIK 208231623",
-  vatNumber: "À compléter",
-  publicationDirector: "Cédric Sanjuan",
-  host: "À compléter",
-  mediator: "À compléter",
-};
+export const legalIdentity = businessIdentity;
 
 export const googleMapsEmbedUrl =
-  "https://www.google.com/maps?q=A%C3%A9ration%20Ventilation%20France&output=embed";
+  "https://www.google.com/maps?q=Slaveykovo%209247%20Provadiya%20Varna%20Bulgaria&output=embed";
 
 export const services = [
   {

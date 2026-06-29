@@ -107,7 +107,7 @@ test("GET routes HTML injectent des metas SEO spécifiques", async () => {
       );
       assert.match(
         getMetaContent(htmlByRoute.get("/contact"), "description"),
-        /Contactez Aération Ventilation/,
+        /réponse écrite/,
       );
       assert.match(
         getMetaContent(htmlByRoute.get("/boutique/ventilateurs-axiaux"), "description"),

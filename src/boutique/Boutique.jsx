@@ -364,7 +364,7 @@ export function BoutiquePage({ categories: productCategories, currentPath, onNav
     <>
       <PageHero
         title="Boutique"
-        text="Retrouvez les principales familles de ventilateurs, accessoires, grilles et régulateurs pour préparer votre demande."
+        text="Ventilateurs, moteurs, accessoires, grilles et régulateurs pour vos installations professionnelles."
       />
       <Catalog
         categories={productCategories}
