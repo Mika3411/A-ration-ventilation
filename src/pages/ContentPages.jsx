@@ -1,19 +1,20 @@
 import { ArrowRight, Phone, Truck } from "lucide-react";
 
-import heroImage from "../assets/hero-rooftop-ductwork.png";
+import { getHeroBackgroundStyle } from "../assets/optimizedImages.js";
 import { deliverySteps, reasons, services } from "../data/site.js";
 import { PageHero } from "../layout/PageHero.jsx";
 import { RouteLink } from "../layout/Layout.jsx";
 import { FeaturedGallery, ProductPreview } from "../boutique/Boutique.jsx";
 import { ContactBand } from "../contact/Contact.jsx";
 
+const homeHeroGradient =
+  "linear-gradient(90deg, rgba(5, 5, 4, 0.98) 0%, rgba(13, 9, 6, 0.92) 34%, rgba(255, 107, 33, 0.28) 68%, rgba(255, 107, 33, 0.08) 100%)";
+
 export function Hero({ currentPath, onNavigate }) {
   return (
     <section
       className="hero"
-      style={{
-        backgroundImage: `linear-gradient(90deg, rgba(5, 16, 51, 0.96) 0%, rgba(5, 16, 51, 0.82) 33%, rgba(5, 16, 51, 0.22) 62%, rgba(5, 16, 51, 0.04) 100%), url(${heroImage})`,
-      }}
+      style={getHeroBackgroundStyle(homeHeroGradient)}
     >
       <div className="container hero-content">
         <h1>Ventilateurs industriels et systèmes de ventilation</h1>

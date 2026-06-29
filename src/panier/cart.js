@@ -1,6 +1,6 @@
 export const cartStorageKey = "aeration-ventilation-cart-v1";
 
-function sanitizeCartItems(rawItems) {
+export function sanitizeCartItems(rawItems) {
   if (!rawItems || typeof rawItems !== "object" || Array.isArray(rawItems)) return {};
 
   return Object.fromEntries(

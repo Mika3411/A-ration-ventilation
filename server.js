@@ -1,58 +1,48 @@
-import express from "express";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { createAdminAuthRouter } from "./server/auth/adminAuth.js";
-import { createCustomerAuthRouter } from "./server/auth/customerAuth.js";
-import { port } from "./server/config.js";
-import { createContactRouter } from "./server/contact/routes.js";
-import { createOrdersRouter } from "./server/orders/routes.js";
-import { createAdminProductsRouter, createPublicProductsRouter } from "./server/products/routes.js";
-import { securityHeaders } from "./server/security/headers.js";
-import { createCheckoutRouter, createStripeWebhookRouter } from "./server/stripe/routes.js";
+loadEnvFile();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const distPath = path.join(__dirname, "dist");
-const app = express();
+const [{ createApp }, { port }] = await Promise.all([
+  import("./server/app.js"),
+  import("./server/config.js"),
+]);
 
-app.set("trust proxy", 1);
-app.disable("x-powered-by");
-app.use(securityHeaders);
-
-app.use("/api/stripe", createStripeWebhookRouter());
-
-app.use(express.json({ limit: "64kb" }));
-
-app.get("/api/health", (_request, response) => {
-  response.status(200).json({ ok: true });
-});
-
-app.use("/api", createPublicProductsRouter());
-app.use("/api/auth", createCustomerAuthRouter());
-app.use("/api/admin", createAdminAuthRouter());
-app.use("/api/admin", createAdminProductsRouter());
-app.use("/api", createOrdersRouter());
-app.use("/api", createCheckoutRouter());
-app.use("/api", createContactRouter());
-
-app.use(express.static(distPath));
-
-app.use((request, response, next) => {
-  if (request.method !== "GET") {
-    next();
-    return;
-  }
-
-  response.sendFile(path.join(distPath, "index.html"), (error) => {
-    if (error) next(error);
-  });
-});
-
-app.use((error, _request, response, _next) => {
-  console.error(error);
-  response.status(500).json({ error: "Erreur serveur." });
-});
+const app = createApp();
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`Aération Ventilation listening on port ${port}`);
 });
+
+function loadEnvFile() {
+  const envPath = path.join(path.dirname(fileURLToPath(import.meta.url)), ".env");
+
+  if (!fs.existsSync(envPath)) return;
+
+  const envContent = fs.readFileSync(envPath, "utf8");
+
+  for (const rawLine of envContent.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) continue;
+
+    const separatorIndex = line.indexOf("=");
+    if (separatorIndex === -1) continue;
+
+    const key = line.slice(0, separatorIndex).trim();
+    if (!key || process.env[key] !== undefined) continue;
+
+    process.env[key] = stripEnvQuotes(line.slice(separatorIndex + 1).trim());
+  }
+}
+
+function stripEnvQuotes(value) {
+  const startsAndEndsWithSingleQuote = value.startsWith("'") && value.endsWith("'");
+  const startsAndEndsWithDoubleQuote = value.startsWith("\"") && value.endsWith("\"");
+
+  if (value.length >= 2 && (startsAndEndsWithSingleQuote || startsAndEndsWithDoubleQuote)) {
+    return value.slice(1, -1);
+  }
+
+  return value;
+}

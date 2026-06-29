@@ -48,6 +48,9 @@ export const services = [
 export const categories = [
   "Accessoires",
   "Grille de ventilation plafond",
+  "Moteurs électriques 220/380",
+  "Pompes à eau",
+  "Portes d'entrée et blindées",
   "Regulateurs",
   "Ventilateurs axiaux",
   "Ventilateurs de canaux",

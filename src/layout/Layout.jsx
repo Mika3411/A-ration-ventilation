@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, ChevronUp, Menu, Phone, ShoppingCart, X } from "lucide-react";
 
-import brandLogo from "../assets/logo-aeration-ventilation-rounded.png";
+import { brandLogoSources } from "../assets/optimizedImages.js";
 import { categories, routes } from "../data/site.js";
 import { normalizePath } from "../router/useRouter.js";
 
@@ -13,7 +13,11 @@ export function Logo({ onNavigate }) {
       onClick={(event) => onNavigate(event, "/")}
       aria-label="Accueil Aération Ventilation"
     >
-      <img className="logo-image" src={brandLogo} alt="Aération Ventilation" />
+      <picture>
+        <source srcSet={brandLogoSources.avif} type="image/avif" />
+        <source srcSet={brandLogoSources.webp} type="image/webp" />
+        <img className="logo-image" src={brandLogoSources.fallback} alt="Aération Ventilation" />
+      </picture>
     </a>
   );
 }
@@ -152,7 +156,7 @@ export function Footer({ currentPath, onNavigate }) {
         <div>
           <h2>Catégories</h2>
           <ul>
-            {categories.slice(0, 8).map((category) => (
+            {categories.map((category) => (
               <li key={category}>
                 <a href="/boutique" onClick={(event) => onNavigate(event, "/boutique")}>
                   {category}
