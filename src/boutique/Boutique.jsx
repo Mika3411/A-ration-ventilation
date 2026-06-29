@@ -201,6 +201,9 @@ export function Catalog({ categories: productCategories, currentPath, onNavigate
     filteredProducts.length,
   );
   const visibleProducts = filteredProducts.slice(firstProductIndex, lastProductIndex);
+  const productCountLabel = `${filteredProducts.length} produit${
+    filteredProducts.length > 1 ? "s" : ""
+  }`;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -257,10 +260,8 @@ export function Catalog({ categories: productCategories, currentPath, onNavigate
           <div className="catalog-results">
             <p className="catalog-result-summary" aria-live="polite">
               {filteredProducts.length
-                ? `${firstProductIndex + 1}-${lastProductIndex} sur ${
-                    filteredProducts.length
-                  } produits`
-                : "0 produit"}
+                ? `${firstProductIndex + 1}-${lastProductIndex} sur ${productCountLabel}`
+                : productCountLabel}
             </p>
             <div className="product-grid">
               {visibleProducts.map((product) => (
