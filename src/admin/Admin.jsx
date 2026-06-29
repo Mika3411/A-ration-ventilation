@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import {
+  ArrowUpDown,
   Building2,
   CalendarClock,
   Check,
@@ -8,6 +9,7 @@ import {
   CircleHelp,
   Edit3,
   ImagePlus,
+  ListFilter,
   LogIn,
   LogOut,
   Mail,
@@ -27,6 +29,17 @@ import { normalizeCategories, normalizeProducts } from "../data/products.js";
 import { PageHero } from "../layout/PageHero.jsx";
 
 const adminProductsPerPage = 6;
+const adminProductSortOptions = [
+  { value: "manual", label: "Ordre manuel" },
+  { value: "price-asc", label: "Prix croissant" },
+  { value: "price-desc", label: "Prix décroissant" },
+  { value: "created-desc", label: "Date d'ajout récente" },
+  { value: "created-asc", label: "Date d'ajout ancienne" },
+  { value: "updated-desc", label: "Dernière modification" },
+  { value: "name-asc", label: "Nom A-Z" },
+  { value: "category-asc", label: "Catégorie A-Z" },
+];
+const adminProductCollator = new Intl.Collator("fr", { numeric: true, sensitivity: "base" });
 const maxAdminImageFileSize = 1 * 1024 * 1024;
 
 const emptyAdminProductForm = {
@@ -106,6 +119,56 @@ function normalizeAdminSearchValue(value) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
+}
+
+function getAdminProductTimestamp(product, field) {
+  const timestamp = new Date(product?.[field]).getTime();
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function compareAdminProductManualOrder(first, second) {
+  return (
+    (Number.parseInt(first.sortOrder, 10) || 0) - (Number.parseInt(second.sortOrder, 10) || 0) ||
+    adminProductCollator.compare(first.name || "", second.name || "")
+  );
+}
+
+function sortAdminProducts(products, sortMode) {
+  return [...products].sort((first, second) => {
+    switch (sortMode) {
+      case "price-asc":
+        return first.amount - second.amount || compareAdminProductManualOrder(first, second);
+      case "price-desc":
+        return second.amount - first.amount || compareAdminProductManualOrder(first, second);
+      case "created-desc":
+        return (
+          getAdminProductTimestamp(second, "createdAt") -
+            getAdminProductTimestamp(first, "createdAt") ||
+          compareAdminProductManualOrder(first, second)
+        );
+      case "created-asc":
+        return (
+          getAdminProductTimestamp(first, "createdAt") -
+            getAdminProductTimestamp(second, "createdAt") ||
+          compareAdminProductManualOrder(first, second)
+        );
+      case "updated-desc":
+        return (
+          getAdminProductTimestamp(second, "updatedAt") -
+            getAdminProductTimestamp(first, "updatedAt") ||
+          compareAdminProductManualOrder(first, second)
+        );
+      case "name-asc":
+        return adminProductCollator.compare(first.name || "", second.name || "");
+      case "category-asc":
+        return (
+          adminProductCollator.compare(first.category || "", second.category || "") ||
+          compareAdminProductManualOrder(first, second)
+        );
+      default:
+        return compareAdminProductManualOrder(first, second);
+    }
+  });
 }
 
 function AdminHelpTooltip({ text }) {
@@ -304,20 +367,40 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   const [form, setForm] = useState(emptyAdminProductForm);
   const [productPage, setProductPage] = useState(1);
   const [productQuery, setProductQuery] = useState("");
+  const [productSort, setProductSort] = useState("manual");
+  const [selectedProductCategories, setSelectedProductCategories] = useState([]);
+  const [isCategoryFilterOpen, setIsCategoryFilterOpen] = useState(false);
   const [selectedSlug, setSelectedSlug] = useState("");
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
   const selectedProduct = products.find((product) => product.slug === selectedSlug);
-  const adminCategories = normalizeCategories(categories, products);
+  const adminCategories = useMemo(() => normalizeCategories(categories, products), [categories, products]);
   const isSaving = status === "saving";
+  const selectedProductCategorySet = useMemo(
+    () => new Set(selectedProductCategories),
+    [selectedProductCategories],
+  );
+  const activeCategoryFilterCount = selectedProductCategories.length;
+  const productCategoryCounts = useMemo(
+    () =>
+      products.reduce((counts, product) => {
+        counts.set(product.category, (counts.get(product.category) || 0) + 1);
+        return counts;
+      }, new Map()),
+    [products],
+  );
   const filteredProducts = useMemo(() => {
     const normalizedQuery = normalizeAdminSearchValue(productQuery.trim());
+    const categoryFilteredProducts =
+      selectedProductCategorySet.size === 0
+        ? products
+        : products.filter((product) => selectedProductCategorySet.has(product.category));
 
     if (!normalizedQuery) {
-      return products;
+      return categoryFilteredProducts;
     }
 
-    return products.filter((product) => {
+    return categoryFilteredProducts.filter((product) => {
       const searchableProduct = normalizeAdminSearchValue(
         [
           product.name,
@@ -334,17 +417,21 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
 
       return searchableProduct.includes(normalizedQuery);
     });
-  }, [productQuery, products]);
-  const productPageCount = Math.max(1, Math.ceil(filteredProducts.length / adminProductsPerPage));
+  }, [productQuery, products, selectedProductCategorySet]);
+  const sortedProducts = useMemo(
+    () => sortAdminProducts(filteredProducts, productSort),
+    [filteredProducts, productSort],
+  );
+  const productPageCount = Math.max(1, Math.ceil(sortedProducts.length / adminProductsPerPage));
   const currentProductPage = Math.min(productPage, productPageCount);
   const productPageStart = (currentProductPage - 1) * adminProductsPerPage;
   const paginatedProducts = useMemo(
-    () => filteredProducts.slice(productPageStart, productPageStart + adminProductsPerPage),
-    [filteredProducts, productPageStart],
+    () => sortedProducts.slice(productPageStart, productPageStart + adminProductsPerPage),
+    [sortedProducts, productPageStart],
   );
-  const productPageFirstItem = filteredProducts.length === 0 ? 0 : productPageStart + 1;
+  const productPageFirstItem = sortedProducts.length === 0 ? 0 : productPageStart + 1;
   const productPageLastItem = productPageStart + paginatedProducts.length;
-  const shouldPaginateProducts = filteredProducts.length > adminProductsPerPage;
+  const shouldPaginateProducts = sortedProducts.length > adminProductsPerPage;
 
   useEffect(() => {
     loadAdminProducts();
@@ -353,6 +440,12 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   useEffect(() => {
     setProductPage((currentPage) => Math.min(currentPage, productPageCount));
   }, [productPageCount]);
+
+  useEffect(() => {
+    setSelectedProductCategories((currentCategories) =>
+      currentCategories.filter((category) => adminCategories.includes(category)),
+    );
+  }, [adminCategories]);
 
   async function loadAdminProducts(nextSelectedSlug = selectedSlug) {
     setStatus("loading");
@@ -391,6 +484,8 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   function createNewProduct() {
     setSelectedSlug("");
     setProductQuery("");
+    setSelectedProductCategories([]);
+    setIsCategoryFilterOpen(false);
     setProductPage(1);
     setForm({
       ...emptyAdminProductForm,
@@ -401,6 +496,25 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
 
   function updateProductQuery(value) {
     setProductQuery(value);
+    setProductPage(1);
+  }
+
+  function updateProductSort(value) {
+    setProductSort(value);
+    setProductPage(1);
+  }
+
+  function toggleProductCategoryFilter(category) {
+    setSelectedProductCategories((currentCategories) =>
+      currentCategories.includes(category)
+        ? currentCategories.filter((currentCategory) => currentCategory !== category)
+        : [...currentCategories, category],
+    );
+    setProductPage(1);
+  }
+
+  function clearProductCategoryFilters() {
+    setSelectedProductCategories([]);
     setProductPage(1);
   }
 
@@ -616,6 +730,80 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                   type="search"
                 />
               </label>
+              <label className="admin-product-sort">
+                <ArrowUpDown size={18} />
+                <span className="sr-only">Trier les produits</span>
+                <select value={productSort} onChange={(event) => updateProductSort(event.target.value)}>
+                  {adminProductSortOptions.map((option) => (
+                    <option value={option.value} key={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="admin-product-filter">
+                <button
+                  className={activeCategoryFilterCount > 0 ? "is-active" : ""}
+                  type="button"
+                  onClick={() => setIsCategoryFilterOpen((isOpen) => !isOpen)}
+                  aria-expanded={isCategoryFilterOpen}
+                  aria-haspopup="dialog"
+                >
+                  <ListFilter size={18} />
+                  <span>Catégories</span>
+                  {activeCategoryFilterCount > 0 && <em>{activeCategoryFilterCount}</em>}
+                </button>
+                {isCategoryFilterOpen && (
+                  <div className="admin-category-filter-popover" role="dialog" aria-label="Filtrer par catégories">
+                    <div className="admin-category-filter-head">
+                      <div>
+                        <span>Filtrer</span>
+                        <strong>Catégories</strong>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsCategoryFilterOpen(false)}
+                        aria-label="Fermer le filtre catégories"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    <div className="admin-category-filter-list">
+                      {adminCategories.map((category) => {
+                        const productCount = productCategoryCounts.get(category) || 0;
+
+                        return (
+                          <label key={category}>
+                            <input
+                              type="checkbox"
+                              checked={selectedProductCategorySet.has(category)}
+                              onChange={() => toggleProductCategoryFilter(category)}
+                            />
+                            <span>
+                              <strong>{category}</strong>
+                              <small>
+                                {productCount} produit{productCount > 1 ? "s" : ""}
+                              </small>
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    <div className="admin-category-filter-actions">
+                      <button
+                        type="button"
+                        onClick={clearProductCategoryFilters}
+                        disabled={activeCategoryFilterCount === 0}
+                      >
+                        Tout afficher
+                      </button>
+                      <button type="button" onClick={() => setIsCategoryFilterOpen(false)}>
+                        Appliquer
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
               {status === "loading" && <p className="admin-empty-state">Chargement des produits...</p>}
               {status !== "loading" &&
                 paginatedProducts.map((product) => (
@@ -634,7 +822,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                   </button>
                 ))}
               {status !== "loading" && products.length > 0 && filteredProducts.length === 0 && (
-                <p className="admin-empty-state">Aucun produit ne correspond à cette recherche.</p>
+                <p className="admin-empty-state">Aucun produit ne correspond à ces filtres.</p>
               )}
               {status !== "loading" && products.length === 0 && (
                 <p className="admin-empty-state">Aucun produit enregistré pour le moment.</p>
@@ -650,7 +838,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                     <ChevronLeft size={18} />
                   </button>
                   <span>
-                    {productPageFirstItem}-{productPageLastItem} / {filteredProducts.length}
+                    {productPageFirstItem}-{productPageLastItem} / {sortedProducts.length}
                     <small>
                       Page {currentProductPage} / {productPageCount}
                     </small>
