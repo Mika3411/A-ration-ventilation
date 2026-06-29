@@ -3,10 +3,13 @@ import {
   cleanMessage,
   cleanSingleLine,
   formatEuroAmount,
-  isValidHttpUrl,
+  isValidHttpsUrl,
   slugify,
 } from "../helpers.js";
 import { allowedImageKeys, defaultShopCategories, defaultShopProducts } from "./defaultProducts.js";
+
+const maxProductImageDataLength = 1_500_000;
+const productImageDataPattern = /^data:image\/(png|jpe?g|webp|gif);base64,[a-z0-9+/=]+$/i;
 
 let memoryShopProducts = defaultShopProducts.map((product, index) => ({
   id: index + 1,
@@ -92,11 +95,12 @@ export async function createProduct(productInput) {
         amount,
         image_key,
         image_url,
+        image_data,
         featured,
         active,
         sort_order
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *
     `,
     [
@@ -107,6 +111,7 @@ export async function createProduct(productInput) {
       productInput.amount,
       productInput.imageKey,
       productInput.imageUrl,
+      productInput.imageData,
       productInput.featured,
       productInput.active,
       productInput.sortOrder,
@@ -147,11 +152,12 @@ export async function updateProduct(slug, productInput) {
         amount = $4,
         image_key = $5,
         image_url = $6,
-        featured = $7,
-        active = $8,
-        sort_order = $9,
+        image_data = $7,
+        featured = $8,
+        active = $9,
+        sort_order = $10,
         updated_at = NOW()
-      WHERE slug = $10
+      WHERE slug = $11
       RETURNING *
     `,
     [
@@ -161,6 +167,7 @@ export async function updateProduct(slug, productInput) {
       productInput.amount,
       productInput.imageKey,
       productInput.imageUrl,
+      productInput.imageData,
       productInput.featured,
       productInput.active,
       productInput.sortOrder,
@@ -451,6 +458,7 @@ export function normalizeProductInput(body) {
   const category = cleanSingleLine(body?.category, 120);
   const description = cleanMessage(body?.description ?? body?.text, 1200);
   const imageUrl = cleanSingleLine(body?.imageUrl, 500);
+  const imageData = normalizeProductImageData(body?.imageData);
   const requestedImageKey = cleanSingleLine(body?.imageKey, 40);
   const imageKey = allowedImageKeys.has(requestedImageKey) ? requestedImageKey : "ductFan";
   const amount = Number.parseInt(body?.amount, 10);
@@ -468,8 +476,8 @@ export function normalizeProductInput(body) {
     throw new ProductInputError("Le prix doit être un montant valide.");
   }
 
-  if (imageUrl && !isValidHttpUrl(imageUrl)) {
-    throw new ProductInputError("L'URL de l'image doit commencer par http:// ou https://.");
+  if (imageUrl && !isValidHttpsUrl(imageUrl)) {
+    throw new ProductInputError("L'URL de l'image doit commencer par https://.");
   }
 
   return {
@@ -479,10 +487,28 @@ export function normalizeProductInput(body) {
     amount,
     imageKey,
     imageUrl,
+    imageData,
     featured: body?.featured === true,
     active: body?.active !== false,
     sortOrder: Number.isInteger(sortOrder) ? sortOrder : 0,
   };
+}
+
+export function normalizeProductImageData(value) {
+  if (typeof value !== "string") return "";
+
+  const imageData = value.trim();
+  if (!imageData) return "";
+
+  if (imageData.length > maxProductImageDataLength) {
+    throw new ProductInputError("L'image importée ne doit pas dépasser environ 1 Mo.");
+  }
+
+  if (!productImageDataPattern.test(imageData)) {
+    throw new ProductInputError("Merci d'importer une image PNG, JPG, WebP ou GIF valide.");
+  }
+
+  return imageData;
 }
 
 export function normalizeCategoryInput(body) {
@@ -609,6 +635,7 @@ function serializeProductRow(row) {
     price: formatEuroAmount(row.amount),
     imageKey: row.image_key,
     imageUrl: row.image_url,
+    imageData: row.image_data || "",
     featured: row.featured,
     active: row.active,
     sortOrder: row.sort_order,
@@ -629,6 +656,7 @@ function serializeMemoryProduct(product) {
     price: formatEuroAmount(product.amount),
     imageKey: product.imageKey,
     imageUrl: product.imageUrl,
+    imageData: product.imageData || "",
     featured: product.featured,
     active: product.active,
     sortOrder: product.sortOrder,

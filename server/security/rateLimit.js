@@ -29,6 +29,13 @@ export const adminLoginRateLimiter = createRateLimiter({
     `${request.ip}:${cleanSingleLine(request.body?.username, 80) || "admin"}`,
 });
 
+export const adminLoginIpRateLimiter = createRateLimiter({
+  keyPrefix: "admin-login-ip",
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: "Trop de tentatives admin depuis cette adresse. Réessayez dans quelques minutes.",
+});
+
 export const contactRateLimiter = createRateLimiter({
   keyPrefix: "contact",
   windowMs: 15 * 60 * 1000,

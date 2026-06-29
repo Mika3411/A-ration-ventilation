@@ -1,7 +1,9 @@
 import express from "express";
 import Stripe from "stripe";
 
+import { missingProductionSiteUrlError } from "../config.js";
 import { getAuthenticatedCustomer } from "../auth/customerAuth.js";
+import { ensureDatabaseReady } from "../database.js";
 import { getRequestOrigin } from "../helpers.js";
 import {
   attachStripeSessionToOrder,
@@ -11,6 +13,9 @@ import {
 } from "../orders/service.js";
 import { normalizeCheckoutItems } from "../products/service.js";
 import { checkoutRateLimiter } from "../security/rateLimit.js";
+
+export const missingCheckoutDatabaseError =
+  "DATABASE_URL doit être configuré en production avant d'ouvrir un paiement Stripe.";
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -49,7 +54,6 @@ export function createStripeWebhookRouter() {
 
         console.log("Stripe checkout completed:", {
           sessionId: session.id,
-          cart: session.metadata?.cart || "",
           orderId: order?.id || session.metadata?.orderId || "",
         });
       }
@@ -68,6 +72,19 @@ export function createCheckoutRouter() {
   const router = express.Router();
 
   router.post("/checkout", checkoutRateLimiter, async (request, response) => {
+    const origin = getRequestOrigin(request);
+
+    if (!origin) {
+      response.status(503).json({ error: missingProductionSiteUrlError });
+      return;
+    }
+
+    const databaseError = await getProductionCheckoutDatabaseError();
+    if (databaseError) {
+      response.status(503).json({ error: databaseError });
+      return;
+    }
+
     if (!stripe) {
       response.status(503).json({
         error: "Stripe n'est pas encore configuré. Ajoutez STRIPE_SECRET_KEY côté serveur.",
@@ -85,7 +102,6 @@ export function createCheckoutRouter() {
     try {
       const customer = await getAuthenticatedCustomer(request);
       const order = await createPendingOrder({ cartItems, customer });
-      const origin = getRequestOrigin(request);
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
         line_items: cartItems.map(({ product, quantity }) => ({
@@ -129,4 +145,15 @@ export function createCheckoutRouter() {
   });
 
   return router;
+}
+
+async function getProductionCheckoutDatabaseError() {
+  if (process.env.NODE_ENV !== "production") return "";
+
+  try {
+    await ensureDatabaseReady();
+    return "";
+  } catch {
+    return missingCheckoutDatabaseError;
+  }
 }

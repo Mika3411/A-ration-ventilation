@@ -6,6 +6,7 @@ import {
   authCookieName,
   authSecret,
   authTokenMaxAgeSeconds,
+  maxPasswordLength,
   passwordHashOptions,
 } from "../config.js";
 import { databaseReady, dbPool, getDatabaseInitError } from "../database.js";
@@ -68,6 +69,11 @@ export function createCustomerAuthRouter() {
       return;
     }
 
+    if (password.length > maxPasswordLength) {
+      response.status(400).json({ error: "Le mot de passe ne doit pas dépasser 128 caractères." });
+      return;
+    }
+
     try {
       const { hash, salt } = await hashPassword(password);
       const publicId = crypto.randomUUID();
@@ -116,6 +122,11 @@ export function createCustomerAuthRouter() {
 
     if (!email || !password) {
       response.status(400).json({ error: "Merci d'indiquer votre email et votre mot de passe." });
+      return;
+    }
+
+    if (password.length > maxPasswordLength) {
+      response.status(400).json({ error: "Email ou mot de passe incorrect." });
       return;
     }
 

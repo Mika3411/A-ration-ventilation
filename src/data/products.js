@@ -80,7 +80,7 @@ export const defaultProducts = [
 ].map(normalizeProduct);
 
 export function resolveProductImage(product) {
-  return product.imageUrl || productImageByKey[product.imageKey] || ductFan;
+  return product.imageData || product.imageUrl || productImageByKey[product.imageKey] || ductFan;
 }
 
 export function normalizeProduct(product) {
@@ -94,6 +94,7 @@ export function normalizeProduct(product) {
     description: product.description || product.text || "",
     imageKey: product.imageKey || "ductFan",
     imageUrl: product.imageUrl || "",
+    imageData: product.imageData || "",
     image: resolveProductImage(product),
     featured: product.featured === true,
     active: product.active !== false,

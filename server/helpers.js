@@ -69,7 +69,10 @@ export function isValidEmail(value) {
 }
 
 export function getRequestOrigin(request) {
-  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/+$/, "");
+  const siteUrl = process.env.SITE_URL?.trim();
+  if (siteUrl) return siteUrl.replace(/\/+$/, "");
+
+  if (process.env.NODE_ENV === "production") return "";
 
   const origin = request.get("origin");
   if (origin) return origin.replace(/\/+$/, "");
@@ -103,10 +106,10 @@ export function slugify(value) {
   return slug || "produit";
 }
 
-export function isValidHttpUrl(value) {
+export function isValidHttpsUrl(value) {
   try {
     const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
+    return url.protocol === "https:";
   } catch {
     return false;
   }

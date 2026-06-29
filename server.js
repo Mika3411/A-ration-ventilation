@@ -4,10 +4,12 @@ import { fileURLToPath } from "node:url";
 
 loadEnvFile();
 
-const [{ createApp }, { port }] = await Promise.all([
+const [{ createApp }, { assertProductionConfiguration, port }] = await Promise.all([
   import("./server/app.js"),
   import("./server/config.js"),
 ]);
+
+assertProductionConfiguration();
 
 const app = createApp();
 

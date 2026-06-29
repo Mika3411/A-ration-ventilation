@@ -7,6 +7,7 @@ import {
   adminSessionSecret,
   adminTokenMaxAgeSeconds,
   adminUsername,
+  maxPasswordLength,
 } from "../config.js";
 import { dbPool, getDatabaseInitError } from "../database.js";
 import {
@@ -17,7 +18,7 @@ import {
   setHttpOnlyCookie,
   timingSafeEqualString,
 } from "../helpers.js";
-import { adminLoginRateLimiter } from "../security/rateLimit.js";
+import { adminLoginIpRateLimiter, adminLoginRateLimiter } from "../security/rateLimit.js";
 
 export function createAdminAuthRouter() {
   const router = express.Router();
@@ -33,7 +34,7 @@ export function createAdminAuthRouter() {
     });
   });
 
-  router.post("/login", adminLoginRateLimiter, (request, response) => {
+  router.post("/login", adminLoginIpRateLimiter, adminLoginRateLimiter, (request, response) => {
     const configError = getAdminConfigurationError();
 
     if (configError) {
@@ -43,6 +44,11 @@ export function createAdminAuthRouter() {
 
     const username = cleanSingleLine(request.body?.username, 80) || adminUsername;
     const password = typeof request.body?.password === "string" ? request.body.password : "";
+
+    if (password.length > maxPasswordLength) {
+      response.status(401).json({ error: "Identifiants admin incorrects." });
+      return;
+    }
 
     if (username !== adminUsername || !constantTimeEqual(password, adminPassword)) {
       response.status(401).json({ error: "Identifiants admin incorrects." });

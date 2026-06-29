@@ -67,6 +67,12 @@ export function QuoteSection() {
           </div>
         </div>
         <form className="quote-form" onSubmit={handleSubmit}>
+          <div className="honeypot-field" aria-hidden="true">
+            <label>
+              Site web
+              <input name="website" tabIndex="-1" autoComplete="off" />
+            </label>
+          </div>
           <div className="field-row">
             <label>
               Nom

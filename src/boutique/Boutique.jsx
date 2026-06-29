@@ -5,6 +5,8 @@ import { getProductPath } from "../data/products.js";
 import { PageHero } from "../layout/PageHero.jsx";
 import { RouteLink } from "../layout/Layout.jsx";
 
+const catalogProductsPerPage = 8;
+
 export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigate, products }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const featuredProducts = useMemo(() => {
@@ -175,6 +177,7 @@ export function ProductPreview({ currentPath, onNavigate, products }) {
 
 export function Catalog({ categories: productCategories, currentPath, onNavigate, products }) {
   const [activeCategory, setActiveCategory] = useState("Toutes");
+  const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
 
   const filteredProducts = useMemo(() => {
@@ -190,6 +193,30 @@ export function Catalog({ categories: productCategories, currentPath, onNavigate
       return matchesCategory && matchesQuery;
     });
   }, [activeCategory, products, query]);
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / catalogProductsPerPage));
+  const visiblePage = Math.min(currentPage, totalPages);
+  const firstProductIndex = (visiblePage - 1) * catalogProductsPerPage;
+  const lastProductIndex = Math.min(
+    firstProductIndex + catalogProductsPerPage,
+    filteredProducts.length,
+  );
+  const visibleProducts = filteredProducts.slice(firstProductIndex, lastProductIndex);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, query]);
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
+
+  function showPreviousPage() {
+    setCurrentPage((page) => Math.max(page - 1, 1));
+  }
+
+  function showNextPage() {
+    setCurrentPage((page) => Math.min(page + 1, totalPages));
+  }
 
   return (
     <section className="section catalog-section">
@@ -227,17 +254,51 @@ export function Catalog({ categories: productCategories, currentPath, onNavigate
               ))}
             </ul>
           </aside>
-          <div className="product-grid">
-            {filteredProducts.map((product) => (
-              <ProductCard
-                currentPath={currentPath}
-                onNavigate={onNavigate}
-                product={product}
-                key={product.name}
-              />
-            ))}
-            {!filteredProducts.length && (
-              <div className="empty-state">Aucun produit ne correspond à cette recherche.</div>
+          <div className="catalog-results">
+            <p className="catalog-result-summary" aria-live="polite">
+              {filteredProducts.length
+                ? `${firstProductIndex + 1}-${lastProductIndex} sur ${
+                    filteredProducts.length
+                  } produits`
+                : "0 produit"}
+            </p>
+            <div className="product-grid">
+              {visibleProducts.map((product) => (
+                <ProductCard
+                  currentPath={currentPath}
+                  onNavigate={onNavigate}
+                  product={product}
+                  key={product.name}
+                />
+              ))}
+              {!filteredProducts.length && (
+                <div className="empty-state">Aucun produit ne correspond à cette recherche.</div>
+              )}
+            </div>
+            {totalPages > 1 && (
+              <nav className="catalog-pagination" aria-label="Pagination des produits">
+                <button
+                  className="button button-dark"
+                  type="button"
+                  onClick={showPreviousPage}
+                  disabled={visiblePage === 1}
+                >
+                  <ChevronLeft size={18} />
+                  Précédent
+                </button>
+                <span aria-label={`Page ${visiblePage} sur ${totalPages}`}>
+                  Page {visiblePage} sur {totalPages}
+                </span>
+                <button
+                  className="button button-dark"
+                  type="button"
+                  onClick={showNextPage}
+                  disabled={visiblePage === totalPages}
+                >
+                  Suivant
+                  <ChevronRight size={18} />
+                </button>
+              </nav>
             )}
           </div>
         </div>

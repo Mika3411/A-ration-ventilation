@@ -10,10 +10,16 @@ export function createContactRouter() {
   const router = express.Router();
 
   router.post("/contact", contactRateLimiter, async (request, response) => {
+    const website = cleanSingleLine(request.body?.website, 200);
     const name = cleanSingleLine(request.body?.name, 120);
     const phone = cleanSingleLine(request.body?.phone, 80);
     const need = cleanSingleLine(request.body?.need, 160);
     const message = cleanMessage(request.body?.message, 2000);
+
+    if (website) {
+      response.status(200).json({ ok: true });
+      return;
+    }
 
     if (!name || !phone || !need) {
       response.status(400).json({ error: "Merci de compléter les champs obligatoires." });

@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import {
   Building2,
   CalendarClock,
   Check,
+  ChevronLeft,
+  ChevronRight,
+  CircleHelp,
   Edit3,
+  ImagePlus,
   LogIn,
   LogOut,
   Mail,
@@ -19,8 +23,11 @@ import {
   X,
 } from "lucide-react";
 
-import { normalizeCategories, normalizeProducts, productImageOptions } from "../data/products.js";
+import { normalizeCategories, normalizeProducts } from "../data/products.js";
 import { PageHero } from "../layout/PageHero.jsx";
+
+const adminProductsPerPage = 6;
+const maxAdminImageFileSize = 1 * 1024 * 1024;
 
 const emptyAdminProductForm = {
   name: "",
@@ -29,6 +36,9 @@ const emptyAdminProductForm = {
   description: "",
   imageKey: "ductFan",
   imageUrl: "",
+  imageData: "",
+  imagePreview: "",
+  imageFileName: "",
   featured: false,
   active: true,
   sortOrder: "0",
@@ -56,6 +66,9 @@ function getAdminProductForm(product) {
     description: product.description || product.text,
     imageKey: product.imageKey || "ductFan",
     imageUrl: product.imageUrl || "",
+    imageData: product.imageData || "",
+    imagePreview: product.image || product.imageData || product.imageUrl || "",
+    imageFileName: "",
     featured: product.featured === true,
     active: product.active !== false,
     sortOrder: String(product.sortOrder || 0),
@@ -72,10 +85,56 @@ function getAdminProductPayload(form) {
     description: form.description,
     imageKey: form.imageKey,
     imageUrl: form.imageUrl,
+    imageData: form.imageData,
     featured: form.featured,
     active: form.active,
     sortOrder: Number.parseInt(form.sortOrder, 10) || 0,
   };
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => resolve(reader.result));
+    reader.addEventListener("error", () => reject(new Error("Impossible de lire l'image.")));
+    reader.readAsDataURL(file);
+  });
+}
+
+function normalizeAdminSearchValue(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function AdminHelpTooltip({ text }) {
+  const tooltipId = useId();
+
+  return (
+    <span className="admin-help-tooltip">
+      <span
+        className="admin-help-trigger"
+        tabIndex={0}
+        aria-describedby={tooltipId}
+        aria-label="Aide"
+      >
+        <CircleHelp size={15} aria-hidden="true" />
+      </span>
+      <span className="admin-help-bubble" id={tooltipId} role="tooltip">
+        {text}
+      </span>
+    </span>
+  );
+}
+
+function AdminFieldLabel({ label, help }) {
+  return (
+    <span className="admin-field-label">
+      <span>{label}</span>
+      <AdminHelpTooltip text={help} />
+    </span>
+  );
 }
 
 function getAdminMemberForm(member) {
@@ -243,16 +302,57 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [form, setForm] = useState(emptyAdminProductForm);
+  const [productPage, setProductPage] = useState(1);
+  const [productQuery, setProductQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState("");
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
   const selectedProduct = products.find((product) => product.slug === selectedSlug);
   const adminCategories = normalizeCategories(categories, products);
   const isSaving = status === "saving";
+  const filteredProducts = useMemo(() => {
+    const normalizedQuery = normalizeAdminSearchValue(productQuery.trim());
+
+    if (!normalizedQuery) {
+      return products;
+    }
+
+    return products.filter((product) => {
+      const searchableProduct = normalizeAdminSearchValue(
+        [
+          product.name,
+          product.category,
+          product.description,
+          product.text,
+          product.price,
+          product.slug,
+          product.active ? "actif" : "masque",
+        ]
+          .filter(Boolean)
+          .join(" "),
+      );
+
+      return searchableProduct.includes(normalizedQuery);
+    });
+  }, [productQuery, products]);
+  const productPageCount = Math.max(1, Math.ceil(filteredProducts.length / adminProductsPerPage));
+  const currentProductPage = Math.min(productPage, productPageCount);
+  const productPageStart = (currentProductPage - 1) * adminProductsPerPage;
+  const paginatedProducts = useMemo(
+    () => filteredProducts.slice(productPageStart, productPageStart + adminProductsPerPage),
+    [filteredProducts, productPageStart],
+  );
+  const productPageFirstItem = filteredProducts.length === 0 ? 0 : productPageStart + 1;
+  const productPageLastItem = productPageStart + paginatedProducts.length;
+  const shouldPaginateProducts = filteredProducts.length > adminProductsPerPage;
 
   useEffect(() => {
     loadAdminProducts();
   }, []);
+
+  useEffect(() => {
+    setProductPage((currentPage) => Math.min(currentPage, productPageCount));
+  }, [productPageCount]);
 
   async function loadAdminProducts(nextSelectedSlug = selectedSlug) {
     setStatus("loading");
@@ -290,6 +390,8 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
 
   function createNewProduct() {
     setSelectedSlug("");
+    setProductQuery("");
+    setProductPage(1);
     setForm({
       ...emptyAdminProductForm,
       sortOrder: String((products.length + 1) * 10),
@@ -297,11 +399,56 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
     setMessage("");
   }
 
+  function updateProductQuery(value) {
+    setProductQuery(value);
+    setProductPage(1);
+  }
+
+  function goToProductPage(nextPage) {
+    setProductPage(Math.min(Math.max(nextPage, 1), productPageCount));
+  }
+
   function updateForm(field, value) {
     setForm((currentForm) => ({
       ...currentForm,
       [field]: value,
     }));
+  }
+
+  async function importProductImage(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setMessage("Merci d'importer un fichier image.");
+      return;
+    }
+
+    if (file.size > maxAdminImageFileSize) {
+      setMessage("L'image ne doit pas dépasser 1 Mo.");
+      return;
+    }
+
+    try {
+      const imageData = await readFileAsDataUrl(file);
+
+      if (typeof imageData !== "string") {
+        throw new Error("Impossible de lire l'image.");
+      }
+
+      setForm((currentForm) => ({
+        ...currentForm,
+        imageData,
+        imagePreview: imageData,
+        imageFileName: file.name,
+        imageUrl: "",
+      }));
+      setMessage("Image importée. Pensez à enregistrer le produit.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Impossible d'importer l'image.");
+    }
   }
 
   async function saveProduct(event) {
@@ -459,9 +606,19 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                   <PackagePlus size={20} />
                 </button>
               </div>
+              <label className="admin-product-search">
+                <Search size={18} />
+                <span className="sr-only">Rechercher un produit</span>
+                <input
+                  value={productQuery}
+                  onChange={(event) => updateProductQuery(event.target.value)}
+                  placeholder="Rechercher un produit..."
+                  type="search"
+                />
+              </label>
               {status === "loading" && <p className="admin-empty-state">Chargement des produits...</p>}
               {status !== "loading" &&
-                products.map((product) => (
+                paginatedProducts.map((product) => (
                   <button
                     className={selectedSlug === product.slug ? "is-selected" : ""}
                     type="button"
@@ -476,6 +633,38 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                     <em>{product.active ? "Actif" : "Masqué"}</em>
                   </button>
                 ))}
+              {status !== "loading" && products.length > 0 && filteredProducts.length === 0 && (
+                <p className="admin-empty-state">Aucun produit ne correspond à cette recherche.</p>
+              )}
+              {status !== "loading" && products.length === 0 && (
+                <p className="admin-empty-state">Aucun produit enregistré pour le moment.</p>
+              )}
+              {status !== "loading" && shouldPaginateProducts && (
+                <nav className="admin-product-pagination" aria-label="Pagination des produits">
+                  <button
+                    type="button"
+                    onClick={() => goToProductPage(currentProductPage - 1)}
+                    disabled={currentProductPage === 1}
+                    aria-label="Page précédente"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <span>
+                    {productPageFirstItem}-{productPageLastItem} / {filteredProducts.length}
+                    <small>
+                      Page {currentProductPage} / {productPageCount}
+                    </small>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => goToProductPage(currentProductPage + 1)}
+                    disabled={currentProductPage === productPageCount}
+                    aria-label="Page suivante"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </nav>
+              )}
             </aside>
             <AdminCategoriesManager
               categories={adminCategories}
@@ -511,7 +700,10 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
             </div>
             <div className="admin-form-grid">
               <label>
-                Nom
+                <AdminFieldLabel
+                  label="Nom"
+                  help="Nom affiché sur la boutique, la fiche produit et dans le panier."
+                />
                 <input
                   value={form.name}
                   onChange={(event) => updateForm("name", event.target.value)}
@@ -519,7 +711,10 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                 />
               </label>
               <label>
-                Catégorie
+                <AdminFieldLabel
+                  label="Catégorie"
+                  help="Tape une catégorie existante ou un nouveau nom pour classer le produit."
+                />
                 <input
                   value={form.category}
                   list="admin-category-list"
@@ -533,7 +728,10 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                 </datalist>
               </label>
               <label>
-                Prix EUR
+                <AdminFieldLabel
+                  label="Prix EUR"
+                  help="Prix public en euros. Tu peux utiliser une virgule ou un point."
+                />
                 <input
                   value={form.amount}
                   onChange={(event) => updateForm("amount", event.target.value)}
@@ -542,36 +740,46 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                 />
               </label>
               <label>
-                Ordre
+                <AdminFieldLabel
+                  label="Ordre"
+                  help="Position du produit dans les listes : 10 apparaît avant 20, 20 avant 30."
+                />
                 <input
                   value={form.sortOrder}
                   onChange={(event) => updateForm("sortOrder", event.target.value)}
                   inputMode="numeric"
                 />
               </label>
-              <label>
-                Image interne
-                <select
-                  value={form.imageKey}
-                  onChange={(event) => updateForm("imageKey", event.target.value)}
-                >
-                  {productImageOptions.map((option) => (
-                    <option value={option.value} key={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                URL image
-                <input
-                  value={form.imageUrl}
-                  onChange={(event) => updateForm("imageUrl", event.target.value)}
-                  placeholder="https://..."
+              <label className="admin-wide-field">
+                <AdminFieldLabel
+                  label="Image produit"
+                  help="Image importée pour ce produit. Elle remplace l'image actuelle après enregistrement."
                 />
+                <div className="admin-image-import">
+                  <div className="admin-image-preview">
+                    {form.imagePreview ? (
+                      <img src={form.imagePreview} alt="" />
+                    ) : (
+                      <ImagePlus size={34} />
+                    )}
+                  </div>
+                  <div className="admin-image-import-copy">
+                    <strong>{form.imageFileName || "Importer une image"}</strong>
+                    <span>PNG, JPG, WebP ou GIF jusqu'à 1 Mo.</span>
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/gif"
+                      onChange={importProductImage}
+                      disabled={isSaving}
+                    />
+                  </div>
+                </div>
               </label>
               <label className="admin-wide-field">
-                Description
+                <AdminFieldLabel
+                  label="Description"
+                  help="Texte affiché sur la fiche produit pour expliquer l'usage du produit."
+                />
                 <textarea
                   value={form.description}
                   onChange={(event) => updateForm("description", event.target.value)}
@@ -584,7 +792,8 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                     checked={form.featured}
                     onChange={(event) => updateForm("featured", event.target.checked)}
                   />
-                  Mis en avant
+                  <span>Mis en avant</span>
+                  <AdminHelpTooltip text="Affiche le produit dans les zones de mise en avant de la boutique." />
                 </label>
                 <label>
                   <input
@@ -592,14 +801,19 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                     checked={form.active}
                     onChange={(event) => updateForm("active", event.target.checked)}
                   />
-                  Visible en boutique
+                  <span>Visible en boutique</span>
+                  <AdminHelpTooltip text="Décoche pour masquer le produit sans le supprimer." />
                 </label>
               </div>
             </div>
             {message && (
               <p
                 className={
-                  message.includes("Impossible") || message.includes("obligatoire")
+                  message.includes("Impossible") ||
+                  message.includes("obligatoire") ||
+                  message.includes("Merci") ||
+                  message.includes("doit") ||
+                  message.includes("valide")
                     ? "form-error"
                     : "form-success"
                 }
@@ -1082,7 +1296,10 @@ function AdminCategoriesManager({
       </div>
       <form className="admin-category-form" onSubmit={handleCreateCategory}>
         <label>
-          Nouvelle catégorie
+          <AdminFieldLabel
+            label="Nouvelle catégorie"
+            help="Ajoute une catégorie qui pourra ensuite être utilisée sur les fiches produits."
+          />
           <span>
             <input
               value={newCategoryName}

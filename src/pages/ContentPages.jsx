@@ -1,21 +1,14 @@
 import { ArrowRight, Phone, Truck } from "lucide-react";
 
-import { getHeroBackgroundStyle } from "../assets/optimizedImages.js";
 import { deliverySteps, reasons, services } from "../data/site.js";
 import { PageHero } from "../layout/PageHero.jsx";
 import { RouteLink } from "../layout/Layout.jsx";
 import { FeaturedGallery, ProductPreview } from "../boutique/Boutique.jsx";
 import { ContactBand } from "../contact/Contact.jsx";
 
-const homeHeroGradient =
-  "linear-gradient(90deg, rgba(5, 5, 4, 0.98) 0%, rgba(13, 9, 6, 0.92) 34%, rgba(255, 107, 33, 0.28) 68%, rgba(255, 107, 33, 0.08) 100%)";
-
 export function Hero({ currentPath, onNavigate }) {
   return (
-    <section
-      className="hero"
-      style={getHeroBackgroundStyle(homeHeroGradient)}
-    >
+    <section className="hero">
       <div className="container hero-content">
         <h1>Ventilateurs industriels et systèmes de ventilation</h1>
         <p className="hero-lead">

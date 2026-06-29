@@ -66,6 +66,7 @@ async function initializeDatabase() {
       amount INTEGER NOT NULL CHECK (amount >= 0),
       image_key TEXT NOT NULL DEFAULT 'ductFan',
       image_url TEXT NOT NULL DEFAULT '',
+      image_data TEXT NOT NULL DEFAULT '',
       featured BOOLEAN NOT NULL DEFAULT FALSE,
       active BOOLEAN NOT NULL DEFAULT TRUE,
       sort_order INTEGER NOT NULL DEFAULT 0,
@@ -78,6 +79,11 @@ async function initializeDatabase() {
 
     CREATE INDEX IF NOT EXISTS shop_products_active_sort_idx
       ON shop_products (active, sort_order, name);
+  `);
+
+  await dbPool.query(`
+    ALTER TABLE shop_products
+    ADD COLUMN IF NOT EXISTS image_data TEXT NOT NULL DEFAULT ''
   `);
 
   await dbPool.query(`
@@ -131,11 +137,12 @@ async function initializeDatabase() {
           amount,
           image_key,
           image_url,
+          image_data,
           featured,
           active,
           sort_order
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         ON CONFLICT (slug) DO NOTHING
       `,
       [
@@ -146,6 +153,7 @@ async function initializeDatabase() {
         product.amount,
         product.imageKey,
         product.imageUrl,
+        product.imageData || "",
         product.featured,
         product.active,
         product.sortOrder,
