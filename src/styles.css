@@ -1433,6 +1433,12 @@ button {
   box-shadow: var(--shadow);
 }
 
+.admin-product-main {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+
 .admin-product-list {
   display: grid;
   gap: 12px;
@@ -1486,6 +1492,7 @@ button {
 
 .admin-category-manager {
   display: grid;
+  align-content: start;
   gap: 14px;
   padding: 18px;
 }
@@ -1520,9 +1527,12 @@ button {
 
 .admin-category-list {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 8px;
+  max-height: min(300px, 36vh);
+  overflow-y: auto;
   margin: 0;
-  padding: 0;
+  padding: 0 4px 0 0;
   list-style: none;
 }
 
@@ -1531,8 +1541,8 @@ button {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
-  min-height: 58px;
-  padding: 10px;
+  min-height: 54px;
+  padding: 8px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--soft);
@@ -1557,8 +1567,13 @@ button {
 .admin-category-actions,
 .admin-category-edit {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
+}
+
+.admin-category-actions button {
+  width: 40px;
+  min-height: 40px;
 }
 
 .admin-category-edit {
@@ -1627,6 +1642,11 @@ button {
 
 .admin-product-sort select {
   cursor: pointer;
+}
+
+.admin-product-sort select option {
+  background: #fffaf4;
+  color: #120b07;
 }
 
 .admin-product-filter {

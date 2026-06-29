@@ -854,6 +854,156 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                 </nav>
               )}
             </aside>
+          </div>
+          <div className="admin-product-main">
+            <form className="admin-product-form" onSubmit={saveProduct}>
+              <div className="admin-form-head">
+                <div>
+                  <span>{selectedSlug ? selectedSlug : "nouveau-produit"}</span>
+                  <h2>{selectedSlug ? "Modifier le produit" : "Ajouter un produit"}</h2>
+                </div>
+                <div className="admin-form-actions">
+                  {selectedSlug && (
+                    <button
+                      className="admin-delete-button"
+                      type="button"
+                      onClick={deleteSelectedProduct}
+                      disabled={isSaving}
+                    >
+                      <Trash2 size={18} />
+                      Supprimer
+                    </button>
+                  )}
+                  <button className="button button-primary" type="submit" disabled={isSaving}>
+                    <Save size={18} />
+                    {isSaving ? "Enregistrement..." : "Enregistrer"}
+                  </button>
+                </div>
+              </div>
+              <div className="admin-form-grid">
+                <label>
+                  <AdminFieldLabel
+                    label="Nom"
+                    help="Nom affiché sur la boutique, la fiche produit et dans le panier."
+                  />
+                  <input
+                    value={form.name}
+                    onChange={(event) => updateForm("name", event.target.value)}
+                    required
+                  />
+                </label>
+                <label>
+                  <AdminFieldLabel
+                    label="Catégorie"
+                    help="Tape une catégorie existante ou un nouveau nom pour classer le produit."
+                  />
+                  <input
+                    value={form.category}
+                    list="admin-category-list"
+                    onChange={(event) => updateForm("category", event.target.value)}
+                    required
+                  />
+                  <datalist id="admin-category-list">
+                    {adminCategories.map((category) => (
+                      <option value={category} key={category} />
+                    ))}
+                  </datalist>
+                </label>
+                <label>
+                  <AdminFieldLabel
+                    label="Prix EUR"
+                    help="Prix public en euros. Tu peux utiliser une virgule ou un point."
+                  />
+                  <input
+                    value={form.amount}
+                    onChange={(event) => updateForm("amount", event.target.value)}
+                    inputMode="decimal"
+                    required
+                  />
+                </label>
+                <label>
+                  <AdminFieldLabel
+                    label="Ordre"
+                    help="Position du produit dans les listes : 10 apparaît avant 20, 20 avant 30."
+                  />
+                  <input
+                    value={form.sortOrder}
+                    onChange={(event) => updateForm("sortOrder", event.target.value)}
+                    inputMode="numeric"
+                  />
+                </label>
+                <label className="admin-wide-field">
+                  <AdminFieldLabel
+                    label="Image produit"
+                    help="Image importée pour ce produit. Elle remplace l'image actuelle après enregistrement."
+                  />
+                  <div className="admin-image-import">
+                    <div className="admin-image-preview">
+                      {form.imagePreview ? (
+                        <img src={form.imagePreview} alt="" />
+                      ) : (
+                        <ImagePlus size={34} />
+                      )}
+                    </div>
+                    <div className="admin-image-import-copy">
+                      <strong>{form.imageFileName || "Importer une image"}</strong>
+                      <span>PNG, JPG, WebP ou GIF jusqu'à 1 Mo.</span>
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif"
+                        onChange={importProductImage}
+                        disabled={isSaving}
+                      />
+                    </div>
+                  </div>
+                </label>
+                <label className="admin-wide-field">
+                  <AdminFieldLabel
+                    label="Description"
+                    help="Texte affiché sur la fiche produit pour expliquer l'usage du produit."
+                  />
+                  <textarea
+                    value={form.description}
+                    onChange={(event) => updateForm("description", event.target.value)}
+                  />
+                </label>
+                <div className="admin-toggle-row">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={form.featured}
+                      onChange={(event) => updateForm("featured", event.target.checked)}
+                    />
+                    <span>Mis en avant</span>
+                    <AdminHelpTooltip text="Affiche le produit dans les zones de mise en avant de la boutique." />
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={form.active}
+                      onChange={(event) => updateForm("active", event.target.checked)}
+                    />
+                    <span>Visible en boutique</span>
+                    <AdminHelpTooltip text="Décoche pour masquer le produit sans le supprimer." />
+                  </label>
+                </div>
+              </div>
+              {message && (
+                <p
+                  className={
+                    message.includes("Impossible") ||
+                    message.includes("obligatoire") ||
+                    message.includes("Merci") ||
+                    message.includes("doit") ||
+                    message.includes("valide")
+                      ? "form-error"
+                      : "form-success"
+                  }
+                >
+                  {message}
+                </p>
+              )}
+            </form>
             <AdminCategoriesManager
               categories={adminCategories}
               onCreateCategory={createCategory}
@@ -862,154 +1012,6 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
               products={products}
             />
           </div>
-          <form className="admin-product-form" onSubmit={saveProduct}>
-            <div className="admin-form-head">
-              <div>
-                <span>{selectedSlug ? selectedSlug : "nouveau-produit"}</span>
-                <h2>{selectedSlug ? "Modifier le produit" : "Ajouter un produit"}</h2>
-              </div>
-              <div className="admin-form-actions">
-                {selectedSlug && (
-                  <button
-                    className="admin-delete-button"
-                    type="button"
-                    onClick={deleteSelectedProduct}
-                    disabled={isSaving}
-                  >
-                    <Trash2 size={18} />
-                    Supprimer
-                  </button>
-                )}
-                <button className="button button-primary" type="submit" disabled={isSaving}>
-                  <Save size={18} />
-                  {isSaving ? "Enregistrement..." : "Enregistrer"}
-                </button>
-              </div>
-            </div>
-            <div className="admin-form-grid">
-              <label>
-                <AdminFieldLabel
-                  label="Nom"
-                  help="Nom affiché sur la boutique, la fiche produit et dans le panier."
-                />
-                <input
-                  value={form.name}
-                  onChange={(event) => updateForm("name", event.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                <AdminFieldLabel
-                  label="Catégorie"
-                  help="Tape une catégorie existante ou un nouveau nom pour classer le produit."
-                />
-                <input
-                  value={form.category}
-                  list="admin-category-list"
-                  onChange={(event) => updateForm("category", event.target.value)}
-                  required
-                />
-                <datalist id="admin-category-list">
-                  {adminCategories.map((category) => (
-                    <option value={category} key={category} />
-                  ))}
-                </datalist>
-              </label>
-              <label>
-                <AdminFieldLabel
-                  label="Prix EUR"
-                  help="Prix public en euros. Tu peux utiliser une virgule ou un point."
-                />
-                <input
-                  value={form.amount}
-                  onChange={(event) => updateForm("amount", event.target.value)}
-                  inputMode="decimal"
-                  required
-                />
-              </label>
-              <label>
-                <AdminFieldLabel
-                  label="Ordre"
-                  help="Position du produit dans les listes : 10 apparaît avant 20, 20 avant 30."
-                />
-                <input
-                  value={form.sortOrder}
-                  onChange={(event) => updateForm("sortOrder", event.target.value)}
-                  inputMode="numeric"
-                />
-              </label>
-              <label className="admin-wide-field">
-                <AdminFieldLabel
-                  label="Image produit"
-                  help="Image importée pour ce produit. Elle remplace l'image actuelle après enregistrement."
-                />
-                <div className="admin-image-import">
-                  <div className="admin-image-preview">
-                    {form.imagePreview ? (
-                      <img src={form.imagePreview} alt="" />
-                    ) : (
-                      <ImagePlus size={34} />
-                    )}
-                  </div>
-                  <div className="admin-image-import-copy">
-                    <strong>{form.imageFileName || "Importer une image"}</strong>
-                    <span>PNG, JPG, WebP ou GIF jusqu'à 1 Mo.</span>
-                    <input
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp,image/gif"
-                      onChange={importProductImage}
-                      disabled={isSaving}
-                    />
-                  </div>
-                </div>
-              </label>
-              <label className="admin-wide-field">
-                <AdminFieldLabel
-                  label="Description"
-                  help="Texte affiché sur la fiche produit pour expliquer l'usage du produit."
-                />
-                <textarea
-                  value={form.description}
-                  onChange={(event) => updateForm("description", event.target.value)}
-                />
-              </label>
-              <div className="admin-toggle-row">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.featured}
-                    onChange={(event) => updateForm("featured", event.target.checked)}
-                  />
-                  <span>Mis en avant</span>
-                  <AdminHelpTooltip text="Affiche le produit dans les zones de mise en avant de la boutique." />
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.active}
-                    onChange={(event) => updateForm("active", event.target.checked)}
-                  />
-                  <span>Visible en boutique</span>
-                  <AdminHelpTooltip text="Décoche pour masquer le produit sans le supprimer." />
-                </label>
-              </div>
-            </div>
-            {message && (
-              <p
-                className={
-                  message.includes("Impossible") ||
-                  message.includes("obligatoire") ||
-                  message.includes("Merci") ||
-                  message.includes("doit") ||
-                  message.includes("valide")
-                    ? "form-error"
-                    : "form-success"
-                }
-              >
-                {message}
-              </p>
-            )}
-          </form>
         </>
       ) : (
         <AdminMembersManager />
