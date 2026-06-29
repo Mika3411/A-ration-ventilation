@@ -924,7 +924,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                 <label>
                   <AdminFieldLabel
                     label="Ordre"
-                    help="Position du produit dans les listes : 10 apparaît avant 20, 20 avant 30."
+                    help="Position dans les listes. Astuce : 10, 20, 30 laisse de la place pour insérer 15 plus tard."
                   />
                   <input
                     value={form.sortOrder}
