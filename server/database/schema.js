@@ -20,9 +20,6 @@ export async function createDatabaseSchema(pool) {
     CREATE INDEX IF NOT EXISTS customer_accounts_created_at_idx
       ON customer_accounts (created_at DESC);
 
-    CREATE INDEX IF NOT EXISTS customer_accounts_email_verification_token_idx
-      ON customer_accounts (email_verification_token_hash)
-      WHERE email_verification_token_hash <> '';
   `);
 
   await pool.query(`

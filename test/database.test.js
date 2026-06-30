@@ -95,6 +95,9 @@ test("database initialization exécute schéma, migrations et seed dans l'ordre"
   const emailVerificationMigrationIndex = queryIndex(
     "ALTER TABLE customer_accounts ADD COLUMN IF NOT EXISTS email_verified_at",
   );
+  const emailVerificationIndexIndex = queryIndex(
+    "CREATE INDEX IF NOT EXISTS customer_accounts_email_verification_token_idx",
+  );
   const schemaMigrationIndex = queryIndex("ALTER TABLE shop_products ADD COLUMN IF NOT EXISTS image_data");
   const productSeedIndex = queryIndex("INSERT INTO shop_products");
   const customerVerificationDataMigrationIndex = queryIndex(
@@ -108,6 +111,7 @@ test("database initialization exécute schéma, migrations et seed dans l'ordre"
 
   assert.notEqual(productTableIndex, -1);
   assert.notEqual(emailVerificationMigrationIndex, -1);
+  assert.notEqual(emailVerificationIndexIndex, -1);
   assert.notEqual(schemaMigrationIndex, -1);
   assert.notEqual(productSeedIndex, -1);
   assert.notEqual(customerVerificationDataMigrationIndex, -1);
@@ -115,6 +119,7 @@ test("database initialization exécute schéma, migrations et seed dans l'ordre"
   assert.notEqual(categorySeedIndex, -1);
   assert.notEqual(missingCategorySeedIndex, -1);
   assert.ok(productTableIndex < schemaMigrationIndex);
+  assert.ok(emailVerificationMigrationIndex < emailVerificationIndexIndex);
   assert.ok(emailVerificationMigrationIndex < productSeedIndex);
   assert.ok(schemaMigrationIndex < productSeedIndex);
   assert.ok(productSeedIndex < dataMigrationIndex);
