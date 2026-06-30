@@ -1,6 +1,6 @@
 import { CreditCard, Minus, Plus, Trash2 } from "lucide-react";
 
-import { formatEuro } from "../utils/format.js";
+import { formatEuroWithCents } from "../utils/format.js";
 
 export function CartCheckout({
   cartCount,
@@ -50,7 +50,7 @@ export function CartCheckout({
                 <div className="cart-line" key={product.slug}>
                   <div>
                     <strong>{product.name}</strong>
-                    <span>{formatEuro(lineTotal)}</span>
+                    <span>{formatEuroWithCents(lineTotal)}</span>
                   </div>
                   <div className="cart-quantity-controls" aria-label={`Quantité ${product.name}`}>
                     <button
@@ -74,7 +74,7 @@ export function CartCheckout({
             </div>
             <div className="cart-checkout-total">
               <span>Total</span>
-              <strong>{formatEuro(subtotal)}</strong>
+              <strong>{formatEuroWithCents(subtotal)}</strong>
             </div>
             <button
               className="button button-primary cart-checkout-button"

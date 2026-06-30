@@ -48,14 +48,15 @@ export const services = [
 
 export const categories = [
   "Accessoires",
-  "Grille de ventilation plafond",
+  "Conduits spiro et pièces façonnées",
+  "Grilles et clapets de ventilation",
   "Moteurs électriques 220/380",
   "Pompes à eau",
   "Portes d'entrée et blindées",
   "Regulateurs",
   "Ventilateurs axiaux",
   "Ventilateurs de canaux",
-  "Ventilateurs de centrifuges",
+  "Ventilateurs centrifuges",
   "Ventilateurs de restaurant",
   "Ventilateurs de salle de bains",
   "Ventilateurs de toiture",

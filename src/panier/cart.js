@@ -62,7 +62,7 @@ function getPurchasableProductEntries(product) {
   if (!product) return [];
 
   const options = Array.isArray(product.options) ? product.options : [];
-  if (!options.length) return [product];
+  if (!options.length) return isPurchasableAmount(product.amount) ? [product] : [];
 
   return options.map((option) => {
     const { options: _options, ...baseProduct } = product;
@@ -78,7 +78,11 @@ function getPurchasableProductEntries(product) {
       parentSlug: product.slug,
       optionLabel: option.label,
     };
-  });
+  }).filter((entry) => isPurchasableAmount(entry.amount));
+}
+
+function isPurchasableAmount(amount) {
+  return Number.parseInt(amount, 10) > 0;
 }
 
 export function getInitialPaymentNotice() {

@@ -8,13 +8,123 @@ import axialFanKsa from "../assets/product-axial-fan-ksa.jpg";
 
 import axialFanKta from "../assets/product-axial-fan-kta.jpg";
 
+import axialFanDta from "../assets/product-axial-fan-dta.jpg";
+
+import axialFan8ka from "../assets/product-axial-fan-8ka.jpg";
+
+import axialFan4ka from "../assets/product-axial-fan-4ka.jpg";
+
 import ductFan from "../assets/product-duct-fan.jpg";
 
 import ductFanYka from "../assets/product-duct-fan-yka.jpg";
 
+import ductFanPakf from "../assets/product-duct-fan-pakf.jpg";
+
+import roundInlineDuctFanLkt from "../assets/product-round-inline-duct-fan-lkt.jpg";
+
+import bathroomFanDty from "../assets/product-bathroom-fan-dty.jpg";
+
+import bathroomFanApkt from "../assets/product-bathroom-fan-apkt.jpg";
+
+import bathroomFanAuto from "../assets/product-bathroom-fan-auto.jpg";
+
+import axialInlineDuctFanDrpkt from "../assets/product-axial-inline-duct-fan-drpkt.jpg";
+
+import rectangularInlineDuctFanFdkf from "../assets/product-rectangular-inline-duct-fan-fdkf.jpg";
+
+import standingIndustrialFanFsv750A from "../assets/product-standing-industrial-fan-fsv-750-a.jpg";
+
+import industrialFanFsv750D from "../assets/product-industrial-fan-fsv-750-d.jpg";
+
+import bathroomFanDbta from "../assets/product-bathroom-fan-d-bta.jpg";
+
+import centrifugalFanAgf from "../assets/product-centrifugal-fan-agf.jpg";
+
+import centrifugalFanDr from "../assets/product-centrifugal-fan-dr.jpg";
+
+import centrifugalFanFagsM from "../assets/product-centrifugal-fan-fags-m.jpg";
+
+import centrifugalFanFbo from "../assets/product-centrifugal-fan-fbo.jpg";
+
+import centrifugalFanFbk from "../assets/product-centrifugal-fan-fbk.jpg";
+
+import centrifugalFanFobr from "../assets/product-centrifugal-fan-fobr.jpg";
+
+import centrifugalFanFbsy from "../assets/product-centrifugal-fan-fbsy.jpg";
+
+import centrifugalFanKags from "../assets/product-centrifugal-fan-kags.jpg";
+
+import centrifugalFanKtsObs from "../assets/product-centrifugal-fan-kts-obs.jpg";
+
+import centrifugalFanOces from "../assets/product-centrifugal-fan-oces.jpg";
+
+import centrifugalFanObra140 from "../assets/product-centrifugal-fan-obra-140.jpg";
+
+import centrifugalFanObra200 from "../assets/product-centrifugal-fan-obra-200.jpg";
+
+import centrifugalFanObra260 from "../assets/product-centrifugal-fan-obra-260.jpg";
+
+import centrifugalFanPobra from "../assets/product-centrifugal-fan-pobra.jpg";
+
+import centrifugalFanPsek from "../assets/product-centrifugal-fan-psek.jpg";
+
+import centrifugalFanTurboSeries from "../assets/product-centrifugal-fan-turbo-series.jpg";
+
+import roofAxialFanFacf from "../assets/product-roof-axial-fan-facf.jpg";
+
+import roofFanFcf from "../assets/product-roof-fan-fcf.jpg";
+
+import roofFanFkcf from "../assets/product-roof-fan-fkcf.jpg";
+
 import ceilingGrille from "../assets/product-ceiling-grille.jpg";
 
+import wallVentilationGrille from "../assets/product-wall-ventilation-grille.jpg";
+
+import spiroDuctVentilationGrille from "../assets/product-spiro-duct-ventilation-grille.jpg";
+
+import spiroDuct from "../assets/product-round-spiro-duct.jpg";
+
+import spiroDuctElbow90 from "../assets/product-spiro-duct-elbow-90.jpg";
+
+import spiroDuctTee from "../assets/product-spiro-duct-tee.jpg";
+
+import fixedLouverGrille from "../assets/product-fixed-louver-grille.jpg";
+
+import mobileLouverGrille from "../assets/product-mobile-louver-grille.jpg";
+
+import conicalSuctionGrille from "../assets/product-conical-suction-grille.jpg";
+
+import rectangularConstantAirflowDamperHcavR from "../assets/product-rectangular-constant-airflow-damper-hcav-r.jpg";
+
+import roundConstantAirflowDamper from "../assets/product-round-constant-airflow-damper.jpg";
+
+import swirlCeilingDiffuserHsswd from "../assets/product-swirl-ceiling-diffuser-hsswd.jpg";
+
+import linearSlotDiffuserHsd from "../assets/product-linear-slot-diffuser-hsd.jpg";
+
+import manualRegulatingDamper from "../assets/product-manual-regulating-damper.jpg";
+
 import speedController from "../assets/product-speed-controller.jpg";
+
+import speedControllerDha from "../assets/product-speed-controller-dha.jpg";
+
+import speedControllerMna from "../assets/product-speed-controller-mna.jpg";
+
+import waterPumpGmaxQb60 from "../assets/product-water-pump-gmax-qb60.jpg";
+
+import waterPumpGmaxQb70 from "../assets/product-water-pump-gmax-qb70.jpg";
+
+import waterPumpGmaxQb80 from "../assets/product-water-pump-gmax-qb80.jpg";
+
+import pumpInverterControlGmaxIpc01 from "../assets/product-pump-inverter-control-gmax-ipc-01.jpg";
+
+import pressureControlGmaxEpc4 from "../assets/product-pressure-control-gmax-epc-4.jpg";
+
+import pressureControlGmaxEpc1A from "../assets/product-pressure-control-gmax-epc-1a.jpg";
+
+import pressureControlGmaxEpc13 from "../assets/product-pressure-control-gmax-epc-13.jpg";
+
+import pressureControlGmaxEpc10 from "../assets/product-pressure-control-gmax-epc-10.jpg";
 
 import electricMotor from "../assets/product-electric-motor-11kw-cast-iron.jpg";
 
@@ -52,10 +162,65 @@ export const productImageByKey = {
   axialFanYsa,
   axialFanKsa,
   axialFanKta,
+  axialFanDta,
+  axialFan8ka,
+  axialFan4ka,
   ductFan,
   ductFanYka,
+  ductFanPakf,
+  roundInlineDuctFanLkt,
+  bathroomFanDty,
+  bathroomFanApkt,
+  bathroomFanAuto,
+  axialInlineDuctFanDrpkt,
+  rectangularInlineDuctFanFdkf,
+  standingIndustrialFanFsv750A,
+  industrialFanFsv750D,
+  bathroomFanDbta,
+  centrifugalFanAgf,
+  centrifugalFanDr,
+  centrifugalFanFagsM,
+  centrifugalFanFbo,
+  centrifugalFanFbk,
+  centrifugalFanFobr,
+  centrifugalFanFbsy,
+  centrifugalFanKags,
+  centrifugalFanKtsObs,
+  centrifugalFanOces,
+  centrifugalFanObra140,
+  centrifugalFanObra200,
+  centrifugalFanObra260,
+  centrifugalFanPobra,
+  centrifugalFanPsek,
+  centrifugalFanTurboSeries,
+  roofAxialFanFacf,
+  roofFanFcf,
+  roofFanFkcf,
   ceilingGrille,
+  wallVentilationGrille,
+  spiroDuctVentilationGrille,
+  spiroDuct,
+  spiroDuctElbow90,
+  spiroDuctTee,
+  fixedLouverGrille,
+  mobileLouverGrille,
+  conicalSuctionGrille,
+  rectangularConstantAirflowDamperHcavR,
+  roundConstantAirflowDamper,
+  swirlCeilingDiffuserHsswd,
+  linearSlotDiffuserHsd,
+  manualRegulatingDamper,
   speedController,
+  speedControllerDha,
+  speedControllerMna,
+  waterPumpGmaxQb60,
+  waterPumpGmaxQb70,
+  waterPumpGmaxQb80,
+  pumpInverterControlGmaxIpc01,
+  pressureControlGmaxEpc4,
+  pressureControlGmaxEpc1A,
+  pressureControlGmaxEpc13,
+  pressureControlGmaxEpc10,
   electricMotor,
   electricMotor11Kw2800Aluminum,
   electricMotor22Kw,
@@ -77,10 +242,68 @@ export const productImageOptions = [
   { label: "Ventilateur axial YSA", value: "axialFanYsa" },
   { label: "Ventilateur axial KSA", value: "axialFanKsa" },
   { label: "Ventilateur axial KTA", value: "axialFanKta" },
+  { label: "Ventilateur axial DTA", value: "axialFanDta" },
+  { label: "Ventilateur axial 8KA", value: "axialFan8ka" },
+  { label: "Ventilateur axial 4KA", value: "axialFan4ka" },
   { label: "Ventilateur de canal", value: "ductFan" },
   { label: "Ventilateur de canal YKA", value: "ductFanYka" },
-  { label: "Grille plafond", value: "ceilingGrille" },
+  { label: "Ventilateur de canal PAKF", value: "ductFanPakf" },
+  { label: "Ventilateur de conduit rond LKT", value: "roundInlineDuctFanLkt" },
+  { label: "Ventilateur de salle de bains DTY", value: "bathroomFanDty" },
+  { label: "Ventilateur de salle de bains APKT", value: "bathroomFanApkt" },
+  { label: "Ventilateur de salle de bains AUTO", value: "bathroomFanAuto" },
+  { label: "Ventilateur axial de conduit DRPKT", value: "axialInlineDuctFanDrpkt" },
+  { label: "Ventilateur de conduit rectangulaire FDKF", value: "rectangularInlineDuctFanFdkf" },
+  { label: "Ventilateur industriel sur pied FSV-750-A", value: "standingIndustrialFanFsv750A" },
+  { label: "Ventilateur industriel FSV-750-D", value: "industrialFanFsv750D" },
+  { label: "Ventilateur de salle de bains D-BTA", value: "bathroomFanDbta" },
+  { label: "Ventilateur centrifuge AGF", value: "centrifugalFanAgf" },
+  { label: "Ventilateur centrifuge DR", value: "centrifugalFanDr" },
+  { label: "Ventilateur centrifuge FAGS-M", value: "centrifugalFanFagsM" },
+  { label: "Ventilateur centrifuge FBO", value: "centrifugalFanFbo" },
+  { label: "Ventilateur centrifuge FBK", value: "centrifugalFanFbk" },
+  { label: "Ventilateur centrifuge FOBR", value: "centrifugalFanFobr" },
+  { label: "Ventilateur centrifuge FBSY", value: "centrifugalFanFbsy" },
+  { label: "Ventilateur centrifuge KAGS", value: "centrifugalFanKags" },
+  { label: "Ventilateur centrifuge KTS-OBS", value: "centrifugalFanKtsObs" },
+  { label: "Ventilateur centrifuge OCES", value: "centrifugalFanOces" },
+  { label: "Ventilateur centrifuge OBRA-140", value: "centrifugalFanObra140" },
+  { label: "Ventilateur centrifuge OBRA-200", value: "centrifugalFanObra200" },
+  { label: "Ventilateur centrifuge OBRA-260", value: "centrifugalFanObra260" },
+  { label: "Ventilateur centrifuge POBRA", value: "centrifugalFanPobra" },
+  { label: "Ventilateur centrifuge PSEK", value: "centrifugalFanPsek" },
+  { label: "Ventilateur centrifuge Turbo Series", value: "centrifugalFanTurboSeries" },
+  { label: "Ventilateur axial de toiture FACF", value: "roofAxialFanFacf" },
+  { label: "Ventilateur de toiture FCF", value: "roofFanFcf" },
+  { label: "Ventilateur de toiture FKCF", value: "roofFanFkcf" },
+  { label: "Grille de ventilation plafond", value: "ceilingGrille" },
+  { label: "Grille de ventilation murale", value: "wallVentilationGrille" },
+  { label: "Grille de ventilation pour conduits spiro", value: "spiroDuctVentilationGrille" },
+  { label: "Conduit rond spiro galvanisé", value: "spiroDuct" },
+  { label: "Coude 90° pour conduit spiro", value: "spiroDuctElbow90" },
+  { label: "Té pour conduit rond spiro", value: "spiroDuctTee" },
+  { label: "Grille à lamelles fixes", value: "fixedLouverGrille" },
+  { label: "Grille à lamelles mobiles", value: "mobileLouverGrille" },
+  { label: "Grille d'aspiration conique", value: "conicalSuctionGrille" },
+  {
+    label: "Clapet rectangulaire à débit constant HCAV-R",
+    value: "rectangularConstantAirflowDamperHcavR",
+  },
+  { label: "Clapet rond à débit constant", value: "roundConstantAirflowDamper" },
+  { label: "Diffuseur plafonnier tourbillonnaire HSWD", value: "swirlCeilingDiffuserHsswd" },
+  { label: "Diffuseur linéaire HSD", value: "linearSlotDiffuserHsd" },
+  { label: "Clapet de réglage manuel", value: "manualRegulatingDamper" },
   { label: "Régulateur", value: "speedController" },
+  { label: "Régulateur de vitesse DHA", value: "speedControllerDha" },
+  { label: "Régulateur de vitesse MNA", value: "speedControllerMna" },
+  { label: "Pompe à eau périphérique Gmax QB60", value: "waterPumpGmaxQb60" },
+  { label: "Pompe à eau périphérique Gmax QB70", value: "waterPumpGmaxQb70" },
+  { label: "Pompe à eau périphérique Gmax QB80", value: "waterPumpGmaxQb80" },
+  { label: "Contrôleur à onduleur pour pompe Gmax IPC-01", value: "pumpInverterControlGmaxIpc01" },
+  { label: "Contrôleur de pression Gmax EPC-4", value: "pressureControlGmaxEpc4" },
+  { label: "Contrôleur de pression Gmax EPC-1A", value: "pressureControlGmaxEpc1A" },
+  { label: "Contrôleur de pression Gmax EPC-13", value: "pressureControlGmaxEpc13" },
+  { label: "Contrôleur de pression Gmax EPC-10", value: "pressureControlGmaxEpc10" },
   { label: "Moteur électrique", value: "electricMotor" },
   {
     label: "Moteur électrique 1,1 kW aluminium",
@@ -276,6 +499,122 @@ const ktaAxialFanProduct = {
   sortOrder: 14,
 };
 
+const dtaAxialFanOptions = [
+  { model: "200", amount: 4090, price: "40,90 €", bgn: "80,00 BGN" },
+  { model: "250", amount: 4602, price: "46,02 €", bgn: "90,00 BGN" },
+  { model: "300", amount: 5113, price: "51,13 €", bgn: "100,00 BGN" },
+  { model: "350", amount: 5880, price: "58,80 €", bgn: "115,00 BGN" },
+];
+
+const dtaAxialFanProduct = {
+  name: "Ventilateur axial DTA",
+  slug: "ventilateur-axial-dta",
+  category: "Ventilateurs axiaux",
+  imageKey: "axialFanDta",
+  imageUrl: "",
+  amount: 4090,
+  price: "40,90 €",
+  text: "Ventilateur axial DTA pour extraction d'air. Anneau bleu avec hélice rouge et grille de protection noire. Choisissez le diamètre adapté dans les options.",
+  options: dtaAxialFanOptions.map(({ model, amount, price, bgn }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-axial-dta-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 15,
+};
+
+const axialFan8kaOptions = [
+  { model: "300-T", amount: 17640, price: "176,40 €", bgn: "345,00 BGN" },
+  { model: "300-M", amount: 20452, price: "204,52 €", bgn: "400,00 BGN" },
+  { model: "350-T", amount: 17895, price: "178,95 €", bgn: "350,00 BGN" },
+  { model: "350-M", amount: 20707, price: "207,07 €", bgn: "405,00 BGN" },
+  { model: "400-T", amount: 19429, price: "194,29 €", bgn: "380,00 BGN" },
+  { model: "400-M", amount: 23008, price: "230,08 €", bgn: "450,00 BGN" },
+  { model: "450-T", amount: 21474, price: "214,74 €", bgn: "420,00 BGN" },
+  { model: "450-M", amount: 25565, price: "255,65 €", bgn: "500,00 BGN" },
+  { model: "500-T", amount: 26587, price: "265,87 €", bgn: "520,00 BGN" },
+  { model: "500-M", amount: 30166, price: "301,66 €", bgn: "590,00 BGN" },
+  { model: "600-T", amount: 33490, price: "334,90 €", bgn: "655,00 BGN" },
+  { model: "600-M", amount: 37324, price: "373,24 €", bgn: "730,00 BGN" },
+  { model: "700-T", amount: 59310, price: "593,10 €", bgn: "1160,00 BGN" },
+  { model: "700-M", amount: 64423, price: "644,23 €", bgn: "1260,00 BGN" },
+  { model: "800-T", amount: 85897, price: "858,97 €", bgn: "1680,00 BGN" },
+  { model: "800-M", amount: 92544, price: "925,44 €", bgn: "1810,00 BGN" },
+];
+
+const axialFan8kaProduct = {
+  name: "Ventilateur axial 8KA",
+  slug: "ventilateur-axial-8ka",
+  category: "Ventilateurs axiaux",
+  imageKey: "axialFan8ka",
+  imageUrl: "",
+  amount: 17640,
+  price: "176,40 €",
+  text: "Ventilateur axial 8KA pour extraction et brassage d'air. Corps rond bleu avec hélice rouge et grille métallique de protection. Choisissez le modèle adapté dans les options.",
+  options: axialFan8kaOptions.map(({ model, amount, price, bgn }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-axial-8ka-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 16,
+};
+
+const axialFan4kaOptions = [
+  { model: "300-T", amount: 25565, price: "255,65 €", bgn: "500,00 BGN" },
+  { model: "300-M", amount: 28121, price: "281,21 €", bgn: "550,00 BGN" },
+  { model: "350-T", amount: 28121, price: "281,21 €", bgn: "550,00 BGN" },
+  { model: "350-M", amount: 29655, price: "296,55 €", bgn: "580,00 BGN" },
+  { model: "400-T", amount: 30422, price: "304,22 €", bgn: "595,00 BGN" },
+  { model: "400-M", amount: 31956, price: "319,56 €", bgn: "625,00 BGN" },
+  { model: "450-T", amount: 31189, price: "311,89 €", bgn: "610,00 BGN" },
+  { model: "450-M", amount: 34768, price: "347,68 €", bgn: "680,00 BGN" },
+  { model: "500-T", amount: 37324, price: "373,24 €", bgn: "730,00 BGN" },
+  { model: "500-M", amount: 40903, price: "409,03 €", bgn: "800,00 BGN" },
+  { model: "550-T", amount: 32723, price: "327,23 €", bgn: "640,00 BGN" },
+  { model: "550-M", amount: 41926, price: "419,26 €", bgn: "820,00 BGN" },
+  { model: "600-T", amount: 42949, price: "429,49 €", bgn: "840,00 BGN" },
+  { model: "600-M", amount: 45505, price: "455,05 €", bgn: "890,00 BGN" },
+  { model: "650-T", amount: 53174, price: "531,74 €", bgn: "1040,00 BGN" },
+  { model: "650-M", amount: 55220, price: "552,20 €", bgn: "1080,00 BGN" },
+  { model: "700-T", amount: 61355, price: "613,55 €", bgn: "1200,00 BGN" },
+  { model: "700-M", amount: 65445, price: "654,45 €", bgn: "1280,00 BGN" },
+  { model: "800-T", amount: 91010, price: "910,10 €", bgn: "1780,00 BGN" },
+  { model: "900-T", amount: 115552, price: "1155,52 €", bgn: "2260,00 BGN" },
+  { model: "1000-T", amount: 128334, price: "1283,34 €", bgn: "2510,00 BGN" },
+];
+
+const axialFan4kaProduct = {
+  name: "Ventilateur axial 4KA",
+  slug: "ventilateur-axial-4ka",
+  category: "Ventilateurs axiaux",
+  imageKey: "axialFan4ka",
+  imageUrl: "",
+  amount: 25565,
+  price: "255,65 €",
+  text: "Ventilateur axial 4KA pour extraction et brassage d'air. Corps rond bleu clair avec hélice rouge et grille métallique de protection. Choisissez le modèle adapté dans les options.",
+  options: axialFan4kaOptions.map(({ model, amount, price, bgn }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-axial-4ka-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 17,
+};
+
 const ykaDuctFanOptions = [
   { model: "100-A", amount: 7669, price: "76,69 €", bgn: "150,00 BGN" },
   { model: "100-B", amount: 7669, price: "76,69 €", bgn: "150,00 BGN" },
@@ -315,6 +654,2443 @@ const ykaDuctFanProduct = {
   sortOrder: 21,
 };
 
+const pakfDuctFanOptions = [
+  {
+    model: "400",
+    amount: 26485,
+    price: "264,85 €",
+    bgn: "518,00 BGN",
+    description: "Modèle PAKF-400 : 230/380 V / 50 Hz, 200 W, 1,20 A, 1400 tr/min, débit d'air 4700 m3/h, niveau sonore 62 dBA.",
+  },
+  {
+    model: "450",
+    amount: 28888,
+    price: "288,88 €",
+    bgn: "565,00 BGN",
+    description: "Modèle PAKF-450 : 230/380 V / 50 Hz, 280 W, 1,22 A, 1400 tr/min, débit d'air 5700 m3/h, niveau sonore 66 dBA.",
+  },
+  {
+    model: "500",
+    amount: 29911,
+    price: "299,11 €",
+    bgn: "585,00 BGN",
+    description: "Modèle PAKF-500 : 230/380 V / 50 Hz, 335 W, 1,01 A, 1400 tr/min, débit d'air 7200 m3/h, niveau sonore 70 dBA.",
+  },
+  {
+    model: "600",
+    amount: 30933,
+    price: "309,33 €",
+    bgn: "605,00 BGN",
+    description: "Modèle PAKF-600 : 230/380 V / 50 Hz, 450 W, 1,02 A, 1400 tr/min, débit d'air 8300 m3/h, niveau sonore 72 dBA.",
+  },
+];
+
+const pakfDuctFanProduct = {
+  name: "Ventilateur de canal PAKF",
+  slug: "ventilateur-de-canal-pakf",
+  category: "Ventilateurs de canaux",
+  imageKey: "ductFanPakf",
+  imageUrl: "",
+  amount: 26485,
+  price: "264,85 €",
+  text: "Ventilateur de canal PAKF pour réseaux de ventilation à fort débit. Corps cylindrique avec hélice axiale, grille de protection et points de levage. Disponible en modèles PAKF-400 à PAKF-600, avec débits d'air de 4700 à 8300 m3/h.",
+  options: pakfDuctFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-de-canal-pakf-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 24,
+};
+
+const lktRoundInlineDuctFanOptions = [
+  {
+    model: "100 B",
+    amount: 7669,
+    price: "76,69 €",
+    bgn: "150,00 BGN",
+    description: "Modèle LKT 100 B : 230 V / 50 Hz, 72 W, 0,33 A, 2540 tr/min, débit d'air 255 m3/h, niveau sonore 46 dBA.",
+  },
+  {
+    model: "125 B",
+    amount: 8181,
+    price: "81,81 €",
+    bgn: "160,00 BGN",
+    description: "Modèle LKT 125 B : 230 V / 50 Hz, 72 W, 0,37 A, 2480 tr/min, débit d'air 330 m3/h, niveau sonore 45 dBA.",
+  },
+  {
+    model: "160 B",
+    amount: 8948,
+    price: "89,48 €",
+    bgn: "175,00 BGN",
+    description: "Modèle LKT 160 B : 230 V / 50 Hz, 120 W, 0,55 A, 2600 tr/min, débit d'air 760 m3/h, niveau sonore 51 dBA.",
+  },
+  {
+    model: "200 B",
+    amount: 11504,
+    price: "115,04 €",
+    bgn: "225,00 BGN",
+    description: "Modèle LKT 200 B : 230 V / 50 Hz, 160 W, 0,74 A, 2750 tr/min, débit d'air 1140 m3/h, niveau sonore 53 dBA.",
+  },
+  {
+    model: "250 B",
+    amount: 13549,
+    price: "135,49 €",
+    bgn: "265,00 BGN",
+    description: "Modèle LKT 250 B : 230 V / 50 Hz, 195 W, 0,98 A, 2710 tr/min, débit d'air 1250 m3/h, niveau sonore 54 dBA.",
+  },
+  {
+    model: "315 B",
+    amount: 16106,
+    price: "161,06 €",
+    bgn: "315,00 BGN",
+    description: "Modèle LKT 315 B : 230 V / 50 Hz, 310 W, 1,50 A, 2645 tr/min, débit d'air 1875 m3/h, niveau sonore 60 dBA.",
+  },
+  {
+    model: "315 C",
+    amount: 19685,
+    price: "196,85 €",
+    bgn: "385,00 BGN",
+    description: "Modèle LKT 315 C : 230 V / 50 Hz, 450 W, 1,70 A, 2800 tr/min, débit d'air 2500 m3/h, niveau sonore 84 dBA.",
+  },
+  {
+    model: "355 B",
+    amount: 24031,
+    price: "240,31 €",
+    bgn: "470,00 BGN",
+    description: "Modèle LKT 355 B : 230 V / 50 Hz, 280 W, 1,70 A, 1400 tr/min, débit d'air 1500 m3/h, niveau sonore 64 dBA.",
+  },
+  {
+    model: "355 C",
+    amount: 27098,
+    price: "270,98 €",
+    bgn: "530,00 BGN",
+    description: "Modèle LKT 355 C : 230 V / 50 Hz, 450 W, 1,70 A, 2800 tr/min, débit d'air 2800 m3/h, niveau sonore 86 dBA.",
+  },
+];
+
+const lktRoundInlineDuctFanProduct = {
+  name: "Ventilateur de conduit rond LKT",
+  slug: "ventilateur-conduit-rond-lkt",
+  category: "Ventilateurs de canaux",
+  imageKey: "roundInlineDuctFanLkt",
+  imageUrl: "",
+  amount: 7669,
+  price: "76,69 €",
+  text: "Ventilateur de conduit rond en ligne LKT pour réseaux de ventilation. Corps compact avec turbine centrifuge, adapté au montage dans les conduits circulaires. Disponible en modèles LKT 100 B à LKT 355 C, avec débits d'air de 255 à 2800 m3/h.",
+  options: lktRoundInlineDuctFanOptions.map(({ model, amount, price, bgn, description }) => {
+    const optionSlug = model.toLowerCase().replace(/\s+/g, "-");
+
+    return {
+      label: model,
+      value: optionSlug,
+      slug: `ventilateur-conduit-rond-lkt-${optionSlug}`,
+      amount,
+      price,
+      bgn,
+      description,
+    };
+  }),
+  featured: true,
+  active: true,
+  sortOrder: 25,
+};
+
+const dtyBathroomFanOptions = [
+  {
+    model: "100",
+    amount: 1534,
+    price: "15,34 €",
+    bgn: "30,00 BGN",
+    description: "Modèle DTY-100 : 230 V / 50 Hz, 15 W, 0,10 A, 2600 tr/min, débit d'air 95 m3/h, niveau sonore 40 dBA.",
+  },
+  {
+    model: "120",
+    amount: 1790,
+    price: "17,90 €",
+    bgn: "35,00 BGN",
+    description: "Modèle DTY-120 : 230 V / 50 Hz, 20 W, 0,13 A, 2600 tr/min, débit d'air 185 m3/h, niveau sonore 42 dBA.",
+  },
+  {
+    model: "150",
+    amount: 2045,
+    price: "20,45 €",
+    bgn: "40,00 BGN",
+    description: "Modèle DTY-150 : 230 V / 50 Hz, 35 W, 0,32 A, 2250 tr/min, débit d'air 285 m3/h, niveau sonore 48 dBA.",
+  },
+  {
+    model: "200",
+    amount: 3068,
+    price: "30,68 €",
+    bgn: "60,00 BGN",
+    description: "Modèle DTY-200 : 230 V / 50 Hz, 40 W, 0,42 A, 2250 tr/min, débit d'air 360 m3/h, niveau sonore 50 dBA.",
+  },
+];
+
+const dtyBathroomFanProduct = {
+  name: "Ventilateur de salle de bains DTY",
+  slug: "ventilateur-salle-de-bains-dty",
+  category: "Ventilateurs de salle de bains",
+  imageKey: "bathroomFanDty",
+  imageUrl: "",
+  amount: 1534,
+  price: "15,34 €",
+  text: "Ventilateur de salle de bains DTY pour l'extraction d'air dans les salles de bains, WC et petits locaux humides. Façade ronde avec grille décorative, alimentation 230 V / 50 Hz, disponible en modèles DTY-100 à DTY-200 avec débits d'air de 95 à 360 m3/h.",
+  options: dtyBathroomFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-salle-de-bains-dty-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 25,
+};
+
+const apktBathroomFanOptions = [
+  {
+    model: "100",
+    amount: 1534,
+    price: "15,34 €",
+    bgn: "30,00 BGN",
+    description: "Modèle APKT-100 : 230 V / 50 Hz, 15 W, 0,10 A, 2600 tr/min, débit d'air 95 m3/h, niveau sonore 38 dBA.",
+  },
+  {
+    model: "120",
+    amount: 1790,
+    price: "17,90 €",
+    bgn: "35,00 BGN",
+    description: "Modèle APKT-120 : 230 V / 50 Hz, 20 W, 0,13 A, 2600 tr/min, débit d'air 190 m3/h, niveau sonore 44 dBA.",
+  },
+  {
+    model: "150",
+    amount: 2045,
+    price: "20,45 €",
+    bgn: "40,00 BGN",
+    description: "Modèle APKT-150 : 230 V / 50 Hz, 35 W, 0,32 A, 2250 tr/min, débit d'air 305 m3/h, niveau sonore 51 dBA.",
+  },
+  {
+    model: "200",
+    amount: 3068,
+    price: "30,68 €",
+    bgn: "60,00 BGN",
+    description: "Modèle APKT-200 : 230 V / 50 Hz, 40 W, 0,42 A, 2250 tr/min, débit d'air 370 m3/h, niveau sonore 52 dBA.",
+  },
+];
+
+const apktBathroomFanProduct = {
+  name: "Ventilateur de salle de bains APKT",
+  slug: "ventilateur-salle-de-bains-apkt",
+  category: "Ventilateurs de salle de bains",
+  imageKey: "bathroomFanApkt",
+  imageUrl: "",
+  amount: 1534,
+  price: "15,34 €",
+  text: "Ventilateur de salle de bains APKT pour l'extraction d'air dans les pièces humides. Corps cylindrique blanc avec hélice axiale apparente, alimentation 230 V / 50 Hz, disponible en modèles APKT-100 à APKT-200 avec débits d'air de 95 à 370 m3/h.",
+  options: apktBathroomFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-salle-de-bains-apkt-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 26,
+};
+
+const autoBathroomFanOptions = [
+  {
+    model: "100",
+    amount: 1074,
+    price: "10,74 €",
+    bgn: "21,00 BGN",
+    description: "Modèle AUTO-100 : 220-240 V / 50 Hz, 18 W, 2300 tr/min, débit d'air 100 m3/h, niveau sonore 34 dBA.",
+  },
+  {
+    model: "125",
+    amount: 1227,
+    price: "12,27 €",
+    bgn: "24,00 BGN",
+    description: "Modèle AUTO-125 : 220-240 V / 50 Hz, 22 W, 2400 tr/min, débit d'air 185 m3/h, niveau sonore 35 dBA.",
+  },
+  {
+    model: "150",
+    amount: 1483,
+    price: "14,83 €",
+    bgn: "29,00 BGN",
+    description: "Modèle AUTO-150 : 220-240 V / 50 Hz, 26 W, 2400 tr/min, débit d'air 295 m3/h, niveau sonore 39 dBA.",
+  },
+];
+
+const autoBathroomFanProduct = {
+  name: "Ventilateur de salle de bains AUTO",
+  slug: "ventilateur-salle-de-bains-auto",
+  category: "Ventilateurs de salle de bains",
+  imageKey: "bathroomFanAuto",
+  imageUrl: "",
+  amount: 1074,
+  price: "10,74 €",
+  text: "Ventilateur de salle de bains AUTO avec façade blanche à lamelles, conçu pour l'extraction d'air des pièces humides. Alimentation 220-240 V / 50 Hz, disponible en modèles AUTO-100 à AUTO-150 avec débits d'air de 100 à 295 m3/h.",
+  options: autoBathroomFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-salle-de-bains-auto-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 27,
+};
+
+const drpktDuctFanOptions = [
+  {
+    model: "150",
+    amount: 8181,
+    price: "81,81 €",
+    bgn: "160,00 BGN",
+    description: "Modèle DRPKT-150 : 230 V / 50 Hz, 80 W, 0,32 A, 2800 tr/min, débit d'air 650 m3/h, niveau sonore 68 dBA.",
+  },
+  {
+    model: "160",
+    amount: 8692,
+    price: "86,92 €",
+    bgn: "170,00 BGN",
+    description: "Modèle DRPKT-160 : 230 V / 50 Hz, 85 W, 0,32 A, 2750 tr/min, débit d'air 750 m3/h, niveau sonore 69 dBA.",
+  },
+  {
+    model: "200",
+    amount: 10226,
+    price: "102,26 €",
+    bgn: "200,00 BGN",
+    description: "Modèle DRPKT-200 : 230 V / 50 Hz, 90 W, 0,33 A, 2770 tr/min, débit d'air 850 m3/h, niveau sonore 70 dBA.",
+  },
+  {
+    model: "250",
+    amount: 11760,
+    price: "117,60 €",
+    bgn: "230,00 BGN",
+    description: "Modèle DRPKT-250 : 230 V / 50 Hz, 120 W, 0,51 A, 2685 tr/min, débit d'air 1800 m3/h, niveau sonore 73 dBA.",
+  },
+  {
+    model: "300",
+    amount: 12782,
+    price: "127,82 €",
+    bgn: "250,00 BGN",
+    description: "Modèle DRPKT-300 : 230 V / 50 Hz, 160 W, 0,65 A, 2650 tr/min, débit d'air 2500 m3/h, niveau sonore 75 dBA.",
+  },
+  {
+    model: "350",
+    amount: 13805,
+    price: "138,05 €",
+    bgn: "270,00 BGN",
+    description: "Modèle DRPKT-350 : 230 V / 50 Hz, 240 W, 1,08 A, 2670 tr/min, débit d'air 4200 m3/h, niveau sonore 78 dBA.",
+  },
+];
+
+const drpktDuctFanProduct = {
+  name: "Ventilateur axial de conduit DRPKT",
+  slug: "ventilateur-axial-conduit-drpkt",
+  category: "Ventilateurs de canaux",
+  imageKey: "axialInlineDuctFanDrpkt",
+  imageUrl: "",
+  amount: 8181,
+  price: "81,81 €",
+  text: "Ventilateur axial en ligne pour conduits DRPKT avec moteur à rotor externe. Conçu pour l'extraction ou l'insufflation d'air dans les réseaux de ventilation. Alimentation 230 V / 50 Hz selon modèle, avec débits de 650 à 4200 m3/h.",
+  options: drpktDuctFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-axial-conduit-drpkt-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 22,
+};
+
+const fdkfRectangularDuctFanOptions = [
+  {
+    model: "30-15",
+    amount: 15850,
+    price: "158,50 €",
+    bgn: "310,00 BGN",
+    description: "Modèle FDKF 30-15 : 230 V / 50 Hz, 90 W, 0,35 A, 2650 tr/min, débit d'air 650 m3/h, niveau sonore 71 dBA.",
+  },
+  {
+    model: "40-20-A",
+    amount: 17640,
+    price: "176,40 €",
+    bgn: "345,00 BGN",
+    description: "Modèle FDKF 40-20-A : 230 V / 50 Hz, 105 W, 0,46 A, 2762 tr/min, débit d'air 1000 m3/h, niveau sonore 74 dBA.",
+  },
+  {
+    model: "40-20-B",
+    amount: 18151,
+    price: "181,51 €",
+    bgn: "355,00 BGN",
+    description: "Modèle FDKF 40-20-B : 230 V / 50 Hz, 140 W, 0,61 A, 2693 tr/min, débit d'air 1250 m3/h, niveau sonore 76 dBA.",
+  },
+  {
+    model: "50-25",
+    amount: 20196,
+    price: "201,96 €",
+    bgn: "395,00 BGN",
+    description: "Modèle FDKF 50-25 : 230 V / 50 Hz, 213 W, 0,94 A, 2546 tr/min, débit d'air 1900 m3/h, niveau sonore 79 dBA.",
+  },
+  {
+    model: "60-30",
+    amount: 30422,
+    price: "304,22 €",
+    bgn: "595,00 BGN",
+    description: "Modèle FDKF 60-30 : 230 V / 50 Hz, 140 W, 0,60 A, 1400 tr/min, débit d'air 2100 m3/h, niveau sonore 70 dBA.",
+  },
+  {
+    model: "60-35-A",
+    amount: 32723,
+    price: "327,23 €",
+    bgn: "640,00 BGN",
+    description: "Modèle FDKF 60-35-A : 230 V / 50 Hz, 175 W, 0,90 A, 1385 tr/min, débit d'air 2800 m3/h, niveau sonore 80 dBA.",
+  },
+  {
+    model: "60-35-B",
+    amount: 34257,
+    price: "342,57 €",
+    bgn: "670,00 BGN",
+    description: "Modèle FDKF 60-35-B : 230 V / 50 Hz, 225 W, 0,94 A, 1370 tr/min, débit d'air 3400 m3/h, niveau sonore 83 dBA.",
+  },
+  {
+    model: "70-40-A",
+    amount: 48317,
+    price: "483,17 €",
+    bgn: "945,00 BGN",
+    description: "Modèle FDKF 70-40-A : 230 V / 50 Hz, 435 W, 2,70 A, 1320 tr/min, débit d'air 4500 m3/h, niveau sonore 83 dBA.",
+  },
+  {
+    model: "70-40-B",
+    amount: 53686,
+    price: "536,86 €",
+    bgn: "1050,00 BGN",
+    description: "Modèle FDKF 70-40-B : 230 V / 50 Hz, 645 W, 3,00 A, 1378 tr/min, débit d'air 5900 m3/h, niveau sonore 84 dBA.",
+  },
+  {
+    model: "80-50",
+    amount: 70047,
+    price: "700,47 €",
+    bgn: "1370,00 BGN",
+    description: "Modèle FDKF 80-50 : 400 V / 50 Hz, 815 W, 2,50 A, 1375 tr/min, débit d'air 8000 m3/h, niveau sonore 86 dBA.",
+  },
+  {
+    model: "100-50",
+    amount: 79250,
+    price: "792,50 €",
+    bgn: "1550,00 BGN",
+    description: "Modèle FDKF 100-50 : 400 V / 50 Hz, 2200 W, 3,00 A, 1360 tr/min, débit d'air 10000 m3/h, niveau sonore 87 dBA.",
+  },
+];
+
+const fdkfRectangularDuctFanProduct = {
+  name: "Ventilateur de conduit rectangulaire FDKF",
+  slug: "ventilateur-conduit-rectangulaire-fdkf",
+  category: "Ventilateurs de canaux",
+  imageKey: "rectangularInlineDuctFanFdkf",
+  imageUrl: "",
+  amount: 15850,
+  price: "158,50 €",
+  text: "Ventilateur en ligne rectangulaire FDKF pour réseaux de ventilation. Adapté aux conduits rectangulaires, avec alimentation 230 V ou 400 V selon modèle et débits d'air de 650 à 10000 m3/h.",
+  options: fdkfRectangularDuctFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-conduit-rectangulaire-fdkf-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 23,
+};
+
+const standingIndustrialFanFsv750AProduct = {
+  name: "Ventilateur industriel sur pied FSV-750-A",
+  slug: "ventilateur-industriel-sur-pied-fsv-750-a",
+  category: "Ventilateurs de restaurant",
+  imageKey: "standingIndustrialFanFsv750A",
+  imageUrl: "",
+  amount: 25053,
+  price: "250,53 €",
+  text: "Ventilateur industriel sur pied FSV-750-A pour grands volumes, terrasses, ateliers et espaces professionnels. Diamètre 750 mm, alimentation 230 V, puissance 285 W, vitesse 1350 tr/min, débit d'air 17000 m3/h et niveau sonore 86 dBA.",
+  featured: true,
+  active: true,
+  sortOrder: 30,
+};
+
+const agfCentrifugalFanOptions = [
+  {
+    model: "120E",
+    amount: 7669,
+    price: "76,69 €",
+    bgn: "150,00 BGN",
+    description: "Modèle AGF 120E : 220 V / 50 Hz, 90 W, 0,4 A, condensateur 2,5/400 mF/V, 2450 tr/min, débit d'air 395 m3/h, pression sonore 60 dB(A), poids 2,45 kg.",
+  },
+  {
+    model: "140E",
+    amount: 8692,
+    price: "86,92 €",
+    bgn: "170,00 BGN",
+    description: "Modèle AGF 140E : 220 V / 50 Hz, 130 W, 0,53 A, condensateur 2,5/400 mF/V, 2410 tr/min, débit d'air 550 m3/h, pression sonore 67 dB(A), poids 2,57 kg.",
+  },
+  {
+    model: "140ER",
+    amount: 9459,
+    price: "94,59 €",
+    bgn: "185,00 BGN",
+    description: "Modèle AGF 140ER : 220 V / 50 Hz, 165 W, 0,6 A, condensateur 2,5/400 mF/V, 2390 tr/min, débit d'air 660 m3/h, pression sonore 69 dB(A), poids 2,98 kg.",
+  },
+  {
+    model: "160E",
+    amount: 9970,
+    price: "99,70 €",
+    bgn: "195,00 BGN",
+    description: "Modèle AGF 160E : 220 V / 50 Hz, 173 W, 0,8 A, condensateur 4/400 mF/V, 2320 tr/min, débit d'air 730 m3/h, pression sonore 72 dB(A), poids 3,63 kg.",
+  },
+  {
+    model: "160ER",
+    amount: 10481,
+    price: "104,81 €",
+    bgn: "205,00 BGN",
+    description: "Modèle AGF 160ER : 220 V / 50 Hz, 185 W, 0,85 A, condensateur 4/400 mF/V, 2285 tr/min, débit d'air 850 m3/h, pression sonore 74 dB(A), poids 3,82 kg.",
+  },
+];
+
+const agfCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge AGF",
+  slug: "ventilateur-centrifuge-agf",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanAgf",
+  imageUrl: "",
+  amount: 7669,
+  price: "76,69 €",
+  text: "Ventilateur centrifuge AGF avec volute métallique et raccord rectangulaire, conçu pour l'extraction et le soufflage d'air dans les installations de ventilation. Disponible en modèles AGF 120E à AGF 160ER, avec débits d'air de 395 à 850 m3/h.",
+  options: agfCentrifugalFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-centrifuge-agf-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const drCentrifugalFanOptions = [
+  {
+    model: "DROBS 125-60",
+    slugPart: "drobs-125-60",
+    amount: 6647,
+    price: "66,47 €",
+    bgn: "130,00 BGN",
+    description: "Modèle DR DROBS 125-60 : 230 V / 50 Hz, 125 W, 0,52 A, 2600 tr/min, débit d'air 380 m3/h, niveau sonore 60 dBA.",
+  },
+  {
+    model: "DRTOS 140-60",
+    slugPart: "drtos-140-60",
+    amount: 7414,
+    price: "74,14 €",
+    bgn: "145,00 BGN",
+    description: "Modèle DR DRTOS 140-60 : 230 V / 50 Hz, 150 W, 0,60 A, 2450 tr/min, débit d'air 500 m3/h, niveau sonore 62 dBA.",
+  },
+  {
+    model: "DRBTMS 140-60",
+    slugPart: "drbtms-140-60",
+    amount: 7925,
+    price: "79,25 €",
+    bgn: "155,00 BGN",
+    description: "Modèle DR DRBTMS 140-60 : 230 V / 50 Hz, 165 W, 0,83 A, 2450 tr/min, débit d'air 580 m3/h, niveau sonore 68 dBA.",
+  },
+  {
+    model: "DRBTMS 160-60",
+    slugPart: "drbtms-160-60",
+    amount: 8181,
+    price: "81,81 €",
+    bgn: "160,00 BGN",
+    description: "Modèle DR DRBTMS 160-60 : 230 V / 50 Hz, 170 W, 1,08 A, 2200 tr/min, débit d'air 650 m3/h, niveau sonore 70 dBA.",
+  },
+  {
+    model: "DRBTMS 180-60",
+    slugPart: "drbtms-180-60",
+    amount: 9203,
+    price: "92,03 €",
+    bgn: "180,00 BGN",
+    description: "Modèle DR DRBTMS 180-60 : 230 V / 50 Hz, 250 W, 1,20 A, 2200 tr/min, débit d'air 800 m3/h, niveau sonore 71 dBA.",
+  },
+  {
+    model: "DRBTMS 180-70",
+    slugPart: "drbtms-180-70",
+    amount: 9715,
+    price: "97,15 €",
+    bgn: "190,00 BGN",
+    description: "Modèle DR DRBTMS 180-70 : 230 V / 50 Hz, 320 W, 1,30 A, 2450 tr/min, débit d'air 900 m3/h, niveau sonore 72 dBA.",
+  },
+];
+
+const drCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge DR",
+  slug: "ventilateur-centrifuge-dr",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanDr",
+  imageUrl: "",
+  amount: 6647,
+  price: "66,47 €",
+  text: "Ventilateur centrifuge DR à rotor externe avec corps métallique, conçu pour l'extraction et le soufflage d'air dans les installations de ventilation. Disponible en modèles DROBS, DRTOS et DRBTMS avec alimentation 230 V / 50 Hz, vitesses de 2200 à 2600 tr/min et débits d'air de 380 à 900 m3/h.",
+  options: drCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-dr-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const fagsMCentrifugalFanOptions = [
+  {
+    model: "FAGS-M1",
+    slugPart: "m1",
+    amount: 18407,
+    price: "184,07 €",
+    bgn: "360,00 BGN",
+    description: "Modèle FAGS-M1 : turbine 140-70 mm, sortie 64x87 mm, entrée Ø120 mm, alimentation 380 V / 50 Hz, moteur 1/3 HP / 0,25 kW, courant 0,67 A, vitesse 2800 tr/min, débit d'air 800 m3/h, pression 270 Pa et niveau sonore 25 dBA.",
+  },
+  {
+    model: "FAGS-M2",
+    slugPart: "m2",
+    amount: 19429,
+    price: "194,29 €",
+    bgn: "380,00 BGN",
+    description: "Modèle FAGS-M2 : turbine 160-90 mm, sortie 108x110 mm, entrée Ø120 mm, alimentation 380 V / 50 Hz, moteur 1/2 HP / 0,37 kW, courant 1,05 A, vitesse 2800 tr/min, débit d'air 1700 m3/h, pression 360 Pa et niveau sonore 30 dBA.",
+  },
+  {
+    model: "FAGS-M3",
+    slugPart: "m3",
+    amount: 23008,
+    price: "230,08 €",
+    bgn: "450,00 BGN",
+    description: "Modèle FAGS-M3 : turbine 180-90 mm, sortie 106x108 mm, entrée Ø140 mm, alimentation 380 V / 50 Hz, moteur 3/4 HP / 0,55 kW, courant 1,27 A, vitesse 2800 tr/min, débit d'air 2100 m3/h, pression 510 Pa et niveau sonore 34 dBA.",
+  },
+  {
+    model: "FAGS-M4 225-90",
+    slugPart: "m4-225-90",
+    amount: 30166,
+    price: "301,66 €",
+    bgn: "590,00 BGN",
+    description: "Modèle FAGS-M4 225-90 : turbine 225-90 mm, sortie 127x108 mm, entrée Ø140 mm, alimentation 380 V / 50 Hz, moteur 1 HP / 0,75 kW, courant 1,70 A, vitesse 2800 tr/min, débit d'air 2600 m3/h, pression 610 Pa et niveau sonore 37 dBA.",
+  },
+  {
+    model: "FAGS-M4 225-102",
+    slugPart: "m4-225-102",
+    amount: 31956,
+    price: "319,56 €",
+    bgn: "625,00 BGN",
+    description: "Modèle FAGS-M4 225-102 : turbine 225-102 mm, sortie 127x108 mm, entrée Ø140 mm, alimentation 380 V / 50 Hz, moteur 1,5 HP / 1,1 kW, courant 2,30 A, vitesse 2800 tr/min, débit d'air 3100 m3/h, pression 610 Pa et niveau sonore 40 dBA.",
+  },
+  {
+    model: "FAGS-M5 250-112",
+    slugPart: "m5-250-112",
+    amount: 37836,
+    price: "378,36 €",
+    bgn: "740,00 BGN",
+    description: "Modèle FAGS-M5 250-112 : turbine 250-112 mm, sortie Ø162 mm, entrée Ø160 mm, alimentation 380 V / 50 Hz, moteur 2 HP / 1,5 kW, courant 3,30 A, vitesse 2800 tr/min, débit d'air 3600 m3/h, pression 710 Pa et niveau sonore 44 dBA.",
+  },
+  {
+    model: "FAGS-M5 250-118",
+    slugPart: "m5-250-118",
+    amount: 41415,
+    price: "414,15 €",
+    bgn: "810,00 BGN",
+    description: "Modèle FAGS-M5 250-118 : turbine 250-118 mm, sortie Ø162 mm, entrée Ø160 mm, alimentation 380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 4,48 A, vitesse 2800 tr/min, débit d'air 4150 m3/h, pression 910 Pa et niveau sonore 49 dBA.",
+  },
+  {
+    model: "FAGS-M6 268-112",
+    slugPart: "m6-268-112",
+    amount: 47294,
+    price: "472,94 €",
+    bgn: "925,00 BGN",
+    description: "Modèle FAGS-M6 268-112 : turbine 268-112 mm, sortie Ø155 mm, entrée Ø160 mm, alimentation 380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 4,48 A, vitesse 2800 tr/min, débit d'air 4550 m3/h, pression 1210 Pa et niveau sonore 51 dBA.",
+  },
+  {
+    model: "FAGS-M6 268-118",
+    slugPart: "m6-268-118",
+    amount: 50107,
+    price: "501,07 €",
+    bgn: "980,00 BGN",
+    description: "Modèle FAGS-M6 268-118 : turbine 268-118 mm, sortie Ø155 mm, entrée Ø160 mm, alimentation 380 V / 50 Hz, moteur 4 HP / 3 kW, courant 5,80 A, vitesse 2800 tr/min, débit d'air 5150 m3/h, pression 1510 Pa et niveau sonore 55 dBA.",
+  },
+];
+
+const fagsMCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge FAGS-M",
+  slug: "ventilateur-centrifuge-fags-m",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanFagsM",
+  imageUrl: "",
+  amount: 18407,
+  price: "184,07 €",
+  text: "Ventilateur centrifuge FAGS-M à corps métallique avec volute et raccord rectangulaire, conçu pour l'extraction et le soufflage d'air dans les installations de ventilation. Modèles alimentés en 380 V / 50 Hz, avec vitesse 2800 tr/min, débit d'air de 800 à 5150 m3/h et pression de 270 à 1510 Pa selon modèle.",
+  options: fagsMCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-fags-m-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const fboCentrifugalFanOptions = [
+  {
+    model: "FBO-0,5 - T",
+    slugPart: "0-5-t",
+    amount: 43460,
+    price: "434,60 €",
+    bgn: "850,00 BGN",
+    description: "Modèle FBO-0,5 - T : alimentation 230/380 V / 50 Hz, moteur 1/2 HP / 0,37 kW, courant 1,05 A, vitesse 2800 tr/min, débit d'air 1000 m3/h et pression 1200 Pa.",
+  },
+  {
+    model: "FBO-1 - T",
+    slugPart: "1-t",
+    amount: 56242,
+    price: "562,42 €",
+    bgn: "1100,00 BGN",
+    description: "Modèle FBO-1 - T : alimentation 230/380 V / 50 Hz, moteur 1 HP / 0,75 kW, courant 1,70 A, vitesse 2800 tr/min, débit d'air 1100 m3/h et pression 1500 Pa.",
+  },
+  {
+    model: "FBO-1,5 - T",
+    slugPart: "1-5-t",
+    amount: 63911,
+    price: "639,11 €",
+    bgn: "1250,00 BGN",
+    description: "Modèle FBO-1,5 - T : alimentation 230/380 V / 50 Hz, moteur 1,5 HP / 1,1 kW, courant 2,30 A, vitesse 2800 tr/min, débit d'air 1400 m3/h et pression 2000 Pa.",
+  },
+  {
+    model: "FBO-2 - T",
+    slugPart: "2-t",
+    amount: 74137,
+    price: "741,37 €",
+    bgn: "1450,00 BGN",
+    description: "Modèle FBO-2 - T : alimentation 230/380 V / 50 Hz, moteur 2 HP / 1,5 kW, courant 3,30 A, vitesse 2800 tr/min, débit d'air 1600 m3/h et pression 2500 Pa.",
+  },
+  {
+    model: "FBO-3 - T",
+    slugPart: "3-t",
+    amount: 84363,
+    price: "843,63 €",
+    bgn: "1650,00 BGN",
+    description: "Modèle FBO-3 - T : alimentation 230/380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 4,48 A, vitesse 2800 tr/min, débit d'air 2100 m3/h et pression 3500 Pa.",
+  },
+  {
+    model: "FBO-4 - T",
+    slugPart: "4-t",
+    amount: 89476,
+    price: "894,76 €",
+    bgn: "1750,00 BGN",
+    description: "Modèle FBO-4 - T : alimentation 230/380 V / 50 Hz, moteur 4 HP / 3 kW, courant 5,80 A, vitesse 2800 tr/min, débit d'air 2300 m3/h et pression 4500 Pa.",
+  },
+  {
+    model: "FBO-5,5 - T",
+    slugPart: "5-5-t",
+    amount: 99702,
+    price: "997,02 €",
+    bgn: "1950,00 BGN",
+    description: "Modèle FBO-5,5 - T : alimentation 380 V / 50 Hz, moteur 5,5 HP / 4 kW, courant 7,40 A, vitesse 2800 tr/min, débit d'air 2600 m3/h et pression 5000 Pa.",
+  },
+  {
+    model: "FBO-7,5 - T",
+    slugPart: "7-5-t",
+    amount: 123733,
+    price: "1237,33 €",
+    bgn: "2420,00 BGN",
+    description: "Modèle FBO-7,5 - T : alimentation 380 V / 50 Hz, moteur 7,5 HP / 5,5 kW, courant 10,30 A, vitesse 2800 tr/min, débit d'air 3200 m3/h et pression 6000 Pa.",
+  },
+  {
+    model: "FBO-10 - T",
+    slugPart: "10-t",
+    amount: 150831,
+    price: "1508,31 €",
+    bgn: "2950,00 BGN",
+    description: "Modèle FBO-10 - T : alimentation 380 V / 50 Hz, moteur 10 HP / 7,5 kW, courant 13,60 A, vitesse 2800 tr/min, débit d'air 4200 m3/h et pression 6500 Pa.",
+  },
+  {
+    model: "FBO-0,5 - M",
+    slugPart: "0-5-m",
+    amount: 43460,
+    price: "434,60 €",
+    bgn: "850,00 BGN",
+    description: "Modèle FBO-0,5 - M : alimentation 230/380 V / 50 Hz, moteur 1/2 HP / 0,37 kW, courant 1,05 A, vitesse 2800 tr/min, débit d'air 1000 m3/h et pression 1200 Pa.",
+  },
+  {
+    model: "FBO-1 - M",
+    slugPart: "1-m",
+    amount: 56242,
+    price: "562,42 €",
+    bgn: "1100,00 BGN",
+    description: "Modèle FBO-1 - M : alimentation 230/380 V / 50 Hz, moteur 1 HP / 0,75 kW, courant 1,70 A, vitesse 2800 tr/min, débit d'air 1100 m3/h et pression 1500 Pa.",
+  },
+  {
+    model: "FBO-1,5 - M",
+    slugPart: "1-5-m",
+    amount: 63911,
+    price: "639,11 €",
+    bgn: "1250,00 BGN",
+    description: "Modèle FBO-1,5 - M : alimentation 230/380 V / 50 Hz, moteur 1,5 HP / 1,1 kW, courant 2,30 A, vitesse 2800 tr/min, débit d'air 1400 m3/h et pression 2000 Pa.",
+  },
+  {
+    model: "FBO-2 - M",
+    slugPart: "2-m",
+    amount: 74137,
+    price: "741,37 €",
+    bgn: "1450,00 BGN",
+    description: "Modèle FBO-2 - M : alimentation 230/380 V / 50 Hz, moteur 2 HP / 1,5 kW, courant 3,30 A, vitesse 2800 tr/min, débit d'air 1600 m3/h et pression 2500 Pa.",
+  },
+  {
+    model: "FBO-3 - M",
+    slugPart: "3-m",
+    amount: 84363,
+    price: "843,63 €",
+    bgn: "1650,00 BGN",
+    description: "Modèle FBO-3 - M : alimentation 230/380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 4,48 A, vitesse 2800 tr/min, débit d'air 2100 m3/h et pression 3500 Pa.",
+  },
+  {
+    model: "FBO-4 - M",
+    slugPart: "4-m",
+    amount: 89476,
+    price: "894,76 €",
+    bgn: "1750,00 BGN",
+    description: "Modèle FBO-4 - M : alimentation 230/380 V / 50 Hz, moteur 4 HP / 3 kW, courant 5,80 A, vitesse 2800 tr/min, débit d'air 2300 m3/h et pression 4500 Pa.",
+  },
+];
+
+const fboCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge FBO",
+  slug: "ventilateur-centrifuge-fbo",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanFbo",
+  imageUrl: "",
+  amount: 43460,
+  price: "434,60 €",
+  text: "Ventilateur centrifuge FBO à volute métallique, avec raccord circulaire et sortie latérale. Conçu pour les installations de ventilation nécessitant une pression élevée. Disponible en versions T et M visibles, avec vitesse 2800 tr/min, débit d'air de 1000 à 4200 m3/h et pression de 1200 à 6500 Pa selon modèle.",
+  options: fboCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-fbo-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const fbkCentrifugalFanOptions = [
+  {
+    model: "FBK-0,5 - T",
+    slugPart: "0-5-t",
+    amount: 43460,
+    price: "434,60 €",
+    bgn: "850,00 BGN",
+    description: "Modèle FBK-0,5 - T : alimentation 230/380 V / 50 Hz, moteur 1/2 HP / 0,37 kW, courant 1,05 A, vitesse 2800 tr/min, débit d'air 350 m3/h et pression 2500 Pa.",
+  },
+  {
+    model: "FBK-1 - T",
+    slugPart: "1-t",
+    amount: 56242,
+    price: "562,42 €",
+    bgn: "1100,00 BGN",
+    description: "Modèle FBK-1 - T : alimentation 230/380 V / 50 Hz, moteur 1 HP / 0,75 kW, courant 1,70 A, vitesse 2800 tr/min, débit d'air 450 m3/h et pression 3000 Pa.",
+  },
+  {
+    model: "FBK-1,5 - T",
+    slugPart: "1-5-t",
+    amount: 63911,
+    price: "639,11 €",
+    bgn: "1250,00 BGN",
+    description: "Modèle FBK-1,5 - T : alimentation 230/380 V / 50 Hz, moteur 1,5 HP / 1,1 kW, courant 2,30 A, vitesse 2800 tr/min, débit d'air 550 m3/h et pression 4000 Pa.",
+  },
+  {
+    model: "FBK-2 - T",
+    slugPart: "2-t",
+    amount: 74137,
+    price: "741,37 €",
+    bgn: "1450,00 BGN",
+    description: "Modèle FBK-2 - T : alimentation 230/380 V / 50 Hz, moteur 2 HP / 1,5 kW, courant 3,30 A, vitesse 2800 tr/min, débit d'air 600 m3/h et pression 5000 Pa.",
+  },
+  {
+    model: "FBK-3 - T",
+    slugPart: "3-t",
+    amount: 84363,
+    price: "843,63 €",
+    bgn: "1650,00 BGN",
+    description: "Modèle FBK-3 - T : alimentation 230/380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 4,48 A, vitesse 2800 tr/min, débit d'air 700 m3/h et pression 6000 Pa.",
+  },
+  {
+    model: "FBK-4 - T",
+    slugPart: "4-t",
+    amount: 89476,
+    price: "894,76 €",
+    bgn: "1750,00 BGN",
+    description: "Modèle FBK-4 - T : alimentation 230/380 V / 50 Hz, moteur 4 HP / 3 kW, courant 5,80 A, vitesse 2800 tr/min, débit d'air 1000 m3/h et pression 7000 Pa.",
+  },
+  {
+    model: "FBK-5,5 - T",
+    slugPart: "5-5-t",
+    amount: 99702,
+    price: "997,02 €",
+    bgn: "1950,00 BGN",
+    description: "Modèle FBK-5,5 - T : alimentation 380 V / 50 Hz, moteur 5,5 HP / 4 kW, courant 7,40 A, vitesse 2800 tr/min, débit d'air 1250 m3/h et pression 8000 Pa.",
+  },
+  {
+    model: "FBK-7,5 - T",
+    slugPart: "7-5-t",
+    amount: 123733,
+    price: "1237,33 €",
+    bgn: "2420,00 BGN",
+    description: "Modèle FBK-7,5 - T : alimentation 380 V / 50 Hz, moteur 7,5 HP / 5,5 kW, courant 10,30 A, vitesse 2800 tr/min, débit d'air 1500 m3/h et pression 9000 Pa.",
+  },
+  {
+    model: "FBK-10 - T",
+    slugPart: "10-t",
+    amount: 150831,
+    price: "1508,31 €",
+    bgn: "2950,00 BGN",
+    description: "Modèle FBK-10 - T : alimentation 380 V / 50 Hz, moteur 10 HP / 7,5 kW, courant 13,60 A, vitesse 2800 tr/min, débit d'air 1700 m3/h et pression 10000 Pa.",
+  },
+  {
+    model: "FBK-0,5 - M",
+    slugPart: "0-5-m",
+    amount: 43460,
+    price: "434,60 €",
+    bgn: "850,00 BGN",
+    description: "Modèle FBK-0,5 - M : alimentation 230/380 V / 50 Hz, moteur 1/2 HP / 0,37 kW, courant 1,05 A, vitesse 2800 tr/min, débit d'air 350 m3/h et pression 2500 Pa.",
+  },
+  {
+    model: "FBK-1 - M",
+    slugPart: "1-m",
+    amount: 56242,
+    price: "562,42 €",
+    bgn: "1100,00 BGN",
+    description: "Modèle FBK-1 - M : alimentation 230/380 V / 50 Hz, moteur 1 HP / 0,75 kW, courant 1,70 A, vitesse 2800 tr/min, débit d'air 450 m3/h et pression 3000 Pa.",
+  },
+  {
+    model: "FBK-1,5 - M",
+    slugPart: "1-5-m",
+    amount: 63911,
+    price: "639,11 €",
+    bgn: "1250,00 BGN",
+    description: "Modèle FBK-1,5 - M : alimentation 230/380 V / 50 Hz, moteur 1,5 HP / 1,1 kW, courant 2,30 A, vitesse 2800 tr/min, débit d'air 550 m3/h et pression 4000 Pa.",
+  },
+  {
+    model: "FBK-2 - M",
+    slugPart: "2-m",
+    amount: 74137,
+    price: "741,37 €",
+    bgn: "1450,00 BGN",
+    description: "Modèle FBK-2 - M : alimentation 230/380 V / 50 Hz, moteur 2 HP / 1,5 kW, courant 3,30 A, vitesse 2800 tr/min, débit d'air 600 m3/h et pression 5000 Pa.",
+  },
+  {
+    model: "FBK-3 - M",
+    slugPart: "3-m",
+    amount: 84363,
+    price: "843,63 €",
+    bgn: "1650,00 BGN",
+    description: "Modèle FBK-3 - M : alimentation 230/380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 4,48 A, vitesse 2800 tr/min, débit d'air 700 m3/h et pression 6000 Pa.",
+  },
+  {
+    model: "FBK-4 - M",
+    slugPart: "4-m",
+    amount: 89476,
+    price: "894,76 €",
+    bgn: "1750,00 BGN",
+    description: "Modèle FBK-4 - M : alimentation 230/380 V / 50 Hz, moteur 4 HP / 3 kW, courant 5,80 A, vitesse 2800 tr/min, débit d'air 1000 m3/h et pression 7000 Pa.",
+  },
+];
+
+const fbkCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge FBK",
+  slug: "ventilateur-centrifuge-fbk",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanFbk",
+  imageUrl: "",
+  amount: 43460,
+  price: "434,60 €",
+  text: "Ventilateur centrifuge FBK à volute métallique, conçu pour les installations nécessitant une pression élevée et un débit maîtrisé. Disponible en versions T et M visibles, avec vitesse 2800 tr/min, débit d'air de 350 à 1700 m3/h et pression de 2500 à 10000 Pa selon modèle.",
+  options: fbkCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-fbk-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const fobrCentrifugalFanOptions = [
+  {
+    model: "FOBR-260 (2) T",
+    slugPart: "260-2-t",
+    amount: 19940,
+    price: "199,40 €",
+    bgn: "390,00 BGN",
+    description: "Modèle FOBR-260 (2) T : alimentation 380 V / 50 Hz, puissance 750 W, courant 1,70 A, vitesse 2800 tr/min, débit d'air 2700 m3/h et niveau sonore 78 dBA.",
+  },
+  {
+    model: "FOBR-260 (4) T",
+    slugPart: "260-4-t",
+    amount: 23008,
+    price: "230,08 €",
+    bgn: "450,00 BGN",
+    description: "Modèle FOBR-260 (4) T : alimentation 380 V / 50 Hz, puissance 750 W, courant 2,10 A, vitesse 1400 tr/min, débit d'air 1450 m3/h et niveau sonore 67 dBA.",
+  },
+  {
+    model: "FOBR-260 (2) M",
+    slugPart: "260-2-m",
+    amount: 23008,
+    price: "230,08 €",
+    bgn: "450,00 BGN",
+    description: "Modèle FOBR-260 (2) M : alimentation 230 V / 50 Hz, puissance 750 W, courant 1,70 A, vitesse 2800 tr/min, débit d'air 2700 m3/h et niveau sonore 80 dBA.",
+  },
+  {
+    model: "FOBR-260 (4) M",
+    slugPart: "260-4-m",
+    amount: 25053,
+    price: "250,53 €",
+    bgn: "490,00 BGN",
+    description: "Modèle FOBR-260 (4) M : alimentation 230 V / 50 Hz, puissance 750 W, courant 2,10 A, vitesse 1400 tr/min, débit d'air 1450 m3/h et niveau sonore 69 dBA.",
+  },
+];
+
+const fobrCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge FOBR",
+  slug: "ventilateur-centrifuge-fobr",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanFobr",
+  imageUrl: "",
+  amount: 19940,
+  price: "199,40 €",
+  text: "Ventilateur centrifuge radial FOBR à aubes courbées vers l'avant avec moteur externe. Corps compact avec entrée circulaire et sortie rectangulaire, disponible en versions monophasées et triphasées, puissance 750 W, vitesses 1400 ou 2800 tr/min et débits d'air de 1450 à 2700 m3/h selon modèle.",
+  options: fobrCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-fobr-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const fbsyCentrifugalFanOptions = [
+  {
+    model: "FBSY 0,5 - T",
+    slugPart: "0-5-t",
+    amount: 43460,
+    price: "434,60 €",
+    bgn: "850,00 BGN",
+    description: "Modèle FBSY 0,5 - T : alimentation 230/380 V / 50 Hz, moteur 1/2 HP / 0,37 kW, courant 1,15 A, vitesse 1400 tr/min, débit d'air 2000 m3/h et pression 400 Pa.",
+  },
+  {
+    model: "FBSY 1 - T",
+    slugPart: "1-t",
+    amount: 59310,
+    price: "593,10 €",
+    bgn: "1160,00 BGN",
+    description: "Modèle FBSY 1 - T : alimentation 230/380 V / 50 Hz, moteur 1 HP / 0,75 kW, courant 2,10 A, vitesse 1400 tr/min, débit d'air 3000 m3/h et pression 500 Pa.",
+  },
+  {
+    model: "FBSY 1,5 - T",
+    slugPart: "1-5-t",
+    amount: 63911,
+    price: "639,11 €",
+    bgn: "1250,00 BGN",
+    description: "Modèle FBSY 1,5 - T : alimentation 230/380 V / 50 Hz, moteur 1,5 HP / 1,1 kW, courant 2,60 A, vitesse 1400 tr/min, débit d'air 4000 m3/h et pression 600 Pa.",
+  },
+  {
+    model: "FBSY 2 - T",
+    slugPart: "2-t",
+    amount: 74137,
+    price: "741,37 €",
+    bgn: "1450,00 BGN",
+    description: "Modèle FBSY 2 - T : alimentation 230/380 V / 50 Hz, moteur 2 HP / 1,5 kW, courant 3,50 A, vitesse 1400 tr/min, débit d'air 5000 m3/h et pression 700 Pa.",
+  },
+  {
+    model: "FBSY 3 - T",
+    slugPart: "3-t",
+    amount: 84363,
+    price: "843,63 €",
+    bgn: "1650,00 BGN",
+    description: "Modèle FBSY 3 - T : alimentation 230/380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 5,00 A, vitesse 1400 tr/min, débit d'air 6500 m3/h et pression 800 Pa.",
+  },
+  {
+    model: "FBSY 4 - T",
+    slugPart: "4-t",
+    amount: 90499,
+    price: "904,99 €",
+    bgn: "1770,00 BGN",
+    description: "Modèle FBSY 4 - T : alimentation 230/380 V / 50 Hz, moteur 4 HP / 3 kW, courant 6,60 A, vitesse 1400 tr/min, débit d'air 7500 m3/h et pression 900 Pa.",
+  },
+  {
+    model: "FBSY 5,5 - T",
+    slugPart: "5-5-t",
+    amount: 105837,
+    price: "1058,37 €",
+    bgn: "2070,00 BGN",
+    description: "Modèle FBSY 5,5 - T : alimentation 380 V / 50 Hz, moteur 5,5 HP / 4 kW, courant 8,20 A, vitesse 1400 tr/min, débit d'air 8500 m3/h et pression 1000 Pa.",
+  },
+  {
+    model: "FBSY 7,5 - T",
+    slugPart: "7-5-t",
+    amount: 136004,
+    price: "1360,04 €",
+    bgn: "2660,00 BGN",
+    description: "Modèle FBSY 7,5 - T : alimentation 380 V / 50 Hz, moteur 7,5 HP / 5,5 kW, courant 11,20 A, vitesse 1400 tr/min, débit d'air 10500 m3/h et pression 1100 Pa.",
+  },
+  {
+    model: "FBSY 10 - T",
+    slugPart: "10-t",
+    amount: 165659,
+    price: "1656,59 €",
+    bgn: "3240,00 BGN",
+    description: "Modèle FBSY 10 - T : alimentation 380 V / 50 Hz, moteur 10 HP / 7,5 kW, courant 15,40 A, vitesse 1400 tr/min, débit d'air 12500 m3/h et pression 1200 Pa.",
+  },
+  {
+    model: "FBSY 0,5 - M",
+    slugPart: "0-5-m",
+    amount: 43460,
+    price: "434,60 €",
+    bgn: "850,00 BGN",
+    description: "Modèle FBSY 0,5 - M : alimentation 230/380 V / 50 Hz, moteur 1/2 HP / 0,37 kW, courant 1,15 A, vitesse 1400 tr/min, débit d'air 2000 m3/h et pression 400 Pa.",
+  },
+  {
+    model: "FBSY 1 - M",
+    slugPart: "1-m",
+    amount: 59310,
+    price: "593,10 €",
+    bgn: "1160,00 BGN",
+    description: "Modèle FBSY 1 - M : alimentation 230/380 V / 50 Hz, moteur 1 HP / 0,75 kW, courant 2,10 A, vitesse 1400 tr/min, débit d'air 3000 m3/h et pression 500 Pa.",
+  },
+  {
+    model: "FBSY 1,5 - M",
+    slugPart: "1-5-m",
+    amount: 63911,
+    price: "639,11 €",
+    bgn: "1250,00 BGN",
+    description: "Modèle FBSY 1,5 - M : alimentation 230/380 V / 50 Hz, moteur 1,5 HP / 1,1 kW, courant 2,60 A, vitesse 1400 tr/min, débit d'air 4000 m3/h et pression 600 Pa.",
+  },
+  {
+    model: "FBSY 2 - M",
+    slugPart: "2-m",
+    amount: 74137,
+    price: "741,37 €",
+    bgn: "1450,00 BGN",
+    description: "Modèle FBSY 2 - M : alimentation 230/380 V / 50 Hz, moteur 2 HP / 1,5 kW, courant 3,50 A, vitesse 1400 tr/min, débit d'air 5000 m3/h et pression 700 Pa.",
+  },
+  {
+    model: "FBSY 3 - M",
+    slugPart: "3-m",
+    amount: 84363,
+    price: "843,63 €",
+    bgn: "1650,00 BGN",
+    description: "Modèle FBSY 3 - M : alimentation 230/380 V / 50 Hz, moteur 3 HP / 2,2 kW, courant 5,00 A, vitesse 1400 tr/min, débit d'air 6500 m3/h et pression 800 Pa.",
+  },
+  {
+    model: "FBSY 4 - M",
+    slugPart: "4-m",
+    amount: 89476,
+    price: "894,76 €",
+    bgn: "1750,00 BGN",
+    description: "Modèle FBSY 4 - M : alimentation 230/380 V / 50 Hz, moteur 4 HP / 3 kW, courant 6,60 A, vitesse 1400 tr/min, débit d'air 7500 m3/h et pression 900 Pa.",
+  },
+];
+
+const fbsyCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge FBSY",
+  slug: "ventilateur-centrifuge-fbsy",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanFbsy",
+  imageUrl: "",
+  amount: 43460,
+  price: "434,60 €",
+  text: "Ventilateur centrifuge FBSY à volute métallique avec raccords circulaire et rectangulaire, conçu pour les installations de ventilation à débit élevé. Disponible en versions T et M visibles, avec vitesse 1400 tr/min, débit d'air de 2000 à 12500 m3/h et pression de 400 à 1200 Pa selon modèle.",
+  options: fbsyCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-fbsy-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const kagsCentrifugalFanOptions = [
+  { model: "KAGS 125-60", amount: 5369, price: "53,69 €", bgn: "105,00 BGN" },
+  { model: "BAGS 140-60", amount: 6136, price: "61,36 €", bgn: "120,00 BGN" },
+  { model: "BAGS 160-60", amount: 6902, price: "69,02 €", bgn: "135,00 BGN" },
+  { model: "BAGS 180-70", amount: 7669, price: "76,69 €", bgn: "150,00 BGN" },
+];
+
+const kagsCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge KAGS",
+  slug: "ventilateur-centrifuge-kags",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanKags",
+  imageUrl: "",
+  amount: 5369,
+  price: "53,69 €",
+  text: "Ventilateur centrifuge KAGS à corps métallique avec grille de protection et raccord rectangulaire. Conçu pour l'extraction et le soufflage d'air dans les installations de ventilation, disponible en modèles KAGS 125-60 et BAGS 140-60 à BAGS 180-70.",
+  options: kagsCentrifugalFanOptions.map(({ model, amount, price, bgn }) => ({
+    label: model,
+    value: model.toLowerCase().replaceAll(" ", "-"),
+    slug: `ventilateur-centrifuge-kags-${model.toLowerCase().replaceAll(" ", "-")}`,
+    amount,
+    price,
+    bgn,
+    description: `Modèle ${model} : ventilateur centrifuge à corps métallique avec raccord rectangulaire.`,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const ktsObsCentrifugalFanOptions = [
+  {
+    model: "KTS 90-60",
+    amount: 5369,
+    price: "53,69 €",
+    bgn: "105,00 BGN",
+    description: "Modèle KTS 90-60 : alimentation 230 V / 50 Hz, puissance 53 W, courant 0,24 A, vitesse 2450 tr/min, débit d'air 150 m3/h et niveau sonore 58 dBA.",
+  },
+  {
+    model: "OBS 125-60",
+    amount: 6136,
+    price: "61,36 €",
+    bgn: "120,00 BGN",
+    description: "Modèle OBS 125-60 : alimentation 230 V / 50 Hz, puissance 125 W, courant 0,45 A, vitesse 2700 tr/min, débit d'air 350 m3/h et niveau sonore 60 dBA.",
+  },
+  {
+    model: "TOS 140-60",
+    amount: 6391,
+    price: "63,91 €",
+    bgn: "125,00 BGN",
+    description: "Modèle TOS 140-60 : alimentation 230 V / 50 Hz, puissance 130 W, courant 0,61 A, vitesse 2350 tr/min, débit d'air 450 m3/h et niveau sonore 61 dBA.",
+  },
+  {
+    model: "BTMS 140-60",
+    amount: 6902,
+    price: "69,02 €",
+    bgn: "135,00 BGN",
+    description: "Modèle BTMS 140-60 : alimentation 230 V / 50 Hz, puissance 140 W, courant 0,62 A, vitesse 2200 tr/min, débit d'air 520 m3/h et niveau sonore 66 dBA.",
+  },
+  {
+    model: "BTMS 160-60",
+    amount: 7669,
+    price: "76,69 €",
+    bgn: "150,00 BGN",
+    description: "Modèle BTMS 160-60 : alimentation 230 V / 50 Hz, puissance 230 W, courant 0,82 A, vitesse 2200 tr/min, débit d'air 620 m3/h et niveau sonore 67 dBA.",
+  },
+  {
+    model: "BTMS 180-70",
+    amount: 9715,
+    price: "97,15 €",
+    bgn: "190,00 BGN",
+    description: "Modèle BTMS 180-70 : alimentation 230 V / 50 Hz, puissance 650 W, courant 1,20 A, vitesse 2780 tr/min, débit d'air 1250 m3/h et niveau sonore 74 dBA.",
+  },
+];
+
+const ktsObsCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge KTS-OBS",
+  slug: "ventilateur-centrifuge-kts-obs",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanKtsObs",
+  imageUrl: "",
+  amount: 5369,
+  price: "53,69 €",
+  text: "Ventilateur centrifuge KTS-OBS à corps métallique, conçu pour l'extraction et le soufflage d'air dans les installations de ventilation. Disponible en six modèles, avec alimentation 230 V / 50 Hz et débits d'air de 150 à 1250 m3/h.",
+  options: ktsObsCentrifugalFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase().replaceAll(" ", "-"),
+    slug: `ventilateur-centrifuge-kts-obs-${model.toLowerCase().replaceAll(" ", "-")}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const ocesCentrifugalFanOptions = [
+  {
+    model: "OCES-M",
+    slug: "ventilateur-centrifuge-oces-m",
+    amount: 19940,
+    price: "199,40 €",
+    bgn: "390,00 BGN",
+    description: "Modèle OCES-M : sortie d'air 210 x 135 mm, alimentation 230 V / 50 Hz, puissance 240 W, courant 1,85 A, vitesse 1400 tr/min, débit d'air 2000 m3/h et niveau sonore 61 dBA.",
+  },
+  {
+    model: "OCES-T",
+    slug: "ventilateur-centrifuge-oces-t",
+    amount: 19940,
+    price: "199,40 €",
+    bgn: "390,00 BGN",
+    description: "Modèle OCES-T : sortie d'air 210 x 135 mm, alimentation 380 V / 50 Hz, puissance 240 W, courant 1,74 A, vitesse 1400 tr/min, débit d'air 2000 m3/h et niveau sonore 61 dBA.",
+  },
+];
+
+const ocesCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge OCES",
+  slug: "ventilateur-centrifuge-oces",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanOces",
+  imageUrl: "",
+  amount: 19940,
+  price: "199,40 €",
+  text: "Ventilateur centrifuge OCES à double aspiration pour extraction et soufflage d'air. Sortie d'air 210 x 135 mm, puissance 240 W, vitesse 1400 tr/min, débit d'air 2000 m3/h et niveau sonore 61 dBA selon modèle.",
+  options: ocesCentrifugalFanOptions.map(({ model, slug, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const obra140CentrifugalFanOptions = [
+  {
+    model: "2M",
+    amount: 15850,
+    price: "158,50 €",
+    bgn: "310,00 BGN",
+    description: "Modèle OBRA 140-2M : 220 V, 50 Hz, 370 W, 2,6 A, condensateur 5/400 mF/V, 2800 tr/min, débit d'air 1350 m3/h, pression sonore 50 dB(A), poids 8 kg.",
+  },
+  {
+    model: "4M",
+    amount: 15850,
+    price: "158,50 €",
+    bgn: "310,00 BGN",
+    description: "Modèle OBRA 140-4M : 220 V, 50 Hz, 300 W, 2 A, condensateur 4/400 mF/V, 1400 tr/min, débit d'air 600 m3/h, pression sonore 43 dB(A), poids 7,9 kg.",
+  },
+  {
+    model: "2T",
+    amount: 15850,
+    price: "158,50 €",
+    bgn: "310,00 BGN",
+    description: "Modèle OBRA 140-2T : 380 V, 50 Hz, 370 W, 3 A, 2800 tr/min, débit d'air 1500 m3/h, pression sonore 52 dB(A), poids 7,95 kg.",
+  },
+  {
+    model: "4T",
+    amount: 15850,
+    price: "158,50 €",
+    bgn: "310,00 BGN",
+    description: "Modèle OBRA 140-4T : 380 V, 50 Hz, 2500 W, 1,2 A, 1400 tr/min, débit d'air 650 m3/h, pression sonore 45 dB(A), poids 7,85 kg.",
+  },
+];
+
+const obra140CentrifugalFanProduct = {
+  name: "Ventilateur centrifuge OBRA-140",
+  slug: "ventilateur-centrifuge-obra-140",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanObra140",
+  imageUrl: "",
+  amount: 15850,
+  price: "158,50 €",
+  text: "Ventilateur centrifuge OBRA-140 pour réseaux de ventilation et applications professionnelles. Disponible en versions monophasées et triphasées, avec alimentation 220 V ou 380 V selon modèle, vitesse de 1400 à 2800 tr/min et débit d'air de 600 à 1500 m3/h.",
+  options: obra140CentrifugalFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-centrifuge-obra-140-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const obra200CentrifugalFanOptions = [
+  {
+    model: "2M",
+    amount: 17895,
+    price: "178,95 €",
+    bgn: "350,00 BGN",
+    description: "Modèle OBRA 200-2M : 220 V, 50 Hz, 370 W, 2,6 A, condensateur 5/400 mF/V, 2800 tr/min, débit d'air 1850 m3/h, pression sonore 53 dB(A), poids 9,15 kg.",
+  },
+  {
+    model: "4M",
+    amount: 17895,
+    price: "178,95 €",
+    bgn: "350,00 BGN",
+    description: "Modèle OBRA 200-4M : 220 V, 50 Hz, 300 W, 2 A, condensateur 4/400 mF/V, 1400 tr/min, débit d'air 950 m3/h, pression sonore 45 dB(A), poids 9 kg.",
+  },
+  {
+    model: "2T",
+    amount: 17895,
+    price: "178,95 €",
+    bgn: "350,00 BGN",
+    description: "Modèle OBRA 200-2T : 380 V, 50 Hz, 370 W, 3 A, 2800 tr/min, débit d'air 2150 m3/h, pression sonore 53 dB(A), poids 9,1 kg.",
+  },
+  {
+    model: "4T",
+    amount: 17895,
+    price: "178,95 €",
+    bgn: "350,00 BGN",
+    description: "Modèle OBRA 200-4T : 380 V, 50 Hz, 250 W, 1,2 A, 1400 tr/min, débit d'air 1050 m3/h, pression sonore 46 dB(A), poids 8,9 kg.",
+  },
+];
+
+const obra200CentrifugalFanProduct = {
+  name: "Ventilateur centrifuge OBRA-200",
+  slug: "ventilateur-centrifuge-obra-200",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanObra200",
+  imageUrl: "",
+  amount: 17895,
+  price: "178,95 €",
+  text: "Ventilateur centrifuge OBRA-200 pour réseaux de ventilation et applications professionnelles. Disponible en versions monophasées et triphasées, avec alimentation 220 V ou 380 V selon modèle, vitesse de 1400 à 2800 tr/min et débit d'air de 950 à 2150 m3/h.",
+  options: obra200CentrifugalFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-centrifuge-obra-200-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const obra260CentrifugalFanOptions = [
+  {
+    model: "4M",
+    amount: 23008,
+    price: "230,08 €",
+    bgn: "450,00 BGN",
+    description: "Modèle OBRA 260-4M : 220 V, 50 Hz, 350 W, 1,2 A, condensateur 7/400 mF/V, 1400 tr/min, débit d'air 1300 m3/h, pression sonore 50 dB(A), poids 10,25 kg.",
+  },
+  {
+    model: "4T",
+    amount: 23008,
+    price: "230,08 €",
+    bgn: "450,00 BGN",
+    description: "Modèle OBRA 260-4T : 380 V, 50 Hz, 220 W, 1,4 A, 1400 tr/min, débit d'air 1350 m3/h, pression sonore 46 dB(A), poids 10,15 kg.",
+  },
+  {
+    model: "2M",
+    amount: 30166,
+    price: "301,66 €",
+    bgn: "590,00 BGN",
+    description: "Modèle OBRA 260-2M : 220 V, 50 Hz, 750 W, 5,2 A, condensateur 30/500 mF/V, 2800 tr/min, débit d'air 2500 m3/h, pression sonore 53 dB(A), poids 13,95 kg.",
+  },
+  {
+    model: "2T",
+    amount: 30166,
+    price: "301,66 €",
+    bgn: "590,00 BGN",
+    description: "Modèle OBRA 260-2T : 380 V, 50 Hz, 750 W, 2,5 A, 2800 tr/min, débit d'air 2650 m3/h, pression sonore 55 dB(A), poids 12,6 kg.",
+  },
+];
+
+const obra260CentrifugalFanProduct = {
+  name: "Ventilateur centrifuge OBRA-260",
+  slug: "ventilateur-centrifuge-obra-260",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanObra260",
+  imageUrl: "",
+  amount: 23008,
+  price: "230,08 €",
+  text: "Ventilateur centrifuge OBRA-260 pour réseaux de ventilation et applications professionnelles. Disponible en versions monophasées et triphasées, avec alimentation 220 V ou 380 V selon modèle, vitesse de 1400 à 2800 tr/min et débit d'air de 1300 à 2650 m3/h.",
+  options: obra260CentrifugalFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-centrifuge-obra-260-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const pobraCentrifugalFanOptions = [
+  {
+    model: "180-70 (2)",
+    slugPart: "180-70-2",
+    amount: 15083,
+    price: "150,83 €",
+    bgn: "295,00 BGN",
+    description: "Modèle POBRA 180-70 (2) : 230/380 V / 50 Hz, 600 W, 2,54 A, 2800 tr/min, débit d'air 1950 m3/h, niveau sonore 75 dBA.",
+  },
+  {
+    model: "180-70 (4)",
+    slugPart: "180-70-4",
+    amount: 15083,
+    price: "150,83 €",
+    bgn: "295,00 BGN",
+    description: "Modèle POBRA 180-70 (4) : 230/380 V / 50 Hz, 550 W, 1,18 A, 1400 tr/min, débit d'air 1050 m3/h, niveau sonore 63 dBA.",
+  },
+  {
+    model: "260 (2)",
+    slugPart: "260-2",
+    amount: 25309,
+    price: "253,09 €",
+    bgn: "495,00 BGN",
+    description: "Modèle POBRA 260 (2) : 230/380 V / 50 Hz, 600 W, 1,20 A, 2800 tr/min, débit d'air 2600 m3/h, niveau sonore 82 dBA.",
+  },
+  {
+    model: "260 (4)",
+    slugPart: "260-4",
+    amount: 19429,
+    price: "194,29 €",
+    bgn: "380,00 BGN",
+    description: "Modèle POBRA 260 (4) : 230/380 V / 50 Hz, 600 W, 1,20 A, 1400 tr/min, débit d'air 1400 m3/h, niveau sonore 88 dBA.",
+  },
+];
+
+const pobraCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge POBRA",
+  slug: "ventilateur-centrifuge-pobra",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanPobra",
+  imageUrl: "",
+  amount: 15083,
+  price: "150,83 €",
+  text: "Ventilateur centrifuge POBRA à corps métallique, avec moteur placé hors du flux d'air. Conçu pour l'extraction ou le soufflage d'air dans les réseaux de ventilation, disponible en modèles 180-70 et 260 avec vitesses 1400 ou 2800 tr/min et débits d'air de 1050 à 2600 m3/h.",
+  options: pobraCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-pobra-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const psekCentrifugalFanOptions = [
+  {
+    model: "180-80 M",
+    slugPart: "180-80-m",
+    amount: 18407,
+    price: "184,07 €",
+    bgn: "360,00 BGN",
+    description: "Modèle PSEK 180-80 M : 230 V / 50 Hz, 370 W, 1,55 A, 2800 tr/min, débit d'air 1750 m3/h, niveau sonore 75 dBA.",
+  },
+  {
+    model: "180-80 T",
+    slugPart: "180-80-t",
+    amount: 18407,
+    price: "184,07 €",
+    bgn: "360,00 BGN",
+    description: "Modèle PSEK 180-80 T : 380 V / 50 Hz, 370 W, 1,43 A, 2800 tr/min, débit d'air 1750 m3/h, niveau sonore 74 dBA.",
+  },
+  {
+    model: "260-M",
+    slugPart: "260-m",
+    amount: 21474,
+    price: "214,74 €",
+    bgn: "420,00 BGN",
+    description: "Modèle PSEK 260-M : 230 V / 50 Hz, 600 W, 1,20 A, 2800 tr/min, débit d'air 2050 m3/h, niveau sonore 82 dBA.",
+  },
+  {
+    model: "260-T",
+    slugPart: "260-t",
+    amount: 21474,
+    price: "214,74 €",
+    bgn: "420,00 BGN",
+    description: "Modèle PSEK 260-T : 380 V / 50 Hz, 600 W, 1,20 A, 2800 tr/min, débit d'air 2050 m3/h, niveau sonore 82 dBA.",
+  },
+];
+
+const psekCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge PSEK",
+  slug: "ventilateur-centrifuge-psek",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanPsek",
+  imageUrl: "",
+  amount: 18407,
+  price: "184,07 €",
+  text: "Ventilateur centrifuge PSEK à corps métallique, avec moteur placé hors du flux d'air. Conçu pour l'extraction ou le soufflage d'air dans les réseaux de ventilation, disponible en modèles 180-80 et 260 avec alimentation 230 V ou 380 V / 50 Hz, vitesse 2800 tr/min et débits d'air de 1750 à 2050 m3/h.",
+  options: psekCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-psek-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const turboSeriesCentrifugalFanOptions = [
+  {
+    model: "TURBO-E-100",
+    slugPart: "e-100",
+    amount: 7567,
+    price: "75,67 €",
+    bgn: "148,00 BGN",
+    description: "Modèle TURBO-E-100 : alimentation 230/380 V / 50 Hz, puissance 21 à 35 W, vitesse 2180 à 2395 tr/min, débit d'air 145 à 187 m3/h et niveau sonore 27 à 36 dBA.",
+  },
+  {
+    model: "TURBO-E-125",
+    slugPart: "e-125",
+    amount: 7925,
+    price: "79,25 €",
+    bgn: "155,00 BGN",
+    description: "Modèle TURBO-E-125 : alimentation 230/380 V / 50 Hz, puissance 23 à 37 W, vitesse 1950 à 2455 tr/min, débit d'air 220 à 280 m3/h et niveau sonore 28 à 37 dBA.",
+  },
+  {
+    model: "TURBO-E-150",
+    slugPart: "e-150",
+    amount: 11248,
+    price: "112,48 €",
+    bgn: "220,00 BGN",
+    description: "Modèle TURBO-E-150 : alimentation 230/380 V / 50 Hz, puissance 30 à 60 W, vitesse 1680 à 2460 tr/min, débit d'air 405 à 520 m3/h et niveau sonore 33 à 44 dBA.",
+  },
+  {
+    model: "TURBO-E-160",
+    slugPart: "e-160",
+    amount: 11760,
+    price: "117,60 €",
+    bgn: "230,00 BGN",
+    description: "Modèle TURBO-E-160 : alimentation 230/380 V / 50 Hz, puissance 30 à 60 W, vitesse 1680 à 2460 tr/min, débit d'air 405 à 520 m3/h et niveau sonore 33 à 44 dBA.",
+  },
+  {
+    model: "TURBO 200",
+    slugPart: "200",
+    amount: 19940,
+    price: "199,40 €",
+    bgn: "390,00 BGN",
+    description: "Modèle TURBO 200 : alimentation 230/380 V / 50 Hz, puissance 76 à 108 W, vitesse 1915 à 2780 tr/min, débit d'air 805 à 1080 m3/h et niveau sonore 45 à 52 dBA.",
+  },
+  {
+    model: "TURBO 250",
+    slugPart: "250",
+    amount: 24798,
+    price: "247,98 €",
+    bgn: "485,00 BGN",
+    description: "Modèle TURBO 250 : alimentation 230/380 V / 50 Hz, puissance 125 à 177 W, vitesse 1955 à 2440 tr/min, débit d'air 1070 à 1360 m3/h et niveau sonore 47 à 55 dBA.",
+  },
+  {
+    model: "TURBO 315",
+    slugPart: "315",
+    amount: 38858,
+    price: "388,58 €",
+    bgn: "760,00 BGN",
+    description: "Modèle TURBO 315 : alimentation 230/380 V / 50 Hz, puissance 227 à 315 W, vitesse 2115 à 2505 tr/min, débit d'air 1420 à 1750 m3/h et niveau sonore 47 à 56 dBA.",
+  },
+];
+
+const turboSeriesCentrifugalFanProduct = {
+  name: "Ventilateur centrifuge Turbo Series",
+  slug: "ventilateur-centrifuge-turbo-series",
+  category: "Ventilateurs centrifuges",
+  imageKey: "centrifugalFanTurboSeries",
+  imageUrl: "",
+  amount: 7567,
+  price: "75,67 €",
+  text: "Ventilateur centrifuge Turbo Series pour montage en ligne dans des conduits ronds, à flux mixte. Alimentation 230/380 V / 50 Hz selon l'installation, avec plages de puissance, de vitesse, de débit d'air et de niveau sonore selon modèle.",
+  options: turboSeriesCentrifugalFanOptions.map(({ model, slugPart, amount, price, bgn, description }) => ({
+    label: model,
+    value: slugPart,
+    slug: `ventilateur-centrifuge-turbo-series-${slugPart}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 31,
+};
+
+const facfRoofAxialFanOptions = [
+  {
+    model: "300",
+    amount: 16361,
+    price: "163,61 €",
+    bgn: "320,00 BGN",
+    description: "Modèle FACF-300 : 230/380 V / 50 Hz, 1/4 HP / 0,18 kW, 1,20 A, 1430 tr/min, débit d'air 1800 m3/h, niveau sonore 55 dBA.",
+  },
+  {
+    model: "350",
+    amount: 19429,
+    price: "194,29 €",
+    bgn: "380,00 BGN",
+    description: "Modèle FACF-350 : 230/380 V / 50 Hz, 1/4 HP / 0,18 kW, 1,10 A, 1360 tr/min, débit d'air 2600 m3/h, niveau sonore 59 dBA.",
+  },
+  {
+    model: "400",
+    amount: 20963,
+    price: "209,63 €",
+    bgn: "410,00 BGN",
+    description: "Modèle FACF-400 : 230/380 V / 50 Hz, 1/3 HP / 0,25 kW, 1,20 A, 1400 tr/min, débit d'air 4500 m3/h, niveau sonore 62 dBA.",
+  },
+  {
+    model: "450",
+    amount: 23008,
+    price: "230,08 €",
+    bgn: "450,00 BGN",
+    description: "Modèle FACF-450 : 230/380 V / 50 Hz, 1/2 HP / 0,37 kW, 1,22 A, 1375 tr/min, débit d'air 6500 m3/h, niveau sonore 66 dBA.",
+  },
+  {
+    model: "500",
+    amount: 38347,
+    price: "383,47 €",
+    bgn: "750,00 BGN",
+    description: "Modèle FACF-500 : 230/380 V / 50 Hz, 3/4 HP / 0,55 kW, 1,60 A, 1350 tr/min, débit d'air 8500 m3/h, niveau sonore 62 dBA.",
+  },
+  {
+    model: "550",
+    amount: 56242,
+    price: "562,42 €",
+    bgn: "1100,00 BGN",
+    description: "Modèle FACF-550 : 230/380 V / 50 Hz, 1 HP / 0,75 kW, 2,10 A, 1450 tr/min, débit d'air 10000 m3/h, niveau sonore 62 dBA.",
+  },
+  {
+    model: "600",
+    amount: 57776,
+    price: "577,76 €",
+    bgn: "1130,00 BGN",
+    description: "Modèle FACF-600 : 230/380 V / 50 Hz, 1 HP / 0,75 kW, 2,10 A, 1450 tr/min, débit d'air 12000 m3/h, niveau sonore 63 dBA.",
+  },
+  {
+    model: "650",
+    amount: 60332,
+    price: "603,32 €",
+    bgn: "1180,00 BGN",
+    description: "Modèle FACF-650 : 230/380 V / 50 Hz, 1,5 HP / 1,1 kW, 2,60 A, 1450 tr/min, débit d'air 14000 m3/h, niveau sonore 65 dBA.",
+  },
+  {
+    model: "700",
+    amount: 69024,
+    price: "690,24 €",
+    bgn: "1350,00 BGN",
+    description: "Modèle FACF-700 : 230/380 V / 50 Hz, 2 HP / 1,5 kW, 3,50 A, 1450 tr/min, débit d'air 16000 m3/h, niveau sonore 68 dBA.",
+  },
+  {
+    model: "750",
+    amount: 74137,
+    price: "741,37 €",
+    bgn: "1450,00 BGN",
+    description: "Modèle FACF-750 : 230/380 V / 50 Hz, 3 HP / 2,2 kW, 5,00 A, 1450 tr/min, débit d'air 18000 m3/h, niveau sonore 72 dBA.",
+  },
+  {
+    model: "800",
+    amount: 85897,
+    price: "858,97 €",
+    bgn: "1680,00 BGN",
+    description: "Modèle FACF-800 : 230/380 V / 50 Hz, 3 HP / 2,2 kW, 5,00 A, 1450 tr/min, débit d'air 22000 m3/h, niveau sonore 72 dBA.",
+  },
+  {
+    model: "900",
+    amount: 99702,
+    price: "997,02 €",
+    bgn: "1950,00 BGN",
+    description: "Modèle FACF-900 : 380 V / 50 Hz, 4 HP / 3 kW, 6,60 A, 1400 tr/min, débit d'air 30000 m3/h, niveau sonore 77 dBA.",
+  },
+  {
+    model: "1000",
+    amount: 117597,
+    price: "1175,97 €",
+    bgn: "2300,00 BGN",
+    description: "Modèle FACF-1000 : 380 V / 50 Hz, 5,5 HP / 4 kW, 8,20 A, 1400 tr/min, débit d'air 40000 m3/h, niveau sonore 83 dBA.",
+  },
+];
+
+const facfRoofAxialFanProduct = {
+  name: "Ventilateur axial de toiture FACF",
+  slug: "ventilateur-axial-toiture-facf",
+  category: "Ventilateurs de toiture",
+  imageKey: "roofAxialFanFacf",
+  imageUrl: "",
+  amount: 16361,
+  price: "163,61 €",
+  text: "Ventilateur axial de toiture FACF à sortie horizontale, conçu pour l'extraction d'air en toiture. Disponible en versions monophasées et triphasées selon modèle, avec des débits d'air de 1800 à 40000 m3/h.",
+  options: facfRoofAxialFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-axial-toiture-facf-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 32,
+};
+
+const fcfRoofFanOptions = [
+  {
+    model: "190",
+    amount: 11760,
+    price: "117,60 €",
+    bgn: "230,00 BGN",
+    description: "Modèle FCF 190 : alimentation 230 V / 50 Hz, puissance 76 W, courant 0,37 A, vitesse 2500 tr/min, débit d'air 410 m3/h et niveau sonore 45 dBA.",
+  },
+  {
+    model: "220",
+    amount: 12271,
+    price: "122,71 €",
+    bgn: "240,00 BGN",
+    description: "Modèle FCF 220 : alimentation 230 V / 50 Hz, puissance 145 W, courant 0,63 A, vitesse 2600 tr/min, débit d'air 950 m3/h et niveau sonore 53 dBA.",
+  },
+  {
+    model: "250",
+    amount: 13294,
+    price: "132,94 €",
+    bgn: "260,00 BGN",
+    description: "Modèle FCF 250 : alimentation 230 V / 50 Hz, puissance 200 W, courant 0,87 A, vitesse 2510 tr/min, débit d'air 1300 m3/h et niveau sonore 54 dBA.",
+  },
+  {
+    model: "315",
+    amount: 15339,
+    price: "153,39 €",
+    bgn: "300,00 BGN",
+    description: "Modèle FCF 315 : alimentation 230 V / 50 Hz, puissance 145 W, courant 0,68 A, vitesse 2650 tr/min, débit d'air 1870 m3/h et niveau sonore 55 dBA.",
+  },
+  {
+    model: "355",
+    amount: 23008,
+    price: "230,08 €",
+    bgn: "450,00 BGN",
+    description: "Modèle FCF 355 : alimentation 230 V / 50 Hz, puissance 195 W, courant 0,85 A, vitesse 1350 tr/min, débit d'air 2750 m3/h et niveau sonore 66 dBA.",
+  },
+  {
+    model: "400",
+    amount: 36813,
+    price: "368,13 €",
+    bgn: "720,00 BGN",
+    description: "Modèle FCF 400 : alimentation 230 V / 50 Hz, puissance 350 W, courant 1,75 A, vitesse 1410 tr/min, débit d'air 3750 m3/h et niveau sonore 68 dBA.",
+  },
+  {
+    model: "450",
+    amount: 38858,
+    price: "388,58 €",
+    bgn: "760,00 BGN",
+    description: "Modèle FCF 450 : alimentation 230 V / 50 Hz, puissance 600 W, courant 2,80 A, vitesse 1390 tr/min, débit d'air 6290 m3/h et niveau sonore 73 dBA.",
+  },
+  {
+    model: "500",
+    amount: 63911,
+    price: "639,11 €",
+    bgn: "1250,00 BGN",
+    description: "Modèle FCF 500 : alimentation 400 V / 50 Hz, puissance 900 W, courant 2,56 A, vitesse 1375 tr/min, débit d'air 8000 m3/h et niveau sonore 73 dBA.",
+  },
+  {
+    model: "560",
+    amount: 79250,
+    price: "792,50 €",
+    bgn: "1550,00 BGN",
+    description: "Modèle FCF 560 : alimentation 400 V / 50 Hz, puissance 1500 W, courant 2,98 A, vitesse 1360 tr/min, débit d'air 10000 m3/h et niveau sonore 80 dBA.",
+  },
+];
+
+const fcfRoofFanProduct = {
+  name: "Ventilateur de toiture FCF",
+  slug: "ventilateur-toiture-fcf",
+  category: "Ventilateurs de toiture",
+  imageKey: "roofFanFcf",
+  imageUrl: "",
+  amount: 11760,
+  price: "117,60 €",
+  text: "Ventilateur de toiture FCF pour l'extraction d'air sur réseaux de ventilation. Disponible en neuf modèles, avec alimentation 230 V ou 400 V selon modèle et débits d'air de 410 à 10000 m3/h.",
+  options: fcfRoofFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-toiture-fcf-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 33,
+};
+
+const fkcfRoofFanOptions = [
+  {
+    model: "300",
+    amount: 38603,
+    price: "386,03 €",
+    bgn: "755,00 BGN",
+    description: "Modèle FKCF-300 : ventilateur de toiture pour extraction d'air, avec capot de protection et grille périphérique.",
+  },
+  {
+    model: "350",
+    amount: 43971,
+    price: "439,71 €",
+    bgn: "860,00 BGN",
+    description: "Modèle FKCF-350 : ventilateur de toiture pour extraction d'air, avec capot de protection et grille périphérique.",
+  },
+  {
+    model: "400",
+    amount: 48573,
+    price: "485,73 €",
+    bgn: "950,00 BGN",
+    description: "Modèle FKCF-400 : ventilateur de toiture pour extraction d'air, avec capot de protection et grille périphérique.",
+  },
+];
+
+const fkcfRoofFanProduct = {
+  name: "Ventilateur de toiture FKCF",
+  slug: "ventilateur-toiture-fkcf",
+  category: "Ventilateurs de toiture",
+  imageKey: "roofFanFkcf",
+  imageUrl: "",
+  amount: 38603,
+  price: "386,03 €",
+  text: "Ventilateur de toiture FKCF pour l'extraction d'air en toiture. Corps métallique avec capot de protection et grille périphérique, disponible en modèles FKCF-300, FKCF-350 et FKCF-400.",
+  options: fkcfRoofFanOptions.map(({ model, amount, price, bgn, description }) => ({
+    label: model,
+    value: model.toLowerCase(),
+    slug: `ventilateur-toiture-fkcf-${model.toLowerCase()}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 33,
+};
+
+const industrialFanFsv750DProduct = {
+  name: "Ventilateur industriel FSV-750-D",
+  slug: "ventilateur-industriel-fsv-750-d",
+  category: "Ventilateurs de restaurant",
+  imageKey: "industrialFanFsv750D",
+  imageUrl: "",
+  amount: 25053,
+  price: "250,53 €",
+  text: "Ventilateur industriel FSV-750-D pour espaces professionnels, restaurants, terrasses et ateliers. Modèle compact avec hélice protégée par grille métallique. Alimentation 230 V, puissance 285 W, vitesse 1350 tr/min, débit d'air 17000 m3/h et niveau sonore 86 dBA.",
+  featured: true,
+  active: true,
+  sortOrder: 33,
+};
+
+const bathroomFanDbtaOptions = [
+  {
+    size: "100",
+    amount: 1534,
+    price: "15,34 €",
+    bgn: "30,00 BGN",
+    description: "Modèle D-BTA-100 : alimentation 230 V / 50 Hz, puissance 15 W, courant 0,10 A, vitesse 2600 tr/min, débit d'air 95 m3/h et niveau sonore 41 dBA.",
+  },
+  {
+    size: "120",
+    amount: 1790,
+    price: "17,90 €",
+    bgn: "35,00 BGN",
+    description: "Modèle D-BTA-120 : alimentation 230 V / 50 Hz, puissance 20 W, courant 0,13 A, vitesse 2600 tr/min, débit d'air 185 m3/h et niveau sonore 42 dBA.",
+  },
+  {
+    size: "150",
+    amount: 2045,
+    price: "20,45 €",
+    bgn: "40,00 BGN",
+    description: "Modèle D-BTA-150 : alimentation 230 V / 50 Hz, puissance 35 W, courant 0,32 A, vitesse 2250 tr/min, débit d'air 285 m3/h et niveau sonore 49 dBA.",
+  },
+  {
+    size: "200",
+    amount: 3068,
+    price: "30,68 €",
+    bgn: "60,00 BGN",
+    description: "Modèle D-BTA-200 : alimentation 230 V / 50 Hz, puissance 40 W, courant 0,42 A, vitesse 2250 tr/min, débit d'air 360 m3/h et niveau sonore 51 dBA.",
+  },
+];
+
+const bathroomFanDbtaProduct = {
+  name: "Ventilateur de salle de bains D-BTA",
+  slug: "ventilateur-salle-de-bains-d-bta",
+  category: "Ventilateurs de salle de bains",
+  imageKey: "bathroomFanDbta",
+  imageUrl: "",
+  amount: 1534,
+  price: "15,34 €",
+  text: "Ventilateur de salle de bains D-BTA avec façade à grille ondulée pour l'extraction d'air des pièces humides. Disponible en quatre dimensions, avec alimentation 230 V / 50 Hz et débits d'air de 95 à 360 m3/h selon modèle.",
+  options: bathroomFanDbtaOptions.map(({ size, amount, price, bgn, description }) => ({
+    label: size,
+    value: size,
+    slug: `ventilateur-salle-de-bains-d-bta-${size}`,
+    amount,
+    price,
+    bgn,
+    description,
+  })),
+  featured: true,
+  active: true,
+  sortOrder: 34,
+};
+
+const spiroDuctOptions = [
+  { diameter: "100", amount: 716, price: "7,16 €", bgn: "14,00 BGN" },
+  { diameter: "125", amount: 741, price: "7,41 €", bgn: "14,50 BGN" },
+  { diameter: "160", amount: 920, price: "9,20 €", bgn: "18,00 BGN" },
+  { diameter: "200", amount: 1329, price: "13,29 €", bgn: "26,00 BGN" },
+  { diameter: "250", amount: 1585, price: "15,85 €", bgn: "31,00 BGN" },
+  { diameter: "315", amount: 2250, price: "22,50 €", bgn: "44,00 BGN" },
+];
+
+const spiroDuctProduct = {
+  name: "Conduit rond spiro galvanisé",
+  slug: "conduit-rond-spiro",
+  category: "Conduits spiro et pièces façonnées",
+  imageKey: "spiroDuct",
+  imageUrl: "",
+  amount: 716,
+  price: "7,16 €",
+  text: "Conduit rond spiro galvanisé pour réseaux de ventilation et d'extraction d'air. Profil spiralé rigide, adapté au raccordement des accessoires circulaires, disponible en diamètres Ø100 à Ø315.",
+  options: spiroDuctOptions.map(({ diameter, amount, price, bgn }) => ({
+    label: `Ø${diameter}`,
+    value: diameter,
+    slug: `conduit-rond-spiro-${diameter}`,
+    amount,
+    price,
+    bgn,
+  })),
+  featured: false,
+  active: true,
+  sortOrder: 39,
+};
+
+const spiroDuctElbow90Options = [
+  { diameter: "160", amount: 1202, price: "12,02 €", bgn: "23,50 BGN" },
+  { diameter: "200", amount: 1790, price: "17,90 €", bgn: "35,00 BGN" },
+  { diameter: "250", amount: 2045, price: "20,45 €", bgn: "40,00 BGN" },
+  { diameter: "315", amount: 2556, price: "25,56 €", bgn: "50,00 BGN" },
+];
+
+const spiroDuctElbow90Product = {
+  name: "Coude 90° pour conduit spiro",
+  slug: "coude-90-conduit-spiro",
+  category: "Conduits spiro et pièces façonnées",
+  imageKey: "spiroDuctElbow90",
+  imageUrl: "",
+  amount: 1202,
+  price: "12,02 €",
+  text: "Coude galvanisé à 90° pour réseaux de ventilation en conduits spiro. Adapté au raccordement et au changement de direction des conduits circulaires, disponible en plusieurs diamètres.",
+  options: spiroDuctElbow90Options.map(({ diameter, amount, price, bgn }) => ({
+    label: `Ø${diameter}`,
+    value: diameter,
+    slug: `coude-90-conduit-spiro-${diameter}`,
+    amount,
+    price,
+    bgn,
+  })),
+  featured: false,
+  active: true,
+  sortOrder: 40,
+};
+
+const spiroDuctTeeOptions = [
+  { diameter: "160", amount: 1534, price: "15,34 €", bgn: "30,00 BGN" },
+  { diameter: "200", amount: 1841, price: "18,41 €", bgn: "36,00 BGN" },
+  { diameter: "250", amount: 2659, price: "26,59 €", bgn: "52,00 BGN" },
+  { diameter: "315", amount: 3579, price: "35,79 €", bgn: "70,00 BGN" },
+];
+
+const spiroDuctTeeProduct = {
+  name: "Té pour conduit rond spiro",
+  slug: "te-conduit-rond-spiro",
+  category: "Conduits spiro et pièces façonnées",
+  imageKey: "spiroDuctTee",
+  imageUrl: "",
+  amount: 1534,
+  price: "15,34 €",
+  text: "Té galvanisé pour conduit rond spiro, destiné à créer une dérivation dans les réseaux de ventilation circulaires. Disponible en diamètres Ø160, Ø200, Ø250 et Ø315.",
+  options: spiroDuctTeeOptions.map(({ diameter, amount, price, bgn }) => ({
+    label: `Ø${diameter}`,
+    value: diameter,
+    slug: `te-conduit-rond-spiro-${diameter}`,
+    amount,
+    price,
+    bgn,
+  })),
+  featured: false,
+  active: true,
+  sortOrder: 41,
+};
+
+const mobileLouverGrilleProduct = {
+  name: "Grille à lamelles mobiles",
+  slug: "grille-a-lamelles-mobiles",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "mobileLouverGrille",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Hauteur disponible de 205 mm à 1005 mm. Montage sur conduits d'air rectangulaires ou sur murs. Elle sert à réguler le débit d'air dans les systèmes de ventilation. Le réglage s'effectue par mécanisme manuel ou par l'ajout d'un actionneur motorisé.",
+  featured: false,
+  active: true,
+  sortOrder: 74,
+};
+
+const wallVentilationGrilleProduct = {
+  name: "Grilles de ventilation murales",
+  slug: "grilles-de-ventilation-murales",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "wallVentilationGrille",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Grilles de ventilation murales à lamelles pour l'apport ou l'extraction d'air dans les systèmes de ventilation et de climatisation. Cadre rectangulaire blanc avec ailettes horizontales, adapté au montage mural et aux raccordements sur conduits ou caissons de ventilation.",
+  featured: false,
+  active: true,
+  sortOrder: 71,
+};
+
+const spiroDuctVentilationGrilleProduct = {
+  name: "Grilles de ventilation pour conduits spiro",
+  slug: "grilles-de-ventilation-pour-conduits-spiro",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "spiroDuctVentilationGrille",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Grilles de ventilation à façade incurvée pour conduits spiro et conduits ronds. Elles permettent le soufflage ou l'extraction d'air dans les réseaux de ventilation et de climatisation, avec ailettes horizontales et finition blanche.",
+  featured: false,
+  active: true,
+  sortOrder: 72,
+};
+
+const fixedLouverGrilleProduct = {
+  name: "Grille à lamelles fixes",
+  slug: "grille-a-lamelles-fixes",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "fixedLouverGrille",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Grille à lamelles fixes pour le soufflage ou l'extraction d'air dans les systèmes de ventilation et de climatisation. Façade rectangulaire blanche avec lames horizontales fixes, adaptée au montage mural ou sur réseau de ventilation.",
+  featured: false,
+  active: true,
+  sortOrder: 73,
+};
+
+const conicalSuctionGrilleProduct = {
+  name: "Grille d'aspiration conique",
+  slug: "grille-aspiration-conique",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "conicalSuctionGrille",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Le réglage du débit d'air s'effectue par rotation de la partie centrale. Cette grille peut être installée au plafond comme au mur et s'utilise dans différents locaux tels que les douches, les salles de bains et les toilettes.",
+  featured: false,
+  active: true,
+  sortOrder: 75,
+};
+
+const rectangularConstantAirflowDamperHcavRProduct = {
+  name: "Clapet rectangulaire à débit constant HCAV-R",
+  slug: "clapet-rectangulaire-debit-constant-hcav-r",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "rectangularConstantAirflowDamperHcavR",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Clapet rectangulaire HCAV-R conçu pour maintenir un débit d'air constant dans les réseaux de ventilation. Corps métallique avec mécanisme de régulation intégré, adapté aux conduits rectangulaires.",
+  featured: false,
+  active: true,
+  sortOrder: 76,
+};
+
+const roundConstantAirflowDamperProduct = {
+  name: "Clapet rond à débit constant",
+  slug: "clapet-rond-debit-constant",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "roundConstantAirflowDamper",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Clapet rond mécanique à débit constant pour contrôler le flux d'air dans les réseaux de ventilation. Corps en tôle galvanisée, ailettes en aluminium et mécanisme à ressort intégré. Il ne nécessite pas d'actionneur électrique. Plage de fonctionnement de 50 à 100 Pa, avec une vitesse d'air optimale entre 2 et 10 m/s.",
+  featured: false,
+  active: true,
+  sortOrder: 77,
+};
+
+const swirlCeilingDiffuserHsswdProduct = {
+  name: "Diffuseurs plafonniers tourbillonnaires HSWD",
+  slug: "diffuseurs-plafonniers-tourbillonnaires-hswd",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "swirlCeilingDiffuserHsswd",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Diffuseurs plafonniers tourbillonnaires HSWD pour le soufflage d'air avec effet de rotation. Disponibles en versions HSWD-A avec ailettes radiales réglables et plaque carrée, HSWD-B avec ailettes carrées réglables et plaque carrée, HSWD-C avec ailettes radiales réglables et plaque ronde, et HSWD-D avec ailettes disposées depuis le centre, réglables radialement, avec plaque carrée.",
+  featured: false,
+  active: true,
+  sortOrder: 78,
+};
+
+const linearSlotDiffuserHsdProduct = {
+  name: "Diffuseurs linéaires HSD",
+  slug: "diffuseurs-lineaires-hsd",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "linearSlotDiffuserHsd",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Diffuseurs linéaires HSD pour le soufflage ou l'extraction d'air dans les réseaux de ventilation et de climatisation. Disponibles en versions HSD-1 à une fente, HSD-2 à deux fentes, HSD-3 à trois fentes et HSD-4 à quatre fentes.",
+  featured: false,
+  active: true,
+  sortOrder: 79,
+};
+
+const manualRegulatingDamperProduct = {
+  name: "Clapet de réglage manuel",
+  slug: "clapet-reglage-manuel",
+  category: "Grilles et clapets de ventilation",
+  imageKey: "manualRegulatingDamper",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Clapet de réglage manuel pour conduits ronds, destiné à ajuster le débit d'air dans les réseaux de ventilation. Disponible en diamètres de Ø100 à Ø630.",
+  featured: false,
+  active: true,
+  sortOrder: 80,
+};
+
+const dhaSpeedControllerProduct = {
+  name: "Régulateur de vitesse DHA",
+  slug: "regulateur-vitesse-dha",
+  category: "Regulateurs",
+  imageKey: "speedControllerDha",
+  imageUrl: "",
+  amount: 32211,
+  price: "322,11 €",
+  text: "Régulateur de vitesse DHA pour le contrôle des moteurs de ventilation. Modèle DHA 5 alimenté en 380 V / 50 Hz, adapté aux puissances de 3,0 à 4,0 kW.",
+  options: [
+    {
+      label: "DHA 5",
+      value: "dha-5",
+      slug: "regulateur-vitesse-dha-5",
+      amount: 32211,
+      price: "322,11 €",
+      bgn: "630,00 BGN",
+      description: "Modèle DHA 5 : alimentation 380 V / 50 Hz, plage de puissance 3,0 à 4,0 kW.",
+    },
+  ],
+  featured: true,
+  active: true,
+  sortOrder: 80,
+};
+
+const mnaSpeedControllerProduct = {
+  name: "Régulateur de vitesse MNA",
+  slug: "regulateur-vitesse-mna",
+  category: "Regulateurs",
+  imageKey: "speedControllerMna",
+  imageUrl: "",
+  amount: 4090,
+  price: "40,90 €",
+  text: "Régulateur de vitesse MNA pour le contrôle manuel des ventilateurs. Disponible en modèles MNA 1 et MNA 2 avec alimentation 220 V / 50 Hz et courants nominaux de 3 A ou 6 A.",
+  options: [
+    {
+      label: "MNA 1",
+      value: "mna-1",
+      slug: "regulateur-vitesse-mna-1",
+      amount: 4090,
+      price: "40,90 €",
+      bgn: "80,00 BGN",
+      description: "Modèle MNA 1 : alimentation 220 V / 50 Hz, courant nominal 3 A.",
+    },
+    {
+      label: "MNA 2",
+      value: "mna-2",
+      slug: "regulateur-vitesse-mna-2",
+      amount: 6136,
+      price: "61,36 €",
+      bgn: "120,00 BGN",
+      description: "Modèle MNA 2 : alimentation 220 V / 50 Hz, courant nominal 6 A.",
+    },
+  ],
+  featured: true,
+  active: true,
+  sortOrder: 80,
+};
+
+const waterPumpGmaxQb60Product = {
+  name: "Pompe à eau périphérique Gmax QB60",
+  slug: "pompe-a-eau-peripherique-gmax-qb60",
+  category: "Pompes à eau",
+  imageKey: "waterPumpGmaxQb60",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Pompe à eau périphérique Gmax QB60 conçue pour les eaux propres, sans particules abrasives ni liquides agressifs pour ses matériaux. Elle convient aux usages domestiques et agricoles. Hélice périphérique en laiton, corps de pompe et carter moteur en fonte, moteur monophasé avec enroulement en cuivre et câble avec prise installé en usine. Raccords d'entrée et de sortie 1 pouce, alimentation 220 V - 50 Hz, température maximale du liquide 45 °C et hauteur d'aspiration jusqu'à 5 m.",
+  featured: true,
+  active: true,
+  sortOrder: 90,
+};
+
+const waterPumpGmaxQb70Product = {
+  name: "Pompe à eau périphérique Gmax QB70",
+  slug: "pompe-a-eau-peripherique-gmax-qb70",
+  category: "Pompes à eau",
+  imageKey: "waterPumpGmaxQb70",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Pompe à eau périphérique Gmax QB70 conçue pour les eaux propres, sans particules abrasives ni liquides agressifs pour ses matériaux. Elle convient aux usages domestiques et agricoles. Hélice périphérique en laiton, corps de pompe et carter moteur en fonte, moteur monophasé avec enroulement en cuivre et câble avec prise installé en usine. Raccords d'entrée et de sortie 1 pouce, alimentation 220 V - 50 Hz, température maximale du liquide 45 °C, hauteur manométrique maximale 55 m et hauteur d'aspiration jusqu'à 5 m.",
+  featured: true,
+  active: true,
+  sortOrder: 91,
+};
+
+const waterPumpGmaxQb80Product = {
+  name: "Pompe à eau périphérique Gmax QB80",
+  slug: "pompe-a-eau-peripherique-gmax-qb80",
+  category: "Pompes à eau",
+  imageKey: "waterPumpGmaxQb80",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Pompe à eau périphérique Gmax QB80 conçue pour les eaux propres, sans particules abrasives ni liquides agressifs pour ses matériaux. Elle convient aux usages domestiques et agricoles. Hélice périphérique en laiton, corps de pompe et carter moteur en fonte, moteur monophasé avec enroulement en cuivre et câble avec prise installé en usine. Raccords d'entrée et de sortie 1 pouce, alimentation 220 V - 50 Hz, température maximale du liquide 45 °C, hauteur manométrique maximale 65 m et hauteur d'aspiration jusqu'à 5 m.",
+  featured: true,
+  active: true,
+  sortOrder: 92,
+};
+
+const pumpInverterControlGmaxIpc01Product = {
+  name: "Contrôleur à onduleur pour pompe Gmax IPC-01",
+  slug: "controleur-onduleur-pompe-gmax-ipc-01",
+  category: "Pompes à eau",
+  imageKey: "pumpInverterControlGmaxIpc01",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Contrôleur à onduleur Gmax IPC-01 conçu pour maintenir une pression constante dans les systèmes d'alimentation en eau, quel que soit le niveau de consommation. Il protège la pompe contre le fonctionnement à sec ainsi que contre les sous-tensions et surtensions du réseau électrique. La pression d'usine est réglée à 1,5 bar et peut être modifiée entre 0,5 et 9,5 bar. Convient aux systèmes d'eau propre sans impuretés, avec une température jusqu'à 55 °C. Raccord 1 pouce, puissance 1,1 kW, fréquence 50-60 Hz, tension 220-240 V, courant maximal 10 A et pression maximale 10 bar.",
+  featured: true,
+  active: true,
+  sortOrder: 93,
+};
+
+const pressureControlGmaxEpc4Product = {
+  name: "Contrôleur de pression Gmax EPC-4 avec manomètre intégré",
+  slug: "controleur-pression-gmax-epc-4-manometre-integre",
+  category: "Pompes à eau",
+  imageKey: "pressureControlGmaxEpc4",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Contrôleur de pression Gmax EPC-4 avec manomètre intégré, conçu pour automatiser la mise en marche et l'arrêt d'une pompe selon la pression du réseau. La pression de démarrage est réglée en usine à 1,5 bar. Le capteur intégré surveille le débit d'eau et arrête la pompe en cas de manque d'eau, afin de protéger l'installation et de prolonger sa durée de vie. Adapté aux systèmes hydrophores, il peut être monté verticalement ou horizontalement. Raccords filetés mâles 1 pouce, puissance 1,1 kW, fréquence 50-60 Hz, tension 220-240 V, courant maximal 10 A, pression maximale 10 bar et température d'eau jusqu'à 55 °C.",
+  featured: true,
+  active: true,
+  sortOrder: 94,
+};
+
+const pressureControlGmaxEpc1AProduct = {
+  name: "Contrôleur de pression Gmax EPC-1A",
+  slug: "controleur-pression-gmax-epc-1a",
+  category: "Pompes à eau",
+  imageKey: "pressureControlGmaxEpc1A",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Contrôleur de pression électronique Gmax EPC-1A conçu pour automatiser la mise en marche et l'arrêt d'une pompe selon la pression. La pression de démarrage est réglée en usine à 1,5 bar. Après la première utilisation sur un système amorcé, l'appareil mémorise la pression maximale fournie par la pompe. Son capteur intégré détecte l'absence de débit d'eau et coupe la pompe pour éviter le fonctionnement à sec. Adapté aux systèmes hydrophores, il s'installe uniquement en position verticale. Raccords filetés mâles 1 pouce, puissance 1,5 kW, fréquence 50-60 Hz, tension 220-240 V, courant maximal 20 A, pression maximale 10 bar et température d'eau jusqu'à 60 °C.",
+  featured: true,
+  active: true,
+  sortOrder: 95,
+};
+
+const pressureControlGmaxEpc13Product = {
+  name: "Contrôleur de pression Gmax EPC-13 avec manomètre intégré",
+  slug: "controleur-pression-gmax-epc-13-manometre-integre",
+  category: "Pompes à eau",
+  imageKey: "pressureControlGmaxEpc13",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Contrôleur de pression Gmax EPC-13 avec manomètre intégré, conçu pour automatiser la mise en marche et l'arrêt d'une pompe selon la pression. Son capteur intégré protège la pompe contre le fonctionnement sans débit d'eau et contribue à prolonger sa durée de vie. La pression de démarrage est réglée en usine à 1,5 bar et peut être ajustée dans les limites prévues. Après la première mise en service sur un système amorcé, l'appareil mémorise la pression maximale fournie par la pompe. Adapté aux systèmes hydrophores, il s'installe uniquement en position verticale. Entrée filetée femelle 1 pouce et 1 1/2 pouce, sortie filetée femelle 1 pouce, puissance 1,5 kW, fréquence 50-60 Hz, tension 220-240 V, courant maximal 16 A, pression maximale 10 bar et température d'eau jusqu'à 55 °C.",
+  featured: true,
+  active: true,
+  sortOrder: 96,
+};
+
+const pressureControlGmaxEpc10Product = {
+  name: "Contrôleur de pression Gmax EPC-10 avec affichage numérique",
+  slug: "controleur-pression-gmax-epc-10-affichage-numerique",
+  category: "Pompes à eau",
+  imageKey: "pressureControlGmaxEpc10",
+  imageUrl: "",
+  amount: 0,
+  price: "Prix sur demande",
+  text: "Contrôleur de pression Gmax EPC-10 avec affichage numérique, conçu pour remplacer un pressostat mécanique et automatiser la mise en marche et l'arrêt d'une pompe selon la pression. Les seuils se règlent depuis l'écran, avec une limite basse à partir de 0,5 bar et une limite haute jusqu'à 9,5 bar. Il nécessite un réservoir d'expansion et s'installe uniquement en position verticale. Raccord fileté femelle 1/4 pouce, puissance 1,5 kW, fréquence 50 Hz, tension 220-240 V, courant maximal 10 A, pression d'usine 1,4/2,8 bar et pression maximale 10 bar.",
+  featured: true,
+  active: true,
+  sortOrder: 97,
+};
+
 export const defaultProducts = [
   {
     name: "Ventilateurs axiaux",
@@ -333,6 +3109,9 @@ export const defaultProducts = [
   ysaAxialFanProduct,
   ksaAxialFanProduct,
   ktaAxialFanProduct,
+  dtaAxialFanProduct,
+  axialFan8kaProduct,
+  axialFan4kaProduct,
   {
     name: "Ventilateurs de canaux",
     slug: "ventilateurs-de-canaux",
@@ -347,6 +3126,38 @@ export const defaultProducts = [
     sortOrder: 20,
   },
   ykaDuctFanProduct,
+  drpktDuctFanProduct,
+  fdkfRectangularDuctFanProduct,
+  pakfDuctFanProduct,
+  lktRoundInlineDuctFanProduct,
+  dtyBathroomFanProduct,
+  apktBathroomFanProduct,
+  autoBathroomFanProduct,
+  standingIndustrialFanFsv750AProduct,
+  agfCentrifugalFanProduct,
+  drCentrifugalFanProduct,
+  fagsMCentrifugalFanProduct,
+  fboCentrifugalFanProduct,
+  fbkCentrifugalFanProduct,
+  fobrCentrifugalFanProduct,
+  fbsyCentrifugalFanProduct,
+  kagsCentrifugalFanProduct,
+  ktsObsCentrifugalFanProduct,
+  ocesCentrifugalFanProduct,
+  obra140CentrifugalFanProduct,
+  obra200CentrifugalFanProduct,
+  obra260CentrifugalFanProduct,
+  pobraCentrifugalFanProduct,
+  psekCentrifugalFanProduct,
+  turboSeriesCentrifugalFanProduct,
+  facfRoofAxialFanProduct,
+  fcfRoofFanProduct,
+  fkcfRoofFanProduct,
+  industrialFanFsv750DProduct,
+  bathroomFanDbtaProduct,
+  spiroDuctProduct,
+  spiroDuctElbow90Product,
+  spiroDuctTeeProduct,
   {
     name: "Moteur électrique monophasé 1,1 kW 2800 tr/min",
     slug: "moteur-electrique-monophase-11-kw-2800-tr-min",
@@ -519,16 +3330,36 @@ export const defaultProducts = [
   {
     name: "Grilles de ventilation plafond",
     slug: "grilles-de-ventilation-plafond",
-    category: "Diffusion d'air",
+    category: "Grilles et clapets de ventilation",
     imageKey: "ceilingGrille",
     imageUrl: "",
-    amount: 7900,
-    price: "79 €",
-    text: "Diffusion d'air efficace pour bureaux, commerces et bâtiments industriels.",
+    amount: 0,
+    price: "Prix sur demande",
+    text: "Grilles de ventilation plafond utilisées pour le soufflage ou l'extraction d'air dans les systèmes de ventilation et de climatisation. Adaptées aux locaux jusqu'à 3,6 m de hauteur, elles sont fabriquées en profilé aluminium avec revêtement en poudre. La partie intérieure du panneau décoratif est amovible pour accéder au mécanisme de réglage et au montage sur caisson. Raccordement au réseau d'air par caisson et conduits flexibles, avec fixation par boulon central pour montage caché ou par quatre vis sur la partie décorative.",
     featured: false,
     active: true,
     sortOrder: 70,
   },
+  wallVentilationGrilleProduct,
+  spiroDuctVentilationGrilleProduct,
+  fixedLouverGrilleProduct,
+  mobileLouverGrilleProduct,
+  conicalSuctionGrilleProduct,
+  rectangularConstantAirflowDamperHcavRProduct,
+  roundConstantAirflowDamperProduct,
+  swirlCeilingDiffuserHsswdProduct,
+  linearSlotDiffuserHsdProduct,
+  manualRegulatingDamperProduct,
+  dhaSpeedControllerProduct,
+  mnaSpeedControllerProduct,
+  waterPumpGmaxQb60Product,
+  waterPumpGmaxQb70Product,
+  waterPumpGmaxQb80Product,
+  pumpInverterControlGmaxIpc01Product,
+  pressureControlGmaxEpc4Product,
+  pressureControlGmaxEpc1AProduct,
+  pressureControlGmaxEpc13Product,
+  pressureControlGmaxEpc10Product,
   {
     name: "Régulateurs",
     slug: "regulateurs",
@@ -558,7 +3389,7 @@ export function normalizeProduct(product) {
   return {
     ...product,
     amount: normalizedAmount,
-    price: product.price || formatEuro(normalizedAmount),
+    price: product.price || (normalizedAmount === 0 ? "Prix sur demande" : formatEuro(normalizedAmount)),
     text: product.text || product.description || "",
     description: product.description || product.text || "",
     options,

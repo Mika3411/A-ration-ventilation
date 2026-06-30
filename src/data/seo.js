@@ -293,7 +293,7 @@ function createProductNode(product, seo, { canonicalUrl, siteUrl }) {
     productNode.image = [imageUrl];
   }
 
-  if (Number.isInteger(amount) && amount >= 0) {
+  if (Number.isInteger(amount) && amount > 0) {
     productNode.offers = {
       "@type": "Offer",
       url: canonicalUrl,

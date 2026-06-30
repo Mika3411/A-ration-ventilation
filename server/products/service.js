@@ -702,7 +702,7 @@ function serializeProductRow(row) {
     description: row.description,
     text: row.description,
     amount: row.amount,
-    price: formatEuroAmount(row.amount),
+    price: getProductDisplayPrice(row),
     imageKey: row.image_key,
     imageUrl: row.image_url,
     imageData: row.image_data || "",
@@ -724,7 +724,7 @@ function serializeMemoryProduct(product) {
     description: product.description,
     text: product.description,
     amount: product.amount,
-    price: product.price || formatEuroAmount(product.amount),
+    price: getProductDisplayPrice(product),
     imageKey: product.imageKey,
     imageUrl: product.imageUrl,
     imageData: product.imageData || "",
@@ -737,6 +737,13 @@ function serializeMemoryProduct(product) {
   };
 }
 
+function getProductDisplayPrice(product) {
+  const amount = Number.parseInt(product?.amount, 10);
+  if (product?.price) return product.price;
+
+  return amount === 0 ? "Prix sur demande" : formatEuroAmount(amount);
+}
+
 function sortProducts(first, second) {
   return first.sortOrder - second.sortOrder || first.name.localeCompare(second.name, "fr");
 }
@@ -747,7 +754,7 @@ function getCheckoutProducts(products) {
 
 function getCheckoutProductEntries(product) {
   const options = Array.isArray(product.options) ? product.options : [];
-  if (!options.length) return [product];
+  if (!options.length) return isPurchasableAmount(product.amount) ? [product] : [];
 
   return options.map((option) => {
     const { options: _options, ...baseProduct } = product;
@@ -766,7 +773,11 @@ function getCheckoutProductEntries(product) {
       parentSlug: product.slug,
       optionLabel: option.label,
     };
-  });
+  }).filter((entry) => isPurchasableAmount(entry.amount));
+}
+
+function isPurchasableAmount(amount) {
+  return Number.parseInt(amount, 10) > 0;
 }
 
 function normalizeProductOptions(options) {

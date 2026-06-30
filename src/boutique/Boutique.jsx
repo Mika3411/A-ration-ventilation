@@ -17,6 +17,7 @@ export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigat
   const activeProduct = featuredProducts[activeIndex];
   const activeQuantity = getProductCartQuantity(activeProduct, cartItems);
   const activeProductHasOptions = Boolean(activeProduct?.options?.length);
+  const activeProductCanBeAdded = Number.parseInt(activeProduct?.amount, 10) > 0;
 
   useEffect(() => {
     setActiveIndex(0);
@@ -91,7 +92,7 @@ export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigat
                     Choisir une option
                     <ArrowRight size={18} />
                   </RouteLink>
-                ) : (
+                ) : activeProductCanBeAdded ? (
                   <button
                     className="button button-primary"
                     type="button"
@@ -100,6 +101,16 @@ export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigat
                     <ShoppingCart size={18} />
                     Ajouter au panier
                   </button>
+                ) : (
+                  <RouteLink
+                    className="button button-primary"
+                    currentPath={currentPath}
+                    onNavigate={onNavigate}
+                    path="/contact"
+                  >
+                    Demander un devis
+                    <ArrowRight size={18} />
+                  </RouteLink>
                 )}
                 <RouteLink
                   className="button button-dark"
@@ -354,6 +365,8 @@ export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavig
     ? productOptions.find((option) => option.slug === selectedOptionSlug) || productOptions[0]
     : null;
   const selectedCartSlug = selectedOption?.slug || product.slug;
+  const selectedAmount = selectedOption?.amount ?? product.amount;
+  const selectedProductCanBeAdded = Number.parseInt(selectedAmount, 10) > 0;
   const displayedPrice = selectedOption?.price || product.price;
   const quantity = cartItems[selectedCartSlug] || 0;
 
@@ -397,24 +410,44 @@ export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavig
           )}
           <p
             className="product-detail-price"
-            aria-label={hasOptions ? `Prix du modèle ${displayedPrice}` : `À partir de ${displayedPrice}`}
+            aria-label={
+              hasOptions
+                ? `Prix du modèle ${displayedPrice}`
+                : selectedProductCanBeAdded
+                  ? `À partir de ${displayedPrice}`
+                  : `Tarif ${displayedPrice}`
+            }
           >
-            <span>{hasOptions ? "Prix du modèle" : "À partir de"}</span>
+            <span>
+              {hasOptions ? "Prix du modèle" : selectedProductCanBeAdded ? "À partir de" : "Tarif"}
+            </span>
             <strong>{displayedPrice}</strong>
           </p>
           {selectedOption?.bgn && (
             <p className="product-option-note">Prix catalogue : {selectedOption.bgn}</p>
           )}
           <div className="product-detail-actions">
-            <button
-              className="button button-primary product-detail-cart-button"
-              type="button"
-              onClick={() => onAddToCart(selectedCartSlug)}
-            >
-              <ShoppingCart size={18} />
-              Ajouter au panier
-            </button>
-            {quantity > 0 && (
+            {selectedProductCanBeAdded ? (
+              <button
+                className="button button-primary product-detail-cart-button"
+                type="button"
+                onClick={() => onAddToCart(selectedCartSlug)}
+              >
+                <ShoppingCart size={18} />
+                Ajouter au panier
+              </button>
+            ) : (
+              <RouteLink
+                className="button button-primary product-detail-cart-button"
+                currentPath={currentPath}
+                onNavigate={onNavigate}
+                path="/contact"
+              >
+                Demander un devis
+                <ArrowRight size={18} />
+              </RouteLink>
+            )}
+            {selectedProductCanBeAdded && quantity > 0 && (
               <span className="product-quantity">
                 {quantity} dans le panier
               </span>
