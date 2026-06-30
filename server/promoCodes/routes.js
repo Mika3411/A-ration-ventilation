@@ -4,6 +4,7 @@ import { requireAdmin } from "../auth/adminAuth.js";
 import { cleanSingleLine } from "../helpers.js";
 import { buildOrderSnapshot } from "../orders/service.js";
 import { normalizeCheckoutItems } from "../products/service.js";
+import { promoCodeValidationRateLimiter } from "../security/rateLimit.js";
 import {
   createPromoCode,
   deletePromoCode,
@@ -11,6 +12,7 @@ import {
   getApplicablePromoCode,
   handlePromoCodeMutationError,
   normalizePromoCodeInput,
+  publicPromoCodeValidationError,
   serializePublicPromoCode,
   updatePromoCode,
 } from "./service.js";
@@ -18,27 +20,30 @@ import {
 export function createPublicPromoCodesRouter() {
   const router = express.Router();
 
-  router.post("/promo-codes/validate", async (request, response) => {
-    try {
-      const cartItems = await normalizeCheckoutItems(request.body?.items);
+  router.post(
+    "/promo-codes/validate",
+    promoCodeValidationRateLimiter,
+    async (request, response) => {
+      try {
+        const cartItems = await normalizeCheckoutItems(request.body?.items);
 
-      if (cartItems.length === 0) {
-        response.status(400).json({ error: "Votre panier est vide." });
-        return;
+        if (cartItems.length === 0) {
+          response.status(400).json({ error: "Votre panier est vide." });
+          return;
+        }
+
+        const subtotalSnapshot = buildOrderSnapshot(cartItems);
+        const promoCode = await getApplicablePromoCode(
+          request.body?.code,
+          subtotalSnapshot.amountSubtotal,
+        );
+
+        response.status(200).json({ promoCode: serializePublicPromoCode(promoCode) });
+      } catch {
+        response.status(400).json({ error: publicPromoCodeValidationError });
       }
-
-      const subtotalSnapshot = buildOrderSnapshot(cartItems);
-      const promoCode = await getApplicablePromoCode(
-        request.body?.code,
-        subtotalSnapshot.amountSubtotal,
-      );
-
-      response.status(200).json({ promoCode: serializePublicPromoCode(promoCode) });
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Code promo invalide.";
-      response.status(message.includes("introuvable") ? 404 : 400).json({ error: message });
-    }
-  });
+    },
+  );
 
   return router;
 }

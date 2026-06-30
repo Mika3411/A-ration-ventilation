@@ -2722,6 +2722,21 @@ const waterPumpGmaxQb80Product = {
   sortOrder: 92,
 };
 
+const waterPumpSuctionHoseKitGmax1InchProduct = {
+  name: "Kit tuyau d'aspiration Gmax 1 pouce",
+  slug: "kit-tuyau-aspiration-gmax-1-pouce",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Kit tuyau d'aspiration Gmax 1 pouce conçu pour créer une connexion fiable entre une pompe et une source d'eau. Il comprend un tuyau d'aspiration série 007N de diamètre intérieur 25 mm et de longueur 7 m, un clapet anti-retour avec filtre, un raccord 25 mm x 1 pouce à filetage extérieur, un raccord 25 mm x 1 pouce à filetage intérieur, une tétine 1 pouce et deux colliers. Le clapet anti-retour avec filtre empêche les gros solides d'entrer dans le circuit, protège la pompe et maintient l'eau dans le tuyau afin de faciliter l'amorçage au démarrage suivant. Raccord 1 pouce, taille 25 mm et longueur de tuyau 7 m.",
+  imageKey: "waterPumpSuctionHoseKitGmax1Inch",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 93,
+};
+
 const pumpInverterControlGmaxIpc01Product = {
   name: "Contrôleur à onduleur pour pompe Gmax IPC-01",
   slug: "controleur-onduleur-pompe-gmax-ipc-01",
@@ -2872,6 +2887,21 @@ const waterPumpSafetyPanelGmaxC1Mp1Product = {
   sortOrder: 102,
 };
 
+const waterPumpProtectionPanelGmaxC1D2Product = {
+  name: "Panneau de protection pour deux pompes Gmax C1-D2",
+  slug: "panneau-protection-deux-pompes-gmax-c1-d2",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Panneau de protection pour deux pompes Gmax C1-D2 conçu pour protéger les pompes en cas de manque d'eau ou de risque de blocage lié aux impuretés. Le contrôle se fait par électrodes installées dans le puits, selon le niveau d'eau et l'intensité de fonctionnement calibrée. Il commande deux pompes centrifuges, auto-amorçantes ou submersibles, chacune avec une puissance de 0,37 à 2,2 kW. Puissance 0,37-2,2 kW, fréquence 50 Hz, tension 220 V et courant maximal 18 A.",
+  imageKey: "waterPumpProtectionPanelGmaxC1D2",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 103,
+};
+
 const waterPumpProtectionPanelGmaxC3Mp1075To4Product = {
   name: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1 0,75-4 kW",
   slug: "panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-075-4",
@@ -2884,7 +2914,97 @@ const waterPumpProtectionPanelGmaxC3Mp1075To4Product = {
   imageData: "",
   featured: true,
   active: true,
-  sortOrder: 103,
+  sortOrder: 104,
+};
+
+const waterPumpProtectionPanelGmaxC3Mp14To55Product = {
+  name: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1 4-5,5 kW",
+  slug: "panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-4-55",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1 4-5,5 kW conçu pour protéger une pompe triphasée en cas de manque d'eau ou de risque de blocage lié aux impuretés. Le contrôle se fait par électrodes installées dans le puits, selon le niveau d'eau et l'intensité de fonctionnement calibrée. Il commande une seule pompe triphasée centrifuge, auto-amorçante ou submersible. Puissance 4-5,5 kW, fréquence 50 Hz, tension 380 V et courant maximal 13,7 A.",
+  imageKey: "waterPumpProtectionPanelGmaxC3Mp1075To4",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 105,
+};
+
+const waterPumpProtectionPanelGmaxC3Mp155To75Product = {
+  name: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1 5,5-7,5 kW",
+  slug: "panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-55-75",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1 5,5-7,5 kW conçu pour protéger une pompe triphasée en cas de manque d'eau ou de risque de blocage lié aux impuretés. Le contrôle se fait par électrodes installées dans le puits, selon le niveau d'eau et l'intensité de fonctionnement calibrée. Il commande une seule pompe triphasée centrifuge, auto-amorçante ou submersible. Puissance 5,5-7,5 kW, fréquence 50 Hz, tension 380 V et courant maximal 18,8 A.",
+  imageKey: "waterPumpProtectionPanelGmaxC3Mp1075To4",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 106,
+};
+
+const waterPumpLevelProbeGmaxProduct = {
+  name: "Sonde de niveau Gmax",
+  slug: "sonde-de-niveau-gmax",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Sonde de niveau Gmax conçue pour fonctionner avec un panneau de protection pour pompe à eau Gmax C1-MP1 ou un panneau de protection pour deux pompes Gmax C1-D2. Elle protège la pompe contre le fonctionnement à sec lorsque le niveau d'eau de la source devient insuffisant. La sonde envoie un signal au tableau de commande pour arrêter la pompe, puis autorise le redémarrage lorsque l'eau revient. Longueur de câble 1 m.",
+  imageKey: "waterPumpLevelProbeGmax",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 110,
+};
+
+const waterPumpExpansionTankHorizontalGmax60LProduct = {
+  name: "Vase d'expansion horizontal Gmax 60 L",
+  slug: "vase-expansion-horizontal-gmax-60-l",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Vase d'expansion horizontal Gmax 60 L conçu pour les systèmes domestiques d'eau potable et les installations de chauffage à eau chaude. Sa capacité doit être adaptée à la consommation instantanée maximale du système. Le réservoir métallique reçoit un revêtement anticorrosion et intègre une membrane EPDM compatible avec des températures d'eau de -10 °C à +70 °C, avec un maximum de 100 °C. Sa bride est en acier et sa partie supérieure peut servir de support pour installer une pompe à eau, le plus souvent auto-amorçante. Volume 60 L, raccord 1 pouce, diamètre 409 mm et hauteur 560 mm.",
+  imageKey: "waterPumpExpansionTankHorizontalGmax60L",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 109,
+};
+
+const waterPumpExpansionTankHorizontalGmax50LProduct = {
+  name: "Cuve d'expansion horizontale Gmax 50 L",
+  slug: "cuve-expansion-horizontale-gmax-50-l",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Cuve d'expansion horizontale Gmax 50 L conçue pour les systèmes domestiques d'eau potable et les installations de chauffage à eau chaude. Sa capacité doit être adaptée à la consommation instantanée maximale du système. Le réservoir métallique reçoit un revêtement anticorrosion et intègre une membrane EPDM compatible avec des températures d'eau de -10 °C à +70 °C, avec un maximum de 100 °C. Sa bride est en acier et sa partie supérieure peut servir de support pour installer une pompe à eau, le plus souvent auto-amorçante. Volume 50 L, raccord 1 pouce, diamètre 409 mm et hauteur 480 mm.",
+  imageKey: "waterPumpExpansionTankHorizontalGmax50L",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 108,
+};
+
+const waterPumpExpansionTankHorizontalGmax24LProduct = {
+  name: "Vase d'expansion horizontal Gmax 24 L",
+  slug: "vase-expansion-horizontal-gmax-24-l",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Vase d'expansion horizontal Gmax 24 L conçu pour les systèmes domestiques d'eau potable et les installations de chauffage à eau chaude. Sa capacité doit être adaptée à la consommation instantanée maximale du système. Le réservoir métallique reçoit un revêtement anticorrosion et intègre une membrane EPDM compatible avec des températures d'eau de -10 °C à +70 °C, avec un maximum de 100 °C. Sa bride est en acier et sa partie supérieure peut servir de support pour installer une pompe à eau, le plus souvent auto-amorçante. Volume 24 L, raccord 1 pouce, diamètre 280 mm et hauteur 470 mm.",
+  imageKey: "waterPumpExpansionTankHorizontalGmax24L",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 107,
 };
 
 export const defaultShopProducts = [
@@ -3152,6 +3272,10 @@ export const defaultShopProducts = [
   waterPumpGmaxQb60Product,
   waterPumpGmaxQb70Product,
   waterPumpGmaxQb80Product,
+  waterPumpSuctionHoseKitGmax1InchProduct,
+  waterPumpExpansionTankHorizontalGmax24LProduct,
+  waterPumpExpansionTankHorizontalGmax50LProduct,
+  waterPumpExpansionTankHorizontalGmax60LProduct,
   pumpInverterControlGmaxIpc01Product,
   pressureControlGmaxEpc4Product,
   pressureControlGmaxEpc1AProduct,
@@ -3162,7 +3286,11 @@ export const defaultShopProducts = [
   pressureSwitchGmaxPc9Product,
   pressureSwitchGmaxKrs5Product,
   waterPumpSafetyPanelGmaxC1Mp1Product,
+  waterPumpProtectionPanelGmaxC1D2Product,
   waterPumpProtectionPanelGmaxC3Mp1075To4Product,
+  waterPumpProtectionPanelGmaxC3Mp14To55Product,
+  waterPumpProtectionPanelGmaxC3Mp155To75Product,
+  waterPumpLevelProbeGmaxProduct,
   {
     name: "Régulateurs",
     slug: "regulateurs",
@@ -3257,6 +3385,11 @@ export const allowedImageKeys = new Set([
   "waterPumpGmaxQb60",
   "waterPumpGmaxQb70",
   "waterPumpGmaxQb80",
+  "waterPumpSuctionHoseKitGmax1Inch",
+  "waterPumpLevelProbeGmax",
+  "waterPumpExpansionTankHorizontalGmax24L",
+  "waterPumpExpansionTankHorizontalGmax50L",
+  "waterPumpExpansionTankHorizontalGmax60L",
   "pumpInverterControlGmaxIpc01",
   "pressureControlGmaxEpc4",
   "pressureControlGmaxEpc1A",
@@ -3267,6 +3400,7 @@ export const allowedImageKeys = new Set([
   "pressureSwitchGmaxPc9",
   "pressureSwitchGmaxKrs5",
   "waterPumpSafetyPanelGmaxC1Mp1",
+  "waterPumpProtectionPanelGmaxC1D2",
   "waterPumpProtectionPanelGmaxC3Mp1075To4",
   "electricMotor",
   "electricMotor11Kw2800Aluminum",

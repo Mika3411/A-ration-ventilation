@@ -8,7 +8,7 @@ import { createContactRouter } from "./contact/routes.js";
 import { createAdminMembersRouter } from "./members/routes.js";
 import { createOrdersRouter } from "./orders/routes.js";
 import { createAdminPromoCodesRouter, createPublicPromoCodesRouter } from "./promoCodes/routes.js";
-import { adminCsrfProtection } from "./security/csrf.js";
+import { adminCsrfProtection, clientCsrfProtection } from "./security/csrf.js";
 import { createAdminProductsRouter, createPublicProductsRouter } from "./products/routes.js";
 import { securityHeaders } from "./security/headers.js";
 import { createSeoFilesRouter } from "./seoFiles.js";
@@ -37,6 +37,10 @@ export function createApp({ distPath = defaultDistPath } = {}) {
 
   app.use("/api", createPublicProductsRouter());
   app.use("/api/admin", adminCsrfProtection);
+  app.use("/api/auth", clientCsrfProtection);
+  app.use("/api/promo-codes", clientCsrfProtection);
+  app.use("/api/checkout", clientCsrfProtection);
+  app.use("/api/contact", clientCsrfProtection);
   app.use("/api/admin/products", parseJsonIfNeeded(adminImageJsonParser));
   app.use(parseJsonIfNeeded(defaultJsonParser));
 

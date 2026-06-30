@@ -116,6 +116,16 @@ import waterPumpGmaxQb70 from "../assets/product-water-pump-gmax-qb70.jpg";
 
 import waterPumpGmaxQb80 from "../assets/product-water-pump-gmax-qb80.jpg";
 
+import waterPumpSuctionHoseKitGmax1Inch from "../assets/product-water-pump-suction-hose-kit-gmax-1-inch.jpg";
+
+import waterPumpLevelProbeGmax from "../assets/product-water-pump-level-probe-gmax.jpg";
+
+import waterPumpExpansionTankHorizontalGmax24L from "../assets/product-water-pump-expansion-tank-horizontal-gmax-24l.jpg";
+
+import waterPumpExpansionTankHorizontalGmax50L from "../assets/product-water-pump-expansion-tank-horizontal-gmax-50l.jpg";
+
+import waterPumpExpansionTankHorizontalGmax60L from "../assets/product-water-pump-expansion-tank-horizontal-gmax-60l.jpg";
+
 import pumpInverterControlGmaxIpc01 from "../assets/product-pump-inverter-control-gmax-ipc-01.jpg";
 
 import pressureControlGmaxEpc4 from "../assets/product-pressure-control-gmax-epc-4.jpg";
@@ -135,6 +145,8 @@ import pressureSwitchGmaxPc9 from "../assets/product-pressure-switch-gmax-pc-9.j
 import pressureSwitchGmaxKrs5 from "../assets/product-pressure-switch-gmax-krs-5.jpg";
 
 import waterPumpSafetyPanelGmaxC1Mp1 from "../assets/product-water-pump-safety-panel-gmax-c1-mp1.jpg";
+
+import waterPumpProtectionPanelGmaxC1D2 from "../assets/product-water-pump-protection-panel-gmax-c1-d2.jpg";
 
 import waterPumpProtectionPanelGmaxC3Mp1075To4 from "../assets/product-water-pump-protection-panel-gmax-c3-mp1-075-4.jpg";
 
@@ -231,6 +243,11 @@ export const productImageByKey = {
   waterPumpGmaxQb60,
   waterPumpGmaxQb70,
   waterPumpGmaxQb80,
+  waterPumpSuctionHoseKitGmax1Inch,
+  waterPumpLevelProbeGmax,
+  waterPumpExpansionTankHorizontalGmax24L,
+  waterPumpExpansionTankHorizontalGmax50L,
+  waterPumpExpansionTankHorizontalGmax60L,
   pumpInverterControlGmaxIpc01,
   pressureControlGmaxEpc4,
   pressureControlGmaxEpc1A,
@@ -241,6 +258,7 @@ export const productImageByKey = {
   pressureSwitchGmaxPc9,
   pressureSwitchGmaxKrs5,
   waterPumpSafetyPanelGmaxC1Mp1,
+  waterPumpProtectionPanelGmaxC1D2,
   waterPumpProtectionPanelGmaxC3Mp1075To4,
   electricMotor,
   electricMotor11Kw2800Aluminum,
@@ -320,6 +338,23 @@ export const productImageOptions = [
   { label: "Pompe à eau périphérique Gmax QB60", value: "waterPumpGmaxQb60" },
   { label: "Pompe à eau périphérique Gmax QB70", value: "waterPumpGmaxQb70" },
   { label: "Pompe à eau périphérique Gmax QB80", value: "waterPumpGmaxQb80" },
+  {
+    label: "Kit tuyau d'aspiration Gmax 1 pouce",
+    value: "waterPumpSuctionHoseKitGmax1Inch",
+  },
+  { label: "Sonde de niveau Gmax", value: "waterPumpLevelProbeGmax" },
+  {
+    label: "Vase d'expansion horizontal Gmax 24 L",
+    value: "waterPumpExpansionTankHorizontalGmax24L",
+  },
+  {
+    label: "Cuve d'expansion horizontale Gmax 50 L",
+    value: "waterPumpExpansionTankHorizontalGmax50L",
+  },
+  {
+    label: "Vase d'expansion horizontal Gmax 60 L",
+    value: "waterPumpExpansionTankHorizontalGmax60L",
+  },
   { label: "Contrôleur à onduleur pour pompe Gmax IPC-01", value: "pumpInverterControlGmaxIpc01" },
   { label: "Contrôleur de pression Gmax EPC-4", value: "pressureControlGmaxEpc4" },
   { label: "Contrôleur de pression Gmax EPC-1A", value: "pressureControlGmaxEpc1A" },
@@ -330,6 +365,10 @@ export const productImageOptions = [
   { label: "Interrupteur de pression Gmax PC-9", value: "pressureSwitchGmaxPc9" },
   { label: "Interrupteur de pression Gmax KRS-5", value: "pressureSwitchGmaxKrs5" },
   { label: "Panneau de sécurité pour pompe à eau Gmax C1-MP1", value: "waterPumpSafetyPanelGmaxC1Mp1" },
+  {
+    label: "Panneau de protection pour deux pompes Gmax C1-D2",
+    value: "waterPumpProtectionPanelGmaxC1D2",
+  },
   {
     label: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1",
     value: "waterPumpProtectionPanelGmaxC3Mp1075To4",

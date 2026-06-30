@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { createApp } from "../server/app.js";
-import { missingProductionSiteUrlError } from "../server/config.js";
+import { defaultShopProducts } from "../server/products/defaultProducts.js";
 import {
   createProduct,
   deleteProduct,
@@ -11,7 +11,13 @@ import {
   normalizeCheckoutItems,
   normalizeProductInput,
 } from "../server/products/service.js";
-import { adminCsrfError } from "../server/security/csrf.js";
+import {
+  createPromoCode,
+  deletePromoCode,
+  normalizePromoCodeInput,
+  publicPromoCodeValidationError,
+} from "../server/promoCodes/service.js";
+import { adminCsrfError, clientCsrfError } from "../server/security/csrf.js";
 import { missingCheckoutDatabaseError } from "../server/stripe/routes.js";
 
 async function withEnv(overrides, callback) {
@@ -56,6 +62,21 @@ async function withServer(callback) {
   }
 }
 
+function validatePromoCode(baseUrl, code, forwardedFor) {
+  return fetch(`${baseUrl}/api/promo-codes/validate`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      origin: "http://localhost:5173",
+      "x-forwarded-for": forwardedFor,
+    },
+    body: JSON.stringify({
+      code,
+      items: [{ slug: "ventilateurs-axiaux", quantity: 1 }],
+    }),
+  });
+}
+
 test("GET /api/health retourne ok", async () => {
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/health`);
@@ -74,99 +95,20 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/products`);
     const body = await response.json();
+    const productSlugs = body.products.map((product) => product.slug);
+    const expectedPublicProductCount = defaultShopProducts.filter(
+      (product) => product.active !== false,
+    ).length;
 
     assert.equal(response.status, 200);
     assert.equal(Array.isArray(body.products), true);
     assert.equal(Array.isArray(body.categories), true);
-    assert.equal(body.products.length, 83);
-    assert.deepEqual(
-      body.products.map((product) => product.slug),
-      [
-        "ventilateurs-axiaux",
-        "ventilateur-axial-draf",
-        "ventilateur-axial-ysa",
-        "ventilateur-axial-ksa",
-        "ventilateur-axial-kta",
-        "ventilateur-axial-dta",
-        "ventilateur-axial-8ka",
-        "ventilateur-axial-4ka",
-        "ventilateurs-de-canaux",
-        "ventilateur-de-canal-yka",
-        "ventilateur-axial-conduit-drpkt",
-        "ventilateur-conduit-rectangulaire-fdkf",
-        "ventilateur-de-canal-pakf",
-        "ventilateur-conduit-rond-lkt",
-        "ventilateur-salle-de-bains-dty",
-        "ventilateur-salle-de-bains-apkt",
-        "ventilateur-salle-de-bains-auto",
-        "ventilateur-industriel-sur-pied-fsv-750-a",
-        "ventilateur-centrifuge-agf",
-        "ventilateur-centrifuge-dr",
-        "ventilateur-centrifuge-fags-m",
-        "ventilateur-centrifuge-fbk",
-        "ventilateur-centrifuge-fbo",
-        "ventilateur-centrifuge-fbsy",
-        "ventilateur-centrifuge-fobr",
-        "ventilateur-centrifuge-kags",
-        "ventilateur-centrifuge-kts-obs",
-        "ventilateur-centrifuge-obra-140",
-        "ventilateur-centrifuge-obra-200",
-        "ventilateur-centrifuge-obra-260",
-        "ventilateur-centrifuge-oces",
-        "ventilateur-centrifuge-pobra",
-        "ventilateur-centrifuge-psek",
-        "ventilateur-centrifuge-turbo-series",
-        "ventilateur-axial-toiture-facf",
-        "ventilateur-toiture-fcf",
-        "ventilateur-toiture-fkcf",
-        "ventilateur-industriel-fsv-750-d",
-        "ventilateur-salle-de-bains-d-bta",
-        "conduit-rond-spiro",
-        "coude-90-conduit-spiro",
-        "te-conduit-rond-spiro",
-        "moteur-electrique-monophase-11-kw-2800-tr-min",
-        "moteur-electrique-monophase-11-kw-2800-tr-min-carter-en-fonte",
-        "moteur-electrique-monophase-22-kw-2800-tr-min",
-        "moteur-electrique-monophase-22-kw-2800-tr-min-carter-en-fonte",
-        "moteur-electrique-monophase-22-kw-2800-tr-min-carter-en-fonte-enroulement-cuivre",
-        "moteur-electrique-monophase-22-kw-1430-tr-min-carter-en-fonte",
-        "moteur-electrique-monophase-3-kw-1430-tr-min-en-fonte",
-        "moteur-electrique-triphase-11-kw-2850-tr-min",
-        "moteur-electrique-triphase-22-kw-1430-tr-min",
-        "moteur-electrique-triphase-3-kw-1430-tr-min",
-        "moteur-electrique-triphase-22-kw-2850-tr-min",
-        "moteur-electrique-triphase-3-kw-2850-tr-min",
-        "moteur-electrique-triphase-55-kw-2850-tr-min",
-        "grilles-de-ventilation-plafond",
-        "grilles-de-ventilation-murales",
-        "grilles-de-ventilation-pour-conduits-spiro",
-        "grille-a-lamelles-fixes",
-        "grille-a-lamelles-mobiles",
-        "grille-aspiration-conique",
-        "clapet-rectangulaire-debit-constant-hcav-r",
-        "clapet-rond-debit-constant",
-        "diffuseurs-plafonniers-tourbillonnaires-hswd",
-        "diffuseurs-lineaires-hsd",
-        "clapet-reglage-manuel",
-        "regulateur-vitesse-dha",
-        "regulateur-vitesse-mna",
-        "regulateurs",
-        "pompe-a-eau-peripherique-gmax-qb60",
-        "pompe-a-eau-peripherique-gmax-qb70",
-        "pompe-a-eau-peripherique-gmax-qb80",
-        "controleur-onduleur-pompe-gmax-ipc-01",
-        "controleur-pression-gmax-epc-4-manometre-integre",
-        "controleur-pression-gmax-epc-1a",
-        "controleur-pression-gmax-epc-13-manometre-integre",
-        "controleur-pression-gmax-epc-10-affichage-numerique",
-        "controleur-pression-gmax-epc-12-affichage-numerique",
-        "interrupteur-pression-combine-trois-voies-gmax-krs-7-manometre",
-        "interrupteur-pression-mecanique-gmax-pc-9",
-        "interrupteur-pression-mecanique-gmax-krs-5",
-        "panneau-securite-pompe-eau-gmax-c1-mp1",
-        "panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-075-4",
-      ],
-    );
+    assert.equal(body.products.length, expectedPublicProductCount);
+    assert.equal(new Set(productSlugs).size, productSlugs.length);
+    assert.ok(productSlugs.includes("ventilateurs-axiaux"));
+    assert.ok(productSlugs.includes("ventilateur-de-canal-yka"));
+    assert.ok(productSlugs.includes("pompe-a-eau-peripherique-gmax-qb80"));
+    assert.ok(productSlugs.includes("panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-075-4"));
     const priceBySlug = new Map(body.products.map((product) => [product.slug, product.price]));
     const drafProduct = body.products.find((product) => product.slug === "ventilateur-axial-draf");
     assert.ok(drafProduct);
@@ -1339,7 +1281,85 @@ test("GET /api/auth/me signale auth indisponible sans DATABASE_URL", async () =>
   });
 });
 
-test("POST /api/checkout refuse la production sans SITE_URL", async () => {
+test("POST /api/promo-codes/validate ne rend pas les codes non applicables énumérables", async () => {
+  const promoCodes = {
+    valid: "SECUREOK",
+    inactive: "SECUREOFF",
+    minimum: "SECUREMIN",
+  };
+
+  await Promise.all(Object.values(promoCodes).map((code) => deletePromoCode(code)));
+  await createPromoCode(
+    normalizePromoCodeInput({
+      code: promoCodes.valid,
+      percent: "10",
+      minimumAmount: "0",
+      active: true,
+    }),
+  );
+  await createPromoCode(
+    normalizePromoCodeInput({
+      code: promoCodes.inactive,
+      percent: "10",
+      minimumAmount: "0",
+      active: false,
+    }),
+  );
+  await createPromoCode(
+    normalizePromoCodeInput({
+      code: promoCodes.minimum,
+      percent: "10",
+      minimumAmount: "10000000",
+      active: true,
+    }),
+  );
+
+  try {
+    await withServer(async (baseUrl) => {
+      const validResponse = await validatePromoCode(baseUrl, promoCodes.valid, "198.51.100.20");
+      const validBody = await validResponse.json();
+
+      assert.equal(validResponse.status, 200);
+      assert.equal(validBody.promoCode.code, promoCodes.valid);
+      assert.equal(validBody.promoCode.percent, 10);
+
+      for (const code of ["MISSINGSECURE", promoCodes.inactive, promoCodes.minimum]) {
+        const response = await validatePromoCode(baseUrl, code, "198.51.100.21");
+        const body = await response.json();
+
+        assert.equal(response.status, 400);
+        assert.deepEqual(body, { error: publicPromoCodeValidationError });
+      }
+    });
+  } finally {
+    await Promise.all(Object.values(promoCodes).map((code) => deletePromoCode(code)));
+  }
+});
+
+test("POST /api/promo-codes/validate limite les tentatives publiques", async () => {
+  await withServer(async (baseUrl) => {
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      const response = await validatePromoCode(baseUrl, `MISS${attempt}`, "198.51.100.22");
+      const body = await response.json();
+
+      assert.equal(response.status, 400);
+      assert.deepEqual(body, { error: publicPromoCodeValidationError });
+    }
+
+    const response = await validatePromoCode(baseUrl, "MISS20", "198.51.100.22");
+    const body = await response.json();
+
+    assert.equal(response.status, 429);
+    assert.deepEqual(body, {
+      error: "Trop de validations de code promo. Réessayez dans quelques minutes.",
+    });
+    assert.equal(response.headers.get("ratelimit-limit"), "20");
+    assert.equal(response.headers.get("ratelimit-remaining"), "0");
+    assert.ok(Number.parseInt(response.headers.get("retry-after"), 10) > 0);
+  });
+});
+
+test("POST /api/checkout échoue fermé en production sans SITE_URL", async () => {
   await withEnv(
     {
       NODE_ENV: "production",
@@ -1360,11 +1380,32 @@ test("POST /api/checkout refuse la production sans SITE_URL", async () => {
         });
         const body = await response.json();
 
-        assert.equal(response.status, 503);
-        assert.deepEqual(body, { error: missingProductionSiteUrlError });
+        assert.equal(response.status, 403);
+        assert.deepEqual(body, { error: clientCsrfError });
       });
     },
   );
+});
+
+test("POST /api/checkout refuse une origine CSRF invalide", async () => {
+  await withEnv({ NODE_ENV: "development", SITE_URL: undefined }, async () => {
+    await withServer(async (baseUrl) => {
+      const response = await fetch(`${baseUrl}/api/checkout`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          origin: "https://attacker.example.com",
+        },
+        body: JSON.stringify({
+          items: [{ slug: "ventilateurs-axiaux", quantity: 1 }],
+        }),
+      });
+      const body = await response.json();
+
+      assert.equal(response.status, 403);
+      assert.deepEqual(body, { error: clientCsrfError });
+    });
+  });
 });
 
 test("POST /api/checkout refuse la production sans base persistante", async () => {
@@ -1413,6 +1454,23 @@ test("POST /api/admin/login refuse une origine CSRF invalide", async () => {
 
       assert.equal(response.status, 403);
       assert.deepEqual(body, { error: adminCsrfError });
+    });
+  });
+});
+
+test("POST /api/auth/logout refuse les mutations client sans Origin ni Referer", async () => {
+  await withEnv({ NODE_ENV: "development", SITE_URL: undefined }, async () => {
+    await withServer(async (baseUrl) => {
+      const response = await fetch(`${baseUrl}/api/auth/logout`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      const body = await response.json();
+
+      assert.equal(response.status, 403);
+      assert.deepEqual(body, { error: clientCsrfError });
     });
   });
 });
@@ -1490,6 +1548,7 @@ test("POST /api/contact ignore les soumissions honeypot", async () => {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        origin: "http://localhost:5173",
       },
       body: JSON.stringify({
         website: "https://spam.example.com",

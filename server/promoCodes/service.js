@@ -10,6 +10,8 @@ import {
 
 const promoCodePattern = /^[A-Z0-9][A-Z0-9_-]{2,31}$/;
 
+export const publicPromoCodeValidationError = "Code promo invalide ou non applicable.";
+
 let memoryPromoCodes = [];
 
 export async function getAdminPromoCodes() {
@@ -145,20 +147,22 @@ export async function deletePromoCode(code) {
 
 export async function getApplicablePromoCode(code, amountSubtotal) {
   const normalizedCode = normalizePromoCode(code);
-  if (!normalizedCode) return null;
+  if (!normalizedCode) {
+    throw new Error(publicPromoCodeValidationError);
+  }
 
   const promoCode = await findPromoCode(normalizedCode);
   if (!promoCode) {
-    throw new Error("Code promo introuvable.");
+    throw new Error(publicPromoCodeValidationError);
   }
 
   if (!isPromoCodeCurrentlyActive(promoCode)) {
-    throw new Error("Ce code promo n'est pas actif.");
+    throw new Error(publicPromoCodeValidationError);
   }
 
   const subtotal = Number.parseInt(amountSubtotal, 10) || 0;
   if (subtotal < promoCode.minimumAmount) {
-    throw new Error(`Ce code promo est valable à partir de ${formatEuroAmount(promoCode.minimumAmount)}.`);
+    throw new Error(publicPromoCodeValidationError);
   }
 
   return promoCode;

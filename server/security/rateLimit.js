@@ -50,6 +50,13 @@ export const checkoutRateLimiter = createRateLimiter({
   message: "Trop de tentatives de paiement. Réessayez dans quelques minutes.",
 });
 
+export const promoCodeValidationRateLimiter = createRateLimiter({
+  keyPrefix: "promo-code-validation",
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: "Trop de validations de code promo. Réessayez dans quelques minutes.",
+});
+
 function createRateLimiter({ keyPrefix, windowMs, max, message, keyGenerator = getIpKey }) {
   const store = new Map();
   limitStores.add(store);

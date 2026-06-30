@@ -17,7 +17,7 @@ services:
           name: aeration-ventilation-db
           property: connectionString
       - key: DATABASE_SSL
-        value: "false"
+        value: auto
       - key: AUTH_SECRET
         generateValue: true
       - key: ADMIN_USERNAME
