@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import {
   ArrowUpDown,
+  Archive,
   BadgePercent,
   Building2,
   CalendarClock,
@@ -42,6 +43,10 @@ const adminProductSortOptions = [
 ];
 const adminProductCollator = new Intl.Collator("fr", { numeric: true, sensitivity: "base" });
 const maxAdminImageFileSize = 1 * 1024 * 1024;
+const adminProductStatusFilters = [
+  { value: "active", label: "Actifs" },
+  { value: "archived", label: "Archivé" },
+];
 
 const emptyAdminProductForm = {
   name: "",
@@ -219,6 +224,10 @@ function normalizeAdminSearchValue(value) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
+}
+
+function isAdminProductInStatusFilter(product, statusFilter) {
+  return statusFilter === "archived" ? product.active === false : product.active !== false;
 }
 
 function getAdminProductTimestamp(product, field) {
@@ -484,6 +493,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   const [productPage, setProductPage] = useState(1);
   const [productQuery, setProductQuery] = useState("");
   const [productSort, setProductSort] = useState("manual");
+  const [productStatusFilter, setProductStatusFilter] = useState("active");
   const [selectedProductCategories, setSelectedProductCategories] = useState([]);
   const [isCategoryFilterOpen, setIsCategoryFilterOpen] = useState(false);
   const [selectedSlug, setSelectedSlug] = useState("");
@@ -497,20 +507,32 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
     [selectedProductCategories],
   );
   const activeCategoryFilterCount = selectedProductCategories.length;
+  const activeProductsCount = useMemo(
+    () => products.filter((product) => product.active !== false).length,
+    [products],
+  );
+  const archivedProductsCount = products.length - activeProductsCount;
+  const statusScopedProducts = useMemo(
+    () =>
+      products.filter((product) =>
+        isAdminProductInStatusFilter(product, productStatusFilter),
+      ),
+    [productStatusFilter, products],
+  );
   const productCategoryCounts = useMemo(
     () =>
-      products.reduce((counts, product) => {
+      statusScopedProducts.reduce((counts, product) => {
         counts.set(product.category, (counts.get(product.category) || 0) + 1);
         return counts;
       }, new Map()),
-    [products],
+    [statusScopedProducts],
   );
   const filteredProducts = useMemo(() => {
     const normalizedQuery = normalizeAdminSearchValue(productQuery.trim());
     const categoryFilteredProducts =
       selectedProductCategorySet.size === 0
-        ? products
-        : products.filter((product) => selectedProductCategorySet.has(product.category));
+        ? statusScopedProducts
+        : statusScopedProducts.filter((product) => selectedProductCategorySet.has(product.category));
 
     if (!normalizedQuery) {
       return categoryFilteredProducts;
@@ -531,7 +553,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
           product.price,
           product.slug,
           optionSearchText,
-          product.active ? "actif" : "masque",
+          product.active ? "actif visible" : "archive archivé masque masqué",
         ]
           .filter(Boolean)
           .join(" "),
@@ -539,7 +561,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
 
       return searchableProduct.includes(normalizedQuery);
     });
-  }, [productQuery, products, selectedProductCategorySet]);
+  }, [productQuery, selectedProductCategorySet, statusScopedProducts]);
   const sortedProducts = useMemo(
     () => sortAdminProducts(filteredProducts, productSort),
     [filteredProducts, productSort],
@@ -569,7 +591,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
     );
   }, [adminCategories]);
 
-  async function loadAdminProducts(nextSelectedSlug = selectedSlug) {
+  async function loadAdminProducts(nextSelectedSlug = selectedSlug, nextStatusFilter = productStatusFilter) {
     setStatus("loading");
     setMessage("");
 
@@ -583,13 +605,25 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
 
       const loadedProducts = normalizeProducts(payload.products);
       const loadedCategories = normalizeCategories(payload.categories, loadedProducts);
+      const statusVisibleProducts = loadedProducts.filter((product) =>
+        isAdminProductInStatusFilter(product, nextStatusFilter),
+      );
       const nextProduct =
-        loadedProducts.find((product) => product.slug === nextSelectedSlug) || loadedProducts[0];
+        statusVisibleProducts.find((product) => product.slug === nextSelectedSlug) ||
+        statusVisibleProducts[0] ||
+        null;
 
       setProducts(loadedProducts);
       setCategories(loadedCategories);
       setSelectedSlug(nextProduct?.slug || "");
-      setForm(getAdminProductForm(nextProduct));
+      setForm(
+        nextProduct
+          ? getAdminProductForm(nextProduct)
+          : {
+              ...emptyAdminProductForm,
+              sortOrder: String((loadedProducts.length + 1) * 10),
+            },
+      );
       setStatus("ready");
     } catch (error) {
       setStatus("error");
@@ -606,6 +640,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   function createNewProduct() {
     setSelectedSlug("");
     setProductQuery("");
+    setProductStatusFilter("active");
     setSelectedProductCategories([]);
     setIsCategoryFilterOpen(false);
     setProductPage(1);
@@ -619,6 +654,26 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   function updateProductQuery(value) {
     setProductQuery(value);
     setProductPage(1);
+  }
+
+  function updateProductStatusFilter(value) {
+    if (value === productStatusFilter) return;
+
+    const nextProduct = products.find((product) => isAdminProductInStatusFilter(product, value));
+
+    setProductStatusFilter(value);
+    setSelectedSlug(nextProduct?.slug || "");
+    setForm(
+      nextProduct
+        ? getAdminProductForm(nextProduct)
+        : {
+            ...emptyAdminProductForm,
+            sortOrder: String((products.length + 1) * 10),
+          },
+    );
+    setProductPage(1);
+    setIsCategoryFilterOpen(false);
+    setMessage("");
   }
 
   function updateProductSort(value) {
@@ -760,8 +815,11 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
         throw new Error(payload.error || "Impossible d'enregistrer le produit.");
       }
 
+      const nextStatusFilter = payload.product?.active === false ? "archived" : "active";
+
       setStatus("ready");
-      await loadAdminProducts(payload.product?.slug);
+      setProductStatusFilter(nextStatusFilter);
+      await loadAdminProducts(payload.product?.slug, nextStatusFilter);
       setMessage("Produit enregistré.");
       await onProductsChanged();
     } catch (error) {
@@ -773,7 +831,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
   async function deleteSelectedProduct() {
     if (!selectedProduct) return;
 
-    const confirmed = window.confirm(`Supprimer ${selectedProduct.name} de la boutique ?`);
+    const confirmed = window.confirm(`Archiver ${selectedProduct.name} ?`);
     if (!confirmed) return;
 
     setStatus("saving");
@@ -789,9 +847,13 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
         throw new Error(payload.error || "Impossible de supprimer le produit.");
       }
 
+      const archivedSlug = selectedProduct.slug;
+      const nextStatusFilter = "archived";
+
       setStatus("ready");
-      await loadAdminProducts("");
-      setMessage("Produit retiré de la boutique.");
+      setProductStatusFilter(nextStatusFilter);
+      await loadAdminProducts(archivedSlug, nextStatusFilter);
+      setMessage("Produit archivé.");
       await onProductsChanged();
     } catch (error) {
       setStatus("ready");
@@ -922,6 +984,27 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                   ))}
                 </select>
               </label>
+              <div className="admin-product-status-tabs" aria-label="Filtrer par statut produit">
+                {adminProductStatusFilters.map((filter) => {
+                  const productCount =
+                    filter.value === "archived" ? archivedProductsCount : activeProductsCount;
+                  const Icon = filter.value === "archived" ? Archive : Check;
+
+                  return (
+                    <button
+                      className={productStatusFilter === filter.value ? "is-active" : ""}
+                      type="button"
+                      key={filter.value}
+                      onClick={() => updateProductStatusFilter(filter.value)}
+                      aria-pressed={productStatusFilter === filter.value}
+                    >
+                      <Icon size={17} />
+                      <span>{filter.label}</span>
+                      <em>{productCount}</em>
+                    </button>
+                  );
+                })}
+              </div>
               <div className="admin-product-filter">
                 <button
                   className={activeCategoryFilterCount > 0 ? "is-active" : ""}
@@ -1004,12 +1087,21 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                           : ""}
                       </small>
                     </span>
-                    <em>{product.active ? "Actif" : "Masqué"}</em>
+                    <em>{product.active ? "Actif" : "Archivé"}</em>
                   </button>
                 ))}
-              {status !== "loading" && products.length > 0 && filteredProducts.length === 0 && (
-                <p className="admin-empty-state">Aucun produit ne correspond à ces filtres.</p>
+              {status !== "loading" && products.length > 0 && statusScopedProducts.length === 0 && (
+                <p className="admin-empty-state">
+                  {productStatusFilter === "archived"
+                    ? "Aucun produit archivé."
+                    : "Aucun produit actif."}
+                </p>
               )}
+              {status !== "loading" &&
+                statusScopedProducts.length > 0 &&
+                filteredProducts.length === 0 && (
+                  <p className="admin-empty-state">Aucun produit ne correspond à ces filtres.</p>
+                )}
               {status !== "loading" && products.length === 0 && (
                 <p className="admin-empty-state">Aucun produit enregistré pour le moment.</p>
               )}
@@ -1049,15 +1141,15 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                   <h2>{selectedSlug ? "Modifier le produit" : "Ajouter un produit"}</h2>
                 </div>
                 <div className="admin-form-actions">
-                  {selectedSlug && (
+                  {selectedSlug && selectedProduct?.active !== false && (
                     <button
                       className="admin-delete-button"
                       type="button"
                       onClick={deleteSelectedProduct}
                       disabled={isSaving}
                     >
-                      <Trash2 size={18} />
-                      Supprimer
+                      <Archive size={18} />
+                      Archiver
                     </button>
                   )}
                   <button className="button button-primary" type="submit" disabled={isSaving}>
@@ -1342,7 +1434,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                       onChange={(event) => updateForm("active", event.target.checked)}
                     />
                     <span>Visible en boutique</span>
-                    <AdminHelpTooltip text="Décoche pour masquer le produit sans le supprimer." />
+                    <AdminHelpTooltip text="Décoche pour envoyer le produit dans Archivé sans le perdre." />
                   </label>
                 </div>
               </div>

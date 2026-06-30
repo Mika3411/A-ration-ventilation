@@ -16,7 +16,6 @@ import {
 
 const maxProductImageDataLength = 1_500_000;
 const productImageDataPattern = /^data:image\/(png|jpe?g|webp|gif);base64,[a-z0-9+/=]+$/i;
-const defaultShopProductSlugs = new Set(defaultShopProducts.map((product) => product.slug));
 
 let memoryShopProducts = defaultShopProducts.map((product, index) => ({
   id: index + 1,
@@ -194,41 +193,29 @@ export async function updateProduct(slug, productInput) {
 }
 
 export async function deleteProduct(slug) {
-  const isDefaultProduct = defaultShopProductSlugs.has(slug);
-
   if (!dbPool) {
     const productIndex = memoryShopProducts.findIndex((product) => product.slug === slug);
 
     if (productIndex === -1) return false;
 
-    if (isDefaultProduct) {
-      memoryShopProducts = memoryShopProducts.map((product, index) =>
-        index === productIndex
-          ? { ...product, active: false, updatedAt: new Date().toISOString() }
-          : product,
-      );
-      return true;
-    }
-
-    memoryShopProducts = memoryShopProducts.filter((product) => product.slug !== slug);
+    memoryShopProducts = memoryShopProducts.map((product, index) =>
+      index === productIndex
+        ? { ...product, active: false, updatedAt: new Date().toISOString() }
+        : product,
+    );
     return true;
   }
 
   await ensureDatabaseReady();
 
-  if (isDefaultProduct) {
-    const result = await dbPool.query(
-      `
-        UPDATE shop_products
-        SET active = FALSE, updated_at = NOW()
-        WHERE slug = $1
-      `,
-      [slug],
-    );
-    return result.rowCount > 0;
-  }
-
-  const result = await dbPool.query("DELETE FROM shop_products WHERE slug = $1", [slug]);
+  const result = await dbPool.query(
+    `
+      UPDATE shop_products
+      SET active = FALSE, updated_at = NOW()
+      WHERE slug = $1
+    `,
+    [slug],
+  );
   return result.rowCount > 0;
 }
 

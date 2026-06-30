@@ -3,7 +3,14 @@ import test from "node:test";
 
 import { createApp } from "../server/app.js";
 import { missingProductionSiteUrlError } from "../server/config.js";
-import { normalizeCheckoutItems } from "../server/products/service.js";
+import {
+  createProduct,
+  deleteProduct,
+  getAdminProducts,
+  getPublicProducts,
+  normalizeCheckoutItems,
+  normalizeProductInput,
+} from "../server/products/service.js";
 import { adminCsrfError } from "../server/security/csrf.js";
 import { missingCheckoutDatabaseError } from "../server/stripe/routes.js";
 
@@ -719,6 +726,34 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
     assert.ok(body.categories.includes("Ventilateurs de toiture"));
     assert.ok(body.categories.includes("Grilles et clapets de ventilation"));
   });
+});
+
+test("deleteProduct archive un produit admin sans le laisser public", async () => {
+  const product = await createProduct(
+    normalizeProductInput({
+      name: "Produit test archive admin",
+      category: "Tests",
+      description: "Produit créé pour vérifier l'archivage admin.",
+      amount: 1299,
+      imageKey: "ductFan",
+      active: true,
+      sortOrder: 9999,
+    }),
+  );
+
+  assert.equal(product.active, true);
+
+  const deleted = await deleteProduct(product.slug);
+
+  assert.equal(deleted, true);
+
+  const publicProducts = await getPublicProducts();
+  const adminProducts = await getAdminProducts();
+  const archivedProduct = adminProducts.find((adminProduct) => adminProduct.slug === product.slug);
+
+  assert.equal(publicProducts.some((publicProduct) => publicProduct.slug === product.slug), false);
+  assert.ok(archivedProduct);
+  assert.equal(archivedProduct.active, false);
 });
 
 test("normalizeCheckoutItems accepte les options YKA comme lignes achetables", async () => {
