@@ -10,12 +10,19 @@ export async function createDatabaseSchema(pool) {
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       password_salt TEXT NOT NULL,
+      email_verified_at TIMESTAMPTZ,
+      email_verification_token_hash TEXT NOT NULL DEFAULT '',
+      email_verification_token_expires_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
 
     CREATE INDEX IF NOT EXISTS customer_accounts_created_at_idx
       ON customer_accounts (created_at DESC);
+
+    CREATE INDEX IF NOT EXISTS customer_accounts_email_verification_token_idx
+      ON customer_accounts (email_verification_token_hash)
+      WHERE email_verification_token_hash <> '';
   `);
 
   await pool.query(`
@@ -87,6 +94,9 @@ export async function createDatabaseSchema(pool) {
       stripe_session_id TEXT UNIQUE,
       stripe_payment_intent_id TEXT NOT NULL DEFAULT '',
       stripe_customer_id TEXT NOT NULL DEFAULT '',
+      stripe_invoice_id TEXT NOT NULL DEFAULT '',
+      stripe_invoice_url TEXT NOT NULL DEFAULT '',
+      stripe_invoice_pdf_url TEXT NOT NULL DEFAULT '',
       status TEXT NOT NULL DEFAULT 'pending',
       payment_status TEXT NOT NULL DEFAULT '',
       currency TEXT NOT NULL DEFAULT 'eur',

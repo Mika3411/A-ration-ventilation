@@ -92,8 +92,14 @@ test("database initialization exécute schéma, migrations et seed dans l'ordre"
 
   const queryIndex = (pattern) => queries.findIndex((query) => query.sql.includes(pattern));
   const productTableIndex = queryIndex("CREATE TABLE IF NOT EXISTS shop_products");
+  const emailVerificationMigrationIndex = queryIndex(
+    "ALTER TABLE customer_accounts ADD COLUMN IF NOT EXISTS email_verified_at",
+  );
   const schemaMigrationIndex = queryIndex("ALTER TABLE shop_products ADD COLUMN IF NOT EXISTS image_data");
   const productSeedIndex = queryIndex("INSERT INTO shop_products");
+  const customerVerificationDataMigrationIndex = queryIndex(
+    "UPDATE customer_accounts SET email_verified_at = COALESCE(email_verified_at, created_at)",
+  );
   const dataMigrationIndex = queryIndex("UPDATE shop_products SET active = FALSE");
   const categorySeedIndex = queryIndex("INSERT INTO shop_categories (name, sort_order) VALUES");
   const missingCategorySeedIndex = queryIndex(
@@ -101,14 +107,18 @@ test("database initialization exécute schéma, migrations et seed dans l'ordre"
   );
 
   assert.notEqual(productTableIndex, -1);
+  assert.notEqual(emailVerificationMigrationIndex, -1);
   assert.notEqual(schemaMigrationIndex, -1);
   assert.notEqual(productSeedIndex, -1);
+  assert.notEqual(customerVerificationDataMigrationIndex, -1);
   assert.notEqual(dataMigrationIndex, -1);
   assert.notEqual(categorySeedIndex, -1);
   assert.notEqual(missingCategorySeedIndex, -1);
   assert.ok(productTableIndex < schemaMigrationIndex);
+  assert.ok(emailVerificationMigrationIndex < productSeedIndex);
   assert.ok(schemaMigrationIndex < productSeedIndex);
   assert.ok(productSeedIndex < dataMigrationIndex);
+  assert.ok(customerVerificationDataMigrationIndex < categorySeedIndex);
   assert.ok(dataMigrationIndex < categorySeedIndex);
   assert.ok(categorySeedIndex < missingCategorySeedIndex);
 });

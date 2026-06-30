@@ -15,7 +15,6 @@ import {
   UserRound,
 } from "lucide-react";
 
-import { PageHero } from "../layout/PageHero.jsx";
 import { RouteLink } from "../layout/Layout.jsx";
 
 const emptyProfileForm = {
@@ -86,6 +85,23 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
     return () => {
       ignore = true;
     };
+  }, []);
+
+  useEffect(() => {
+    const emailStatus = new URLSearchParams(window.location.search).get("email");
+
+    if (emailStatus === "verified") {
+      setMessageType("success");
+      setMessage("Votre email est confirmé. Vous êtes connecté à votre espace client.");
+      window.history.replaceState({}, "", "/espace-client");
+    }
+
+    if (emailStatus === "invalid") {
+      setAuthMode("login");
+      setMessageType("error");
+      setMessage("Le lien de confirmation est invalide ou expiré. Relancez votre inscription pour recevoir un nouveau lien.");
+      window.history.replaceState({}, "", "/espace-client");
+    }
   }, []);
 
   useEffect(() => {
@@ -184,6 +200,18 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
         body: JSON.stringify(Object.fromEntries(formData.entries())),
       });
       const payload = await response.json().catch(() => ({}));
+
+      if (response.ok && authMode === "register" && payload.verificationRequired) {
+        form.reset();
+        setCustomer(null);
+        setAuthMode("login");
+        setStatus("idle");
+        setMessageType("success");
+        setMessage(
+          `Votre compte est créé. Confirmez votre email (${payload.email}) avant de vous connecter.`,
+        );
+        return;
+      }
 
       if (!response.ok || !payload.user) {
         throw new Error(payload.error || "Impossible de traiter la demande.");
@@ -301,12 +329,7 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
   }
 
   return (
-    <>
-      <PageHero
-        title="Espace client"
-        text="Créez votre compte, retrouvez vos informations et préparez vos prochaines demandes."
-      />
-      <section className="section customer-section">
+    <section className="section customer-section">
         <div className={`container customer-shell${customer ? " customer-shell--dashboard" : ""}`}>
           {!customer && (
             <div className="customer-intro">
@@ -535,6 +558,11 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
                     </div>
                   </div>
                   <p className="auth-note">Mot de passe de 8 caractères minimum.</p>
+                  {authMode === "register" && (
+                    <p className="auth-note">
+                      Un lien de confirmation sera envoyé à cette adresse email.
+                    </p>
+                  )}
                   <button className="button button-primary" type="submit" disabled={isSubmitting}>
                     {isSubmitting
                       ? "Traitement..."
@@ -557,7 +585,6 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
           )}
         </div>
       </section>
-    </>
   );
 }
 

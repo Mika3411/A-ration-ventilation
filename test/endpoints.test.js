@@ -1321,6 +1321,16 @@ test("PUT /api/auth/password refuse le changement de mot de passe sans base clie
   });
 });
 
+test("GET /api/auth/verify-email refuse la confirmation sans base client", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/auth/verify-email?token=test-token`);
+    const body = await response.text();
+
+    assert.equal(response.status, 503);
+    assert.match(body, /DATABASE_URL/);
+  });
+});
+
 test("POST /api/promo-codes/validate ne rend pas les codes non applicables énumérables", async () => {
   const promoCodes = {
     valid: "SECUREOK",

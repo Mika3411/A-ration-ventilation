@@ -3358,6 +3358,7 @@ button {
 }
 
 .customer-section {
+  padding: clamp(24px, 4vw, 44px) 0 clamp(56px, 7vw, 88px);
   background:
     linear-gradient(180deg, rgba(255, 122, 31, 0.09) 0%, rgba(8, 7, 6, 0) 42%),
     #0b0807;

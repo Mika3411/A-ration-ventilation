@@ -1,10 +1,8 @@
 import express from "express";
-import nodemailer from "nodemailer";
 
+import { getMailFromAddress, getMailTransport, getMissingMailConfig } from "../email/mailer.js";
 import { cleanMessage, cleanSingleLine, escapeHtml } from "../helpers.js";
 import { contactRateLimiter } from "../security/rateLimit.js";
-
-let mailTransport;
 
 export function createContactRouter() {
   const router = express.Router();
@@ -38,7 +36,7 @@ export function createContactRouter() {
 
     try {
       const to = process.env.CONTACT_TO || "contact@aeration-ventilation.fr";
-      const from = process.env.CONTACT_FROM || process.env.SMTP_USER;
+      const from = getMailFromAddress();
 
       await getMailTransport().sendMail({
         from,
@@ -58,28 +56,6 @@ export function createContactRouter() {
   });
 
   return router;
-}
-
-function getMailTransport() {
-  if (!mailTransport) {
-    const smtpPort = Number.parseInt(process.env.SMTP_PORT || "587", 10);
-
-    mailTransport = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: smtpPort,
-      secure: smtpPort === 465,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-  }
-
-  return mailTransport;
-}
-
-function getMissingMailConfig() {
-  return ["SMTP_HOST", "SMTP_USER", "SMTP_PASS"].filter((key) => !process.env[key]);
 }
 
 function buildPlainTextEmail({ name, phone, need, message }) {

@@ -10,10 +10,13 @@ import {
   passwordHashOptions,
 } from "../config.js";
 import { databaseReady, dbPool, getDatabaseInitError } from "../database.js";
+import { getMailFromAddress, getMailTransport, getMissingMailConfig } from "../email/mailer.js";
 import {
   cleanSingleLine,
   clearHttpOnlyCookie,
+  escapeHtml,
   getCookie,
+  getRequestOrigin,
   isValidEmail,
   normalizeEmail,
   setHttpOnlyCookie,
@@ -22,6 +25,7 @@ import {
 import { customerLoginRateLimiter, customerRegisterRateLimiter } from "../security/rateLimit.js";
 
 const pbkdf2 = promisify(crypto.pbkdf2);
+const emailVerificationTokenMaxAgeMs = 1000 * 60 * 60 * 24;
 
 export function createCustomerAuthRouter() {
   const router = express.Router();
@@ -37,6 +41,50 @@ export function createCustomerAuthRouter() {
     } catch (error) {
       console.error("Customer session lookup failed:", error);
       response.status(200).json({ user: null, authAvailable: false });
+    }
+  });
+
+  router.get("/verify-email", async (request, response) => {
+    const configError = await getAuthConfigurationError();
+    if (configError) {
+      response.status(503).send(configError);
+      return;
+    }
+
+    const token = typeof request.query?.token === "string" ? request.query.token : "";
+    if (!token) {
+      response.redirect(303, "/espace-client?email=invalid");
+      return;
+    }
+
+    try {
+      const tokenHash = hashEmailVerificationToken(token);
+      const result = await dbPool.query(
+        `
+          UPDATE customer_accounts
+          SET
+            email_verified_at = NOW(),
+            email_verification_token_hash = '',
+            email_verification_token_expires_at = NULL,
+            updated_at = NOW()
+          WHERE email_verification_token_hash = $1
+            AND email_verification_token_expires_at > NOW()
+          RETURNING public_id, first_name, last_name, company, phone, email, created_at
+        `,
+        [tokenHash],
+      );
+
+      if (result.rowCount === 0) {
+        response.redirect(303, "/espace-client?email=invalid");
+        return;
+      }
+
+      const customer = serializeCustomer(result.rows[0]);
+      setAuthCookie(response, createAuthToken(customer));
+      response.redirect(303, "/espace-client?email=verified");
+    } catch (error) {
+      console.error("Customer email verification failed:", error);
+      response.redirect(303, "/espace-client?email=invalid");
     }
   });
 
@@ -216,9 +264,29 @@ export function createCustomerAuthRouter() {
       return;
     }
 
+    const missingMailConfig = getMissingMailConfig();
+    if (missingMailConfig.length > 0) {
+      console.error(`Customer confirmation email configuration missing: ${missingMailConfig.join(", ")}`);
+      response.status(503).json({
+        error: "La confirmation email n'est pas encore configurée sur Render.",
+      });
+      return;
+    }
+
+    const verificationOrigin = getRequestOrigin(request);
+    if (!verificationOrigin) {
+      response.status(503).json({
+        error: "SITE_URL doit être configuré pour envoyer les liens de confirmation email.",
+      });
+      return;
+    }
+
     try {
       const { hash, salt } = await hashPassword(password);
       const publicId = crypto.randomUUID();
+      const verificationToken = createEmailVerificationToken();
+      const verificationTokenHash = hashEmailVerificationToken(verificationToken);
+      const verificationExpiresAt = new Date(Date.now() + emailVerificationTokenMaxAgeMs);
       const result = await dbPool.query(
         `
           INSERT INTO customer_accounts (
@@ -229,13 +297,37 @@ export function createCustomerAuthRouter() {
             phone,
             email,
             password_hash,
-            password_salt
+            password_salt,
+            email_verification_token_hash,
+            email_verification_token_expires_at
           )
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-          ON CONFLICT (email) DO NOTHING
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          ON CONFLICT (email) DO UPDATE
+          SET
+            first_name = EXCLUDED.first_name,
+            last_name = EXCLUDED.last_name,
+            company = EXCLUDED.company,
+            phone = EXCLUDED.phone,
+            password_hash = EXCLUDED.password_hash,
+            password_salt = EXCLUDED.password_salt,
+            email_verification_token_hash = EXCLUDED.email_verification_token_hash,
+            email_verification_token_expires_at = EXCLUDED.email_verification_token_expires_at,
+            updated_at = NOW()
+          WHERE customer_accounts.email_verified_at IS NULL
           RETURNING public_id, first_name, last_name, company, phone, email, created_at
         `,
-        [publicId, firstName, lastName, company, phone, email, hash, salt],
+        [
+          publicId,
+          firstName,
+          lastName,
+          company,
+          phone,
+          email,
+          hash,
+          salt,
+          verificationTokenHash,
+          verificationExpiresAt,
+        ],
       );
 
       if (result.rowCount === 0) {
@@ -244,8 +336,25 @@ export function createCustomerAuthRouter() {
       }
 
       const customer = serializeCustomer(result.rows[0]);
-      setAuthCookie(response, createAuthToken(customer));
-      response.status(201).json({ user: customer });
+
+      try {
+        await sendCustomerVerificationEmail({
+          customer,
+          origin: verificationOrigin,
+          token: verificationToken,
+        });
+      } catch (emailError) {
+        console.error("Customer confirmation email failed:", emailError);
+        response.status(502).json({
+          error: "Impossible d'envoyer l'email de confirmation pour le moment.",
+        });
+        return;
+      }
+
+      response.status(201).json({
+        verificationRequired: true,
+        email: customer.email,
+      });
     } catch (error) {
       console.error("Customer registration failed:", error);
       response.status(500).json({ error: "Impossible de créer le compte pour le moment." });
@@ -275,7 +384,17 @@ export function createCustomerAuthRouter() {
     try {
       const result = await dbPool.query(
         `
-          SELECT public_id, first_name, last_name, company, phone, email, password_hash, password_salt, created_at
+          SELECT
+            public_id,
+            first_name,
+            last_name,
+            company,
+            phone,
+            email,
+            password_hash,
+            password_salt,
+            email_verified_at,
+            created_at
           FROM customer_accounts
           WHERE email = $1
           LIMIT 1
@@ -286,6 +405,13 @@ export function createCustomerAuthRouter() {
 
       if (!row || !(await verifyPassword(password, row.password_salt, row.password_hash))) {
         response.status(401).json({ error: "Email ou mot de passe incorrect." });
+        return;
+      }
+
+      if (!row.email_verified_at) {
+        response.status(403).json({
+          error: "Merci de confirmer votre adresse email avant de vous connecter.",
+        });
         return;
       }
 
@@ -436,6 +562,59 @@ function normalizeCustomerProfileInput(body) {
     phone,
     email,
   };
+}
+
+function createEmailVerificationToken() {
+  return crypto.randomBytes(32).toString("base64url");
+}
+
+function hashEmailVerificationToken(token) {
+  return crypto.createHash("sha256").update(token).digest("base64url");
+}
+
+async function sendCustomerVerificationEmail({ customer, origin, token }) {
+  const verificationUrl = new URL("/api/auth/verify-email", origin);
+  verificationUrl.searchParams.set("token", token);
+
+  await getMailTransport().sendMail({
+    from: getMailFromAddress(),
+    to: customer.email,
+    subject: "Confirmez votre email - Aération Ventilation",
+    text: buildVerificationEmailText({ customer, verificationUrl }),
+    html: buildVerificationEmailHtml({ customer, verificationUrl }),
+  });
+}
+
+function buildVerificationEmailText({ customer, verificationUrl }) {
+  return [
+    `Bonjour ${customer.firstName},`,
+    "",
+    "Merci de créer votre compte Aération Ventilation.",
+    "Pour confirmer votre adresse email, ouvrez ce lien :",
+    verificationUrl.toString(),
+    "",
+    "Ce lien est valable 24 heures.",
+    "",
+    "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email.",
+  ].join("\n");
+}
+
+function buildVerificationEmailHtml({ customer, verificationUrl }) {
+  const safeFirstName = escapeHtml(customer.firstName);
+  const safeUrl = escapeHtml(verificationUrl.toString());
+
+  return `
+    <h2>Confirmez votre email</h2>
+    <p>Bonjour ${safeFirstName},</p>
+    <p>Merci de créer votre compte Aération Ventilation.</p>
+    <p>
+      <a href="${safeUrl}" style="display:inline-block;padding:12px 18px;background:#ff7a1f;color:#120b07;font-weight:700;text-decoration:none;border-radius:8px;">
+        Confirmer mon adresse email
+      </a>
+    </p>
+    <p>Ce lien est valable 24 heures.</p>
+    <p>Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email.</p>
+  `;
 }
 
 function serializeCustomer(row) {
