@@ -1279,6 +1279,48 @@ test("GET /api/auth/me signale auth indisponible sans DATABASE_URL", async () =>
   });
 });
 
+test("PUT /api/auth/me refuse la modification du profil sans base client", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/auth/me`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        origin: "http://localhost:5173",
+      },
+      body: JSON.stringify({
+        firstName: "Mickael",
+        lastName: "Thorez",
+        email: "mickael@example.com",
+      }),
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 503);
+    assert.match(body.error, /DATABASE_URL/);
+  });
+});
+
+test("PUT /api/auth/password refuse le changement de mot de passe sans base client", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/auth/password`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        origin: "http://localhost:5173",
+      },
+      body: JSON.stringify({
+        currentPassword: "ancien-password",
+        newPassword: "nouveau-password",
+        confirmPassword: "nouveau-password",
+      }),
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 503);
+    assert.match(body.error, /DATABASE_URL/);
+  });
+});
+
 test("POST /api/promo-codes/validate ne rend pas les codes non applicables énumérables", async () => {
   const promoCodes = {
     valid: "SECUREOK",

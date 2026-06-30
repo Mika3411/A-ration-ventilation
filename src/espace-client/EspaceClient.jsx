@@ -3,8 +3,12 @@ import {
   ArrowRight,
   Building2,
   ClipboardList,
+  Eye,
+  EyeOff,
+  KeyRound,
   LogIn,
   LogOut,
+  Save,
   ShieldCheck,
   ShoppingCart,
   UserPlus,
@@ -14,6 +18,20 @@ import {
 import { PageHero } from "../layout/PageHero.jsx";
 import { RouteLink } from "../layout/Layout.jsx";
 
+const emptyProfileForm = {
+  firstName: "",
+  lastName: "",
+  company: "",
+  phone: "",
+  email: "",
+};
+
+const emptyPasswordForm = {
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+};
+
 export function CustomerPortalPage({ currentPath, onNavigate }) {
   const [authMode, setAuthMode] = useState("register");
   const [customer, setCustomer] = useState(null);
@@ -22,7 +40,18 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
   const [messageType, setMessageType] = useState("success");
   const [orders, setOrders] = useState([]);
   const [ordersStatus, setOrdersStatus] = useState("idle");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [profileForm, setProfileForm] = useState(emptyProfileForm);
+  const [profileStatus, setProfileStatus] = useState("idle");
+  const [profileMessage, setProfileMessage] = useState("");
+  const [profileMessageType, setProfileMessageType] = useState("success");
+  const [passwordForm, setPasswordForm] = useState(emptyPasswordForm);
+  const [passwordStatus, setPasswordStatus] = useState("idle");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [passwordMessageType, setPasswordMessageType] = useState("success");
   const isSubmitting = status === "submitting";
+  const isProfileSubmitting = profileStatus === "submitting";
+  const isPasswordSubmitting = passwordStatus === "submitting";
 
   useEffect(() => {
     let ignore = false;
@@ -58,6 +87,23 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
       ignore = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!customer) {
+      setProfileForm(emptyProfileForm);
+      setPasswordForm(emptyPasswordForm);
+      return;
+    }
+
+    setProfileForm({
+      firstName: customer.firstName || "",
+      lastName: customer.lastName || "",
+      company: customer.company || "",
+      phone: customer.phone || "",
+      email: customer.email || "",
+    });
+    setPasswordForm(emptyPasswordForm);
+  }, [customer]);
 
   useEffect(() => {
     if (!customer) {
@@ -101,6 +147,22 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
     setAuthMode(nextMode);
     setMessage("");
     setMessageType("success");
+  }
+
+  function handleProfileChange(event) {
+    const { name, value } = event.currentTarget;
+    setProfileForm((currentForm) => ({
+      ...currentForm,
+      [name]: value,
+    }));
+  }
+
+  function handlePasswordChange(event) {
+    const { name, value } = event.currentTarget;
+    setPasswordForm((currentForm) => ({
+      ...currentForm,
+      [name]: value,
+    }));
   }
 
   async function handleAuthSubmit(event) {
@@ -161,6 +223,83 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
     }
   }
 
+  async function handleProfileSubmit(event) {
+    event.preventDefault();
+    setProfileStatus("submitting");
+    setProfileMessage("");
+
+    try {
+      const response = await fetch("/api/auth/me", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(profileForm),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload.user) {
+        throw new Error(payload.error || "Impossible de modifier vos informations.");
+      }
+
+      setCustomer(payload.user);
+      setProfileStatus("idle");
+      setProfileMessageType("success");
+      setProfileMessage("Vos informations ont été enregistrées.");
+    } catch (error) {
+      setProfileStatus("idle");
+      setProfileMessageType("error");
+      setProfileMessage(
+        error instanceof Error
+          ? error.message
+          : "Impossible de modifier vos informations pour le moment.",
+      );
+    }
+  }
+
+  async function handlePasswordSubmit(event) {
+    event.preventDefault();
+    setPasswordMessage("");
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setPasswordMessageType("error");
+      setPasswordMessage("Les nouveaux mots de passe ne correspondent pas.");
+      return;
+    }
+
+    setPasswordStatus("submitting");
+
+    try {
+      const response = await fetch("/api/auth/password", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(passwordForm),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Impossible de modifier votre mot de passe.");
+      }
+
+      setPasswordForm(emptyPasswordForm);
+      setPasswordStatus("idle");
+      setPasswordMessageType("success");
+      setPasswordMessage("Votre mot de passe a été modifié.");
+    } catch (error) {
+      setPasswordStatus("idle");
+      setPasswordMessageType("error");
+      setPasswordMessage(
+        error instanceof Error
+          ? error.message
+          : "Impossible de modifier votre mot de passe pour le moment.",
+      );
+    }
+  }
+
   return (
     <>
       <PageHero
@@ -168,39 +307,59 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
         text="Créez votre compte, retrouvez vos informations et préparez vos prochaines demandes."
       />
       <section className="section customer-section">
-        <div className="container customer-shell">
-          <div className="customer-intro">
-            <h2>Votre compte Aération Ventilation</h2>
-            <p>
-              Un espace simple pour centraliser les coordonnées client, les demandes de devis et le
-              suivi des échanges commerciaux.
-            </p>
-            <div className="customer-benefits">
-              <span>
-                <ShieldCheck size={18} />
-                Session sécurisée
-              </span>
-              <span>
-                <ClipboardList size={18} />
-                Demandes centralisées
-              </span>
-              <span>
-                <Building2 size={18} />
-                Profil entreprise
-              </span>
+        <div className={`container customer-shell${customer ? " customer-shell--dashboard" : ""}`}>
+          {!customer && (
+            <div className="customer-intro">
+              <h2>Votre compte Aération Ventilation</h2>
+              <p>
+                Un espace simple pour centraliser les coordonnées client, les demandes de devis et le
+                suivi des échanges commerciaux.
+              </p>
+              <div className="customer-benefits">
+                <span>
+                  <ShieldCheck size={18} />
+                  Session sécurisée
+                </span>
+                <span>
+                  <ClipboardList size={18} />
+                  Demandes centralisées
+                </span>
+                <span>
+                  <Building2 size={18} />
+                  Profil entreprise
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
           {customer ? (
             <div className="customer-dashboard" aria-live="polite">
               <div className="customer-dashboard-head">
-                <div className="customer-avatar" aria-hidden="true">
-                  {getCustomerInitials(customer)}
-                </div>
-                <div>
-                  <span>Connecté</span>
-                  <h2>Bonjour {customer.firstName}</h2>
-                  <p>{customer.email}</p>
+                <div className="customer-dashboard-copy">
+                  <div className="customer-identity">
+                    <div className="customer-avatar" aria-hidden="true">
+                      {getCustomerInitials(customer)}
+                    </div>
+                    <div>
+                      <span className="customer-status">Connecté</span>
+                      <h2>Bonjour {customer.firstName}</h2>
+                      <p>{customer.email}</p>
+                    </div>
+                  </div>
+                  <div className="customer-session-points" aria-label="Services de l'espace client">
+                    <span>
+                      <ShieldCheck size={17} />
+                      Session sécurisée
+                    </span>
+                    <span>
+                      <ClipboardList size={17} />
+                      Demandes centralisées
+                    </span>
+                    <span>
+                      <Building2 size={17} />
+                      Profil entreprise
+                    </span>
+                  </div>
                 </div>
                 <button className="button button-dark" type="button" onClick={handleLogout}>
                   <LogOut size={18} />
@@ -208,18 +367,35 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
                 </button>
               </div>
               <div className="customer-dashboard-grid">
-                <article>
-                  <UserRound size={28} />
-                  <h3>Profil client</h3>
-                  <p>
-                    {customer.firstName} {customer.lastName}
-                    {customer.company ? ` - ${customer.company}` : ""}
-                  </p>
-                  <span>Compte créé le {formatCustomerDate(customer.createdAt)}</span>
+                <article className="customer-profile-card">
+                  <div className="customer-card-title">
+                    <UserRound size={26} />
+                    <h3>Profil client</h3>
+                  </div>
+                  <dl className="customer-profile-list">
+                    <div>
+                      <dt>Nom</dt>
+                      <dd>
+                        {customer.firstName} {customer.lastName}
+                      </dd>
+                    </div>
+                    {customer.company && (
+                      <div>
+                        <dt>Société</dt>
+                        <dd>{customer.company}</dd>
+                      </div>
+                    )}
+                    <div>
+                      <dt>Compte créé</dt>
+                      <dd>{formatCustomerDate(customer.createdAt)}</dd>
+                    </div>
+                  </dl>
                 </article>
-                <article>
-                  <ClipboardList size={28} />
-                  <h3>Demandes de devis</h3>
+                <article className="customer-action-card">
+                  <div className="customer-card-title">
+                    <ClipboardList size={26} />
+                    <h3>Demandes de devis</h3>
+                  </div>
                   <p>Préparez une nouvelle demande avec vos coordonnées déjà prêtes.</p>
                   <RouteLink
                     className="customer-card-link"
@@ -231,9 +407,11 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
                     <ArrowRight size={16} />
                   </RouteLink>
                 </article>
-                <article>
-                  <ShoppingCart size={28} />
-                  <h3>Commandes</h3>
+                <article className="customer-action-card">
+                  <div className="customer-card-title">
+                    <ShoppingCart size={26} />
+                    <h3>Commandes</h3>
+                  </div>
                   <p>
                     {ordersStatus === "loading"
                       ? "Chargement des commandes..."
@@ -252,6 +430,20 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
                   </RouteLink>
                 </article>
               </div>
+              <CustomerAccountSettings
+                profileForm={profileForm}
+                profileMessage={profileMessage}
+                profileMessageType={profileMessageType}
+                isProfileSubmitting={isProfileSubmitting}
+                passwordForm={passwordForm}
+                passwordMessage={passwordMessage}
+                passwordMessageType={passwordMessageType}
+                isPasswordSubmitting={isPasswordSubmitting}
+                onProfileChange={handleProfileChange}
+                onProfileSubmit={handleProfileSubmit}
+                onPasswordChange={handlePasswordChange}
+                onPasswordSubmit={handlePasswordSubmit}
+              />
               <CustomerOrders orders={orders} status={ordersStatus} />
               {message && (
                 <p className={messageType === "error" ? "form-error" : "form-success"} role="status">
@@ -316,16 +508,32 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
                     Email
                     <input name="email" type="email" required autoComplete="email" />
                   </label>
-                  <label>
-                    Mot de passe
-                    <input
-                      name="password"
-                      type="password"
-                      required
-                      minLength={8}
-                      autoComplete={authMode === "register" ? "new-password" : "current-password"}
-                    />
-                  </label>
+                  <div className="customer-field">
+                    <label htmlFor="customer-password">Mot de passe</label>
+                    <div className="customer-password-field">
+                      <input
+                        id="customer-password"
+                        name="password"
+                        type={isPasswordVisible ? "text" : "password"}
+                        required
+                        minLength={8}
+                        autoComplete={authMode === "register" ? "new-password" : "current-password"}
+                      />
+                      <button
+                        className="customer-password-toggle"
+                        type="button"
+                        aria-label={
+                          isPasswordVisible
+                            ? "Masquer le mot de passe"
+                            : "Afficher le mot de passe"
+                        }
+                        aria-pressed={isPasswordVisible}
+                        onClick={() => setIsPasswordVisible((visible) => !visible)}
+                      >
+                        {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                  </div>
                   <p className="auth-note">Mot de passe de 8 caractères minimum.</p>
                   <button className="button button-primary" type="submit" disabled={isSubmitting}>
                     {isSubmitting
@@ -350,6 +558,161 @@ export function CustomerPortalPage({ currentPath, onNavigate }) {
         </div>
       </section>
     </>
+  );
+}
+
+function CustomerAccountSettings({
+  profileForm,
+  profileMessage,
+  profileMessageType,
+  isProfileSubmitting,
+  passwordForm,
+  passwordMessage,
+  passwordMessageType,
+  isPasswordSubmitting,
+  onProfileChange,
+  onProfileSubmit,
+  onPasswordChange,
+  onPasswordSubmit,
+}) {
+  return (
+    <section className="customer-account-panel" aria-labelledby="customer-account-title">
+      <div className="customer-account-head">
+        <div>
+          <h3 id="customer-account-title">Mes informations personnelles</h3>
+          <p>Modifiez vos coordonnées de contact et votre mot de passe de connexion.</p>
+        </div>
+      </div>
+
+      <div className="customer-account-forms">
+        <form className="customer-account-form" onSubmit={onProfileSubmit}>
+          <div className="customer-form-title">
+            <UserRound size={22} />
+            <h4>Coordonnées</h4>
+          </div>
+          <div className="field-row">
+            <label>
+              Prénom
+              <input
+                name="firstName"
+                value={profileForm.firstName}
+                required
+                autoComplete="given-name"
+                onChange={onProfileChange}
+              />
+            </label>
+            <label>
+              Nom
+              <input
+                name="lastName"
+                value={profileForm.lastName}
+                required
+                autoComplete="family-name"
+                onChange={onProfileChange}
+              />
+            </label>
+          </div>
+          <div className="field-row">
+            <label>
+              Société
+              <input
+                name="company"
+                value={profileForm.company}
+                autoComplete="organization"
+                onChange={onProfileChange}
+              />
+            </label>
+            <label>
+              Téléphone
+              <input
+                name="phone"
+                value={profileForm.phone}
+                autoComplete="tel"
+                onChange={onProfileChange}
+              />
+            </label>
+          </div>
+          <label>
+            Email
+            <input
+              name="email"
+              type="email"
+              value={profileForm.email}
+              required
+              autoComplete="email"
+              onChange={onProfileChange}
+            />
+          </label>
+          <button className="button button-primary" type="submit" disabled={isProfileSubmitting}>
+            <Save size={18} />
+            {isProfileSubmitting ? "Enregistrement..." : "Enregistrer mes informations"}
+          </button>
+          {profileMessage && (
+            <p
+              className={profileMessageType === "error" ? "form-error" : "form-success"}
+              role={profileMessageType === "error" ? "alert" : "status"}
+            >
+              {profileMessage}
+            </p>
+          )}
+        </form>
+
+        <form className="customer-account-form" onSubmit={onPasswordSubmit}>
+          <div className="customer-form-title">
+            <KeyRound size={22} />
+            <h4>Mot de passe</h4>
+          </div>
+          <label>
+            Mot de passe actuel
+            <input
+              name="currentPassword"
+              type="password"
+              value={passwordForm.currentPassword}
+              required
+              autoComplete="current-password"
+              onChange={onPasswordChange}
+            />
+          </label>
+          <label>
+            Nouveau mot de passe
+            <input
+              name="newPassword"
+              type="password"
+              value={passwordForm.newPassword}
+              required
+              minLength={8}
+              autoComplete="new-password"
+              onChange={onPasswordChange}
+            />
+          </label>
+          <label>
+            Confirmer le nouveau mot de passe
+            <input
+              name="confirmPassword"
+              type="password"
+              value={passwordForm.confirmPassword}
+              required
+              minLength={8}
+              autoComplete="new-password"
+              onChange={onPasswordChange}
+            />
+          </label>
+          <p className="auth-note">Utilisez au moins 8 caractères.</p>
+          <button className="button button-dark" type="submit" disabled={isPasswordSubmitting}>
+            <KeyRound size={18} />
+            {isPasswordSubmitting ? "Modification..." : "Modifier le mot de passe"}
+          </button>
+          {passwordMessage && (
+            <p
+              className={passwordMessageType === "error" ? "form-error" : "form-success"}
+              role={passwordMessageType === "error" ? "alert" : "status"}
+            >
+              {passwordMessage}
+            </p>
+          )}
+        </form>
+      </div>
+    </section>
   );
 }
 

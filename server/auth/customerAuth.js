@@ -40,6 +40,148 @@ export function createCustomerAuthRouter() {
     }
   });
 
+  router.put("/me", async (request, response) => {
+    const configError = await getAuthConfigurationError();
+    if (configError) {
+      response.status(503).json({ error: configError });
+      return;
+    }
+
+    const customer = await getAuthenticatedCustomer(request);
+    if (!customer) {
+      response.status(401).json({ error: "Merci de vous connecter pour modifier votre profil." });
+      return;
+    }
+
+    const input = normalizeCustomerProfileInput(request.body);
+    if (input.error) {
+      response.status(400).json({ error: input.error });
+      return;
+    }
+
+    try {
+      const result = await dbPool.query(
+        `
+          UPDATE customer_accounts
+          SET
+            first_name = $1,
+            last_name = $2,
+            company = $3,
+            phone = $4,
+            email = $5,
+            updated_at = NOW()
+          WHERE public_id = $6
+          RETURNING public_id, first_name, last_name, company, phone, email, created_at
+        `,
+        [
+          input.firstName,
+          input.lastName,
+          input.company,
+          input.phone,
+          input.email,
+          customer.id,
+        ],
+      );
+
+      if (result.rowCount === 0) {
+        response.status(404).json({ error: "Compte client introuvable." });
+        return;
+      }
+
+      const updatedCustomer = serializeCustomer(result.rows[0]);
+      setAuthCookie(response, createAuthToken(updatedCustomer));
+      response.status(200).json({ user: updatedCustomer });
+    } catch (error) {
+      if (error?.code === "23505") {
+        response.status(409).json({ error: "Un compte existe déjà avec cette adresse email." });
+        return;
+      }
+
+      console.error("Customer profile update failed:", error);
+      response.status(500).json({ error: "Impossible de modifier le profil pour le moment." });
+    }
+  });
+
+  router.put("/password", async (request, response) => {
+    const configError = await getAuthConfigurationError();
+    if (configError) {
+      response.status(503).json({ error: configError });
+      return;
+    }
+
+    const customer = await getAuthenticatedCustomer(request);
+    if (!customer) {
+      response
+        .status(401)
+        .json({ error: "Merci de vous connecter pour modifier votre mot de passe." });
+      return;
+    }
+
+    const currentPassword =
+      typeof request.body?.currentPassword === "string" ? request.body.currentPassword : "";
+    const newPassword = typeof request.body?.newPassword === "string" ? request.body.newPassword : "";
+    const confirmPassword =
+      typeof request.body?.confirmPassword === "string" ? request.body.confirmPassword : "";
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      response.status(400).json({ error: "Merci de compléter tous les champs mot de passe." });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      response.status(400).json({ error: "Les nouveaux mots de passe ne correspondent pas." });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      response.status(400).json({ error: "Le mot de passe doit contenir au moins 8 caractères." });
+      return;
+    }
+
+    if (currentPassword.length > maxPasswordLength || newPassword.length > maxPasswordLength) {
+      response.status(400).json({ error: "Le mot de passe ne doit pas dépasser 128 caractères." });
+      return;
+    }
+
+    try {
+      const accountResult = await dbPool.query(
+        `
+          SELECT password_hash, password_salt
+          FROM customer_accounts
+          WHERE public_id = $1
+          LIMIT 1
+        `,
+        [customer.id],
+      );
+      const account = accountResult.rows[0];
+
+      if (
+        !account ||
+        !(await verifyPassword(currentPassword, account.password_salt, account.password_hash))
+      ) {
+        response.status(401).json({ error: "Mot de passe actuel incorrect." });
+        return;
+      }
+
+      const { hash, salt } = await hashPassword(newPassword);
+      await dbPool.query(
+        `
+          UPDATE customer_accounts
+          SET password_hash = $1, password_salt = $2, updated_at = NOW()
+          WHERE public_id = $3
+        `,
+        [hash, salt, customer.id],
+      );
+
+      response.status(200).json({ ok: true });
+    } catch (error) {
+      console.error("Customer password update failed:", error);
+      response
+        .status(500)
+        .json({ error: "Impossible de modifier le mot de passe pour le moment." });
+    }
+  });
+
   router.post("/register", customerRegisterRateLimiter, async (request, response) => {
     const configError = await getAuthConfigurationError();
     if (configError) {
@@ -270,6 +412,30 @@ function setAuthCookie(response, token) {
 
 function clearAuthCookie(response) {
   clearHttpOnlyCookie(response, authCookieName);
+}
+
+function normalizeCustomerProfileInput(body) {
+  const firstName = cleanSingleLine(body?.firstName, 80);
+  const lastName = cleanSingleLine(body?.lastName, 80);
+  const company = cleanSingleLine(body?.company, 120);
+  const phone = cleanSingleLine(body?.phone, 80);
+  const email = normalizeEmail(body?.email);
+
+  if (!firstName || !lastName || !email) {
+    return { error: "Merci de compléter les champs obligatoires." };
+  }
+
+  if (!isValidEmail(email)) {
+    return { error: "Merci d'indiquer une adresse email valide." };
+  }
+
+  return {
+    firstName,
+    lastName,
+    company,
+    phone,
+    email,
+  };
 }
 
 function serializeCustomer(row) {
