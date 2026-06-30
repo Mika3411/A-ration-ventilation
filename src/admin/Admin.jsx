@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import {
   ArrowUpDown,
+  BadgePercent,
   Building2,
   CalendarClock,
   Check,
@@ -48,6 +49,7 @@ const emptyAdminProductForm = {
   amount: "",
   description: "",
   options: [],
+  quantityDiscounts: [],
   imageKey: "ductFan",
   imageUrl: "",
   imageData: "",
@@ -66,6 +68,15 @@ const emptyAdminMemberForm = {
   email: "",
 };
 
+const emptyAdminPromoCodeForm = {
+  code: "",
+  percent: "",
+  minimumAmount: "",
+  startsAt: "",
+  endsAt: "",
+  active: true,
+};
+
 const dateFormatter = new Intl.DateTimeFormat("fr-FR", {
   dateStyle: "medium",
 });
@@ -79,6 +90,7 @@ function getAdminProductForm(product) {
     amount: String(product.amount / 100),
     description: product.description || product.text,
     options: getAdminProductOptionForm(product.options),
+    quantityDiscounts: getAdminQuantityDiscountForm(product.quantityDiscounts),
     imageKey: product.imageKey || "ductFan",
     imageUrl: product.imageUrl || "",
     imageData: product.imageData || "",
@@ -88,6 +100,15 @@ function getAdminProductForm(product) {
     active: product.active !== false,
     sortOrder: String(product.sortOrder || 0),
   };
+}
+
+function getAdminQuantityDiscountForm(discounts) {
+  if (!Array.isArray(discounts)) return [];
+
+  return discounts.map((discount) => ({
+    minQuantity: String(discount.minQuantity || ""),
+    percent: String(discount.percent || "").replace(".", ","),
+  }));
 }
 
 function getAdminProductOptionForm(options) {
@@ -101,6 +122,13 @@ function getAdminProductOptionForm(options) {
     slug: option.slug || "",
     value: option.value || "",
   }));
+}
+
+function createEmptyQuantityDiscountForm() {
+  return {
+    minQuantity: "",
+    percent: "",
+  };
 }
 
 function createEmptyProductOptionForm() {
@@ -119,6 +147,11 @@ function parseEuroAmountToCents(value) {
   return Number.isFinite(amount) ? Math.round(amount * 100) : -1;
 }
 
+function parseDiscountPercent(value) {
+  const percent = Number.parseFloat(String(value).replace(",", "."));
+  return Number.isFinite(percent) ? Math.round(percent * 100) / 100 : -1;
+}
+
 function getAdminProductPayload(form) {
   return {
     name: form.name,
@@ -133,12 +166,42 @@ function getAdminProductPayload(form) {
       slug: option.slug,
       value: option.value,
     })),
+    quantityDiscounts: form.quantityDiscounts
+      .filter((discount) => String(discount.minQuantity || "").trim() || String(discount.percent || "").trim())
+      .map((discount) => ({
+        minQuantity: Number.parseInt(discount.minQuantity, 10),
+        percent: parseDiscountPercent(discount.percent),
+      })),
     imageKey: form.imageKey,
     imageUrl: form.imageUrl,
     imageData: form.imageData,
     featured: form.featured,
     active: form.active,
     sortOrder: Number.parseInt(form.sortOrder, 10) || 0,
+  };
+}
+
+function getAdminPromoCodeForm(promoCode) {
+  if (!promoCode) return emptyAdminPromoCodeForm;
+
+  return {
+    code: promoCode.code || "",
+    percent: String(promoCode.percent || "").replace(".", ","),
+    minimumAmount: promoCode.minimumAmount ? String(promoCode.minimumAmount / 100).replace(".", ",") : "",
+    startsAt: formatAdminDateTimeInput(promoCode.startsAt),
+    endsAt: formatAdminDateTimeInput(promoCode.endsAt),
+    active: promoCode.active !== false,
+  };
+}
+
+function getAdminPromoCodePayload(form) {
+  return {
+    code: form.code,
+    percent: parseDiscountPercent(form.percent),
+    minimumAmount: form.minimumAmount ? parseEuroAmountToCents(form.minimumAmount) : 0,
+    startsAt: form.startsAt,
+    endsAt: form.endsAt,
+    active: form.active,
   };
 }
 
@@ -266,6 +329,22 @@ function formatAdminDate(value) {
   if (Number.isNaN(date.getTime())) return "Non renseigné";
 
   return dateFormatter.format(date);
+}
+
+function formatAdminDateTimeInput(value) {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
+  return offsetDate.toISOString().slice(0, 16);
+}
+
+function formatAdminPercent(value) {
+  const percent = Number.parseFloat(String(value).replace(",", "."));
+  if (!Number.isFinite(percent)) return "";
+  return Number.isInteger(percent) ? `${percent}%` : `${String(percent).replace(".", ",")}%`;
 }
 
 export function AdminPage({ onProductsChanged }) {
@@ -595,6 +674,34 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
     }));
   }
 
+  function addQuantityDiscount() {
+    setForm((currentForm) => ({
+      ...currentForm,
+      quantityDiscounts: [
+        ...currentForm.quantityDiscounts,
+        createEmptyQuantityDiscountForm(),
+      ],
+    }));
+  }
+
+  function updateQuantityDiscount(index, field, value) {
+    setForm((currentForm) => ({
+      ...currentForm,
+      quantityDiscounts: currentForm.quantityDiscounts.map((discount, discountIndex) =>
+        discountIndex === index ? { ...discount, [field]: value } : discount,
+      ),
+    }));
+  }
+
+  function removeQuantityDiscount(index) {
+    setForm((currentForm) => ({
+      ...currentForm,
+      quantityDiscounts: currentForm.quantityDiscounts.filter(
+        (_, discountIndex) => discountIndex !== index,
+      ),
+    }));
+  }
+
   async function importProductImage(event) {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -684,7 +791,7 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
 
       setStatus("ready");
       await loadAdminProducts("");
-      setMessage("Produit supprimé.");
+      setMessage("Produit retiré de la boutique.");
       await onProductsChanged();
     } catch (error) {
       setStatus("ready");
@@ -768,6 +875,14 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
             >
               <Users size={18} />
               Membres
+            </button>
+            <button
+              className={activeView === "promo-codes" ? "is-active" : ""}
+              type="button"
+              onClick={() => setActiveView("promo-codes")}
+            >
+              <BadgePercent size={18} />
+              Codes promo
             </button>
           </div>
           <button className="button button-dark" type="button" onClick={onLogout}>
@@ -1128,6 +1243,88 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
                     <p className="admin-variant-empty">Ce produit utilise seulement le prix principal.</p>
                   )}
                 </section>
+                <section
+                  className="admin-variant-section admin-wide-field"
+                  aria-label="Remises quantité"
+                >
+                  <div className="admin-variant-head">
+                    <div>
+                      <span>Remises quantité</span>
+                      <strong>
+                        {form.quantityDiscounts.length
+                          ? `${form.quantityDiscounts.length} palier${
+                              form.quantityDiscounts.length > 1 ? "s" : ""
+                            }`
+                          : "Aucune remise"}
+                      </strong>
+                    </div>
+                    <button type="button" onClick={addQuantityDiscount} disabled={isSaving}>
+                      <Plus size={18} />
+                      Ajouter une remise
+                    </button>
+                  </div>
+                  {form.quantityDiscounts.length > 0 ? (
+                    <div className="admin-variant-list">
+                      {form.quantityDiscounts.map((discount, index) => (
+                        <article
+                          className="admin-variant-card"
+                          key={`quantity-discount-${index}`}
+                        >
+                          <div className="admin-variant-card-head">
+                            <strong>Palier {index + 1}</strong>
+                            <button
+                              type="button"
+                              onClick={() => removeQuantityDiscount(index)}
+                              disabled={isSaving}
+                              aria-label={`Supprimer le palier ${index + 1}`}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                          <div className="admin-discount-grid">
+                            <label>
+                              <AdminFieldLabel
+                                label="Quantité min."
+                                help="La remise s'applique à partir de cette quantité dans le panier, par exemple 5."
+                              />
+                              <input
+                                value={discount.minQuantity}
+                                onChange={(event) =>
+                                  updateQuantityDiscount(index, "minQuantity", event.target.value)
+                                }
+                                inputMode="numeric"
+                                required
+                              />
+                            </label>
+                            <label>
+                              <AdminFieldLabel
+                                label="Remise %"
+                                help="Pourcentage de réduction appliqué au prix unitaire, par exemple 10 pour -10%."
+                              />
+                              <input
+                                value={discount.percent}
+                                onChange={(event) =>
+                                  updateQuantityDiscount(index, "percent", event.target.value)
+                                }
+                                inputMode="decimal"
+                                required
+                              />
+                            </label>
+                            <p>
+                              À partir de {discount.minQuantity || "..."} pièce
+                              {discount.minQuantity === "1" ? "" : "s"} : -
+                              {discount.percent || "..."}%
+                            </p>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="admin-variant-empty">
+                      Ajoute un palier pour appliquer une réduction automatique selon la quantité.
+                    </p>
+                  )}
+                </section>
                 <div className="admin-toggle-row">
                   <label>
                     <input
@@ -1174,10 +1371,343 @@ function AdminProductsManager({ admin, onLogout, onProductsChanged }) {
             />
           </div>
         </>
-      ) : (
+      ) : activeView === "members" ? (
         <AdminMembersManager />
+      ) : (
+        <AdminPromoCodesManager />
       )}
     </div>
+  );
+}
+
+function AdminPromoCodesManager() {
+  const [promoCodes, setPromoCodes] = useState([]);
+  const [selectedCode, setSelectedCode] = useState("");
+  const [form, setForm] = useState(emptyAdminPromoCodeForm);
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("loading");
+  const [message, setMessage] = useState("");
+  const selectedPromoCode =
+    promoCodes.find((promoCode) => promoCode.code === selectedCode) || null;
+  const isSaving = status === "saving";
+
+  const filteredPromoCodes = useMemo(() => {
+    const normalizedQuery = normalizeAdminSearchValue(query.trim());
+    if (!normalizedQuery) return promoCodes;
+
+    return promoCodes.filter((promoCode) =>
+      normalizeAdminSearchValue(
+        [
+          promoCode.code,
+          `${promoCode.percent}%`,
+          promoCode.active ? "actif" : "inactif",
+          promoCode.minimumAmountLabel,
+        ]
+          .filter(Boolean)
+          .join(" "),
+      ).includes(normalizedQuery),
+    );
+  }, [promoCodes, query]);
+
+  useEffect(() => {
+    loadPromoCodes();
+  }, []);
+
+  async function loadPromoCodes(nextSelectedCode = selectedCode) {
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/admin/promo-codes");
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Impossible de charger les codes promo.");
+      }
+
+      const loadedPromoCodes = Array.isArray(payload.promoCodes) ? payload.promoCodes : [];
+      const nextPromoCode =
+        loadedPromoCodes.find((promoCode) => promoCode.code === nextSelectedCode) ||
+        loadedPromoCodes[0] ||
+        null;
+
+      setPromoCodes(loadedPromoCodes);
+      setSelectedCode(nextPromoCode?.code || "");
+      setForm(getAdminPromoCodeForm(nextPromoCode));
+      setStatus("ready");
+    } catch (error) {
+      setStatus("error");
+      setMessage(error instanceof Error ? error.message : "Impossible de charger les codes promo.");
+    }
+  }
+
+  function selectPromoCode(promoCode) {
+    setSelectedCode(promoCode.code);
+    setForm(getAdminPromoCodeForm(promoCode));
+    setMessage("");
+  }
+
+  function createNewPromoCode() {
+    setSelectedCode("");
+    setForm(emptyAdminPromoCodeForm);
+    setMessage("");
+  }
+
+  function updatePromoForm(field, value) {
+    setForm((currentForm) => ({
+      ...currentForm,
+      [field]: value,
+    }));
+  }
+
+  async function savePromoCode(event) {
+    event.preventDefault();
+    setStatus("saving");
+    setMessage("");
+
+    try {
+      const response = await fetch(
+        selectedCode ? `/api/admin/promo-codes/${selectedCode}` : "/api/admin/promo-codes",
+        {
+          method: selectedCode ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(getAdminPromoCodePayload(form)),
+        },
+      );
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Impossible d'enregistrer le code promo.");
+      }
+
+      setStatus("ready");
+      await loadPromoCodes(payload.promoCode?.code);
+      setMessage("Code promo enregistré.");
+    } catch (error) {
+      setStatus("ready");
+      setMessage(error instanceof Error ? error.message : "Impossible d'enregistrer le code promo.");
+    }
+  }
+
+  async function deleteSelectedPromoCode() {
+    if (!selectedPromoCode) return;
+
+    const confirmed = window.confirm(`Supprimer le code promo ${selectedPromoCode.code} ?`);
+    if (!confirmed) return;
+
+    setStatus("saving");
+    setMessage("");
+
+    try {
+      const response = await fetch(`/api/admin/promo-codes/${selectedPromoCode.code}`, {
+        method: "DELETE",
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Impossible de supprimer le code promo.");
+      }
+
+      setStatus("ready");
+      await loadPromoCodes("");
+      setMessage("Code promo supprimé.");
+    } catch (error) {
+      setStatus("ready");
+      setMessage(error instanceof Error ? error.message : "Impossible de supprimer le code promo.");
+    }
+  }
+
+  return (
+    <section className="admin-promo-panel" aria-label="Gestion des codes promo">
+      <div className="admin-members-head admin-promo-head">
+        <div>
+          <span>Réductions</span>
+          <h2>Codes promo</h2>
+        </div>
+        <label className="admin-member-search">
+          <Search size={18} />
+          <span className="sr-only">Rechercher un code promo</span>
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Rechercher un code..."
+          />
+        </label>
+      </div>
+
+      {message && (
+        <p
+          className={
+            message.includes("Impossible") ||
+            message.includes("obligatoire") ||
+            message.includes("valable") ||
+            message.includes("invalide") ||
+            message.includes("existe déjà")
+              ? "form-error"
+              : "form-success"
+          }
+        >
+          {message}
+        </p>
+      )}
+
+      <div className="admin-promo-shell">
+        <aside className="admin-promo-list" aria-label="Codes promo enregistrés">
+          <div className="admin-product-list-head">
+            <h2>Codes</h2>
+            <button type="button" onClick={createNewPromoCode} aria-label="Ajouter un code promo">
+              <BadgePercent size={20} />
+            </button>
+          </div>
+          {status === "loading" && <p className="admin-empty-state">Chargement des codes promo...</p>}
+          {status === "error" && !promoCodes.length && (
+            <p className="admin-empty-state">Impossible de charger les codes promo.</p>
+          )}
+          {status !== "loading" && !promoCodes.length && (
+            <p className="admin-empty-state">Aucun code promo créé pour le moment.</p>
+          )}
+          {status !== "loading" &&
+            filteredPromoCodes.map((promoCode) => (
+              <button
+                className={selectedCode === promoCode.code ? "is-selected" : ""}
+                type="button"
+                key={promoCode.code}
+                onClick={() => selectPromoCode(promoCode)}
+              >
+                <span>
+                  <strong>{promoCode.code}</strong>
+                  <small>
+                    -{formatAdminPercent(promoCode.percent)}
+                    {promoCode.minimumAmount > 0
+                      ? ` dès ${promoCode.minimumAmountLabel}`
+                      : " sans minimum"}
+                  </small>
+                </span>
+                <em>{promoCode.active ? "Actif" : "Inactif"}</em>
+              </button>
+            ))}
+          {status !== "loading" && promoCodes.length > 0 && filteredPromoCodes.length === 0 && (
+            <p className="admin-empty-state">Aucun code promo ne correspond à cette recherche.</p>
+          )}
+        </aside>
+
+        <form className="admin-promo-form" onSubmit={savePromoCode}>
+          <div className="admin-form-head">
+            <div>
+              <span>{selectedCode || "nouveau-code"}</span>
+              <h2>{selectedCode ? "Modifier le code promo" : "Créer un code promo"}</h2>
+            </div>
+            <div className="admin-form-actions">
+              {selectedPromoCode && (
+                <button
+                  className="button button-dark"
+                  type="button"
+                  onClick={deleteSelectedPromoCode}
+                  disabled={isSaving}
+                >
+                  <Trash2 size={18} />
+                  Supprimer
+                </button>
+              )}
+              <button className="button button-primary" type="submit" disabled={isSaving}>
+                <Save size={18} />
+                {isSaving ? "Enregistrement..." : "Enregistrer"}
+              </button>
+            </div>
+          </div>
+
+          <div className="admin-form-grid">
+            <label>
+              <AdminFieldLabel
+                label="Code"
+                help="Code saisi par le client dans le panier. Lettres, chiffres, tiret ou underscore."
+              />
+              <input
+                value={form.code}
+                onChange={(event) => updatePromoForm("code", event.target.value.toUpperCase())}
+                placeholder="PRO10"
+                required
+              />
+            </label>
+            <label>
+              <AdminFieldLabel
+                label="Remise %"
+                help="Pourcentage appliqué au panier après les remises quantité."
+              />
+              <input
+                value={form.percent}
+                onChange={(event) => updatePromoForm("percent", event.target.value)}
+                inputMode="decimal"
+                placeholder="10"
+                required
+              />
+            </label>
+            <label>
+              <AdminFieldLabel
+                label="Minimum EUR"
+                help="Montant minimum du panier avant le code promo. Laissez vide pour aucun minimum."
+              />
+              <input
+                value={form.minimumAmount}
+                onChange={(event) => updatePromoForm("minimumAmount", event.target.value)}
+                inputMode="decimal"
+                placeholder="100"
+              />
+            </label>
+            <label>
+              <AdminFieldLabel
+                label="Début"
+                help="Optionnel. Le code ne sera utilisable qu'à partir de cette date."
+              />
+              <input
+                value={form.startsAt}
+                onChange={(event) => updatePromoForm("startsAt", event.target.value)}
+                type="datetime-local"
+              />
+            </label>
+            <label>
+              <AdminFieldLabel
+                label="Fin"
+                help="Optionnel. Après cette date, le code sera refusé automatiquement."
+              />
+              <input
+                value={form.endsAt}
+                onChange={(event) => updatePromoForm("endsAt", event.target.value)}
+                type="datetime-local"
+              />
+            </label>
+            <div className="admin-toggle-row">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={form.active}
+                  onChange={(event) => updatePromoForm("active", event.target.checked)}
+                />
+                <span>Code actif</span>
+                <AdminHelpTooltip text="Décoche pour garder le code en admin sans permettre son utilisation." />
+              </label>
+            </div>
+          </div>
+
+          <div className="admin-promo-preview">
+            <BadgePercent size={22} />
+            <div>
+              <span>Aperçu</span>
+              <strong>
+                {form.code || "CODE"} -{formatAdminPercent(form.percent) || "..."}
+              </strong>
+              <p>
+                {form.minimumAmount
+                  ? `Valable à partir de ${form.minimumAmount} € de panier.`
+                  : "Valable sans minimum de panier."}
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 }
 

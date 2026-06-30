@@ -65,6 +65,7 @@ async function initializeDatabase() {
       description TEXT NOT NULL DEFAULT '',
       amount INTEGER NOT NULL CHECK (amount >= 0),
       options JSONB NOT NULL DEFAULT '[]'::jsonb,
+      quantity_discounts JSONB NOT NULL DEFAULT '[]'::jsonb,
       image_key TEXT NOT NULL DEFAULT 'ductFan',
       image_url TEXT NOT NULL DEFAULT '',
       image_data TEXT NOT NULL DEFAULT '',
@@ -93,6 +94,11 @@ async function initializeDatabase() {
   `);
 
   await dbPool.query(`
+    ALTER TABLE shop_products
+    ADD COLUMN IF NOT EXISTS quantity_discounts JSONB NOT NULL DEFAULT '[]'::jsonb
+  `);
+
+  await dbPool.query(`
     CREATE TABLE IF NOT EXISTS shop_categories (
       id BIGSERIAL PRIMARY KEY,
       name TEXT NOT NULL UNIQUE,
@@ -103,6 +109,26 @@ async function initializeDatabase() {
 
     CREATE INDEX IF NOT EXISTS shop_categories_sort_idx
       ON shop_categories (sort_order, name);
+  `);
+
+  await dbPool.query(`
+    CREATE TABLE IF NOT EXISTS promo_codes (
+      id BIGSERIAL PRIMARY KEY,
+      code TEXT NOT NULL UNIQUE,
+      percent NUMERIC(5,2) NOT NULL CHECK (percent > 0 AND percent <= 99.99),
+      minimum_amount INTEGER NOT NULL DEFAULT 0 CHECK (minimum_amount >= 0),
+      starts_at TIMESTAMPTZ,
+      ends_at TIMESTAMPTZ,
+      active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
+    CREATE INDEX IF NOT EXISTS promo_codes_active_code_idx
+      ON promo_codes (active, code);
+
+    CREATE INDEX IF NOT EXISTS promo_codes_created_at_idx
+      ON promo_codes (created_at DESC);
   `);
 
   await dbPool.query(`
@@ -142,6 +168,7 @@ async function initializeDatabase() {
           description,
           amount,
           options,
+          quantity_discounts,
           image_key,
           image_url,
           image_data,
@@ -149,11 +176,8 @@ async function initializeDatabase() {
           active,
           sort_order
         )
-        VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11, $12)
-        ON CONFLICT (slug) DO UPDATE
-        SET options = EXCLUDED.options
-        WHERE shop_products.options = '[]'::jsonb
-          AND EXCLUDED.options <> '[]'::jsonb
+        VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7::jsonb, $8, $9, $10, $11, $12, $13)
+        ON CONFLICT (slug) DO NOTHING
       `,
       [
         product.slug,
@@ -162,6 +186,7 @@ async function initializeDatabase() {
         product.description,
         product.amount,
         JSON.stringify(product.options || []),
+        JSON.stringify(product.quantityDiscounts || []),
         product.imageKey,
         product.imageUrl,
         product.imageData || "",

@@ -1,3 +1,9 @@
+import {
+  getDiscountedLineTotal,
+  getDiscountedUnitAmount,
+  getQuantityDiscount,
+} from "../../shared/pricing.js";
+
 export const cartStorageKey = "aeration-ventilation-cart-v1";
 
 export function sanitizeCartItems(rawItems) {
@@ -32,7 +38,17 @@ export function getCartLines(products, cartItems) {
     .filter((line) => line.quantity > 0)
     .map((line) => ({
       ...line,
-      lineTotal: line.product.amount * line.quantity,
+      discount: getQuantityDiscount(line.product.quantityDiscounts, line.quantity),
+      unitAmount: getDiscountedUnitAmount(
+        line.product.amount,
+        line.quantity,
+        line.product.quantityDiscounts,
+      ),
+      lineTotal: getDiscountedLineTotal(
+        line.product.amount,
+        line.quantity,
+        line.product.quantityDiscounts,
+      ),
     }));
 }
 

@@ -5,6 +5,13 @@ import { getCategoryPath, slugifyCategory } from "../data/categories.js";
 import { getProductPath } from "../data/products.js";
 import { RouteLink } from "../layout/Layout.jsx";
 import { getProductCartQuantity } from "../panier/cart.js";
+import { formatEuroWithCents } from "../utils/format.js";
+import {
+  getDiscountedUnitAmount,
+  getQuantityDiscount,
+  maxCartQuantity,
+  normalizeCartQuantity,
+} from "../../shared/pricing.js";
 
 const catalogProductsPerPage = 8;
 
@@ -361,18 +368,56 @@ export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavig
   const [selectedOptionSlug, setSelectedOptionSlug] = useState(
     productOptions[0]?.slug || product.slug,
   );
+  const [requestedQuantity, setRequestedQuantity] = useState("1");
   const selectedOption = hasOptions
     ? productOptions.find((option) => option.slug === selectedOptionSlug) || productOptions[0]
     : null;
   const selectedCartSlug = selectedOption?.slug || product.slug;
   const selectedAmount = selectedOption?.amount ?? product.amount;
-  const selectedProductCanBeAdded = Number.parseInt(selectedAmount, 10) > 0;
+  const selectedUnitAmount = Number.parseInt(selectedAmount, 10);
+  const selectedProductCanBeAdded = selectedUnitAmount > 0;
   const displayedPrice = selectedOption?.price || product.price;
+  const requestedQuantityNumber = normalizeCartQuantity(requestedQuantity);
+  const activeDiscount = getQuantityDiscount(product.quantityDiscounts, requestedQuantityNumber);
+  const discountedUnitAmount = getDiscountedUnitAmount(
+    selectedUnitAmount,
+    requestedQuantityNumber,
+    product.quantityDiscounts,
+  );
+  const totalPrice = selectedProductCanBeAdded
+    ? formatEuroWithCents(discountedUnitAmount * requestedQuantityNumber)
+    : displayedPrice;
   const quantity = cartItems[selectedCartSlug] || 0;
 
   useEffect(() => {
     setSelectedOptionSlug(productOptions[0]?.slug || product.slug);
   }, [product.slug, productOptions.length]);
+
+  useEffect(() => {
+    setRequestedQuantity("1");
+  }, [product.slug]);
+
+  function updateRequestedQuantity(event) {
+    const { value } = event.target;
+    if (value === "") {
+      setRequestedQuantity("");
+      return;
+    }
+
+    const nextQuantity = Number.parseInt(value, 10);
+    if (!Number.isFinite(nextQuantity)) return;
+
+    setRequestedQuantity(String(Math.min(Math.max(nextQuantity, 1), maxCartQuantity)));
+  }
+
+  function normalizeRequestedQuantity() {
+    setRequestedQuantity(String(requestedQuantityNumber));
+  }
+
+  function addSelectedProductToCart() {
+    normalizeRequestedQuantity();
+    onAddToCart(selectedCartSlug, requestedQuantityNumber);
+  }
 
   return (
     <section className="section product-detail-section">
@@ -414,24 +459,50 @@ export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavig
               hasOptions
                 ? `Prix du modèle ${displayedPrice}`
                 : selectedProductCanBeAdded
-                  ? `À partir de ${displayedPrice}`
+                  ? `Prix unitaire ${displayedPrice}`
                   : `Tarif ${displayedPrice}`
             }
           >
             <span>
-              {hasOptions ? "Prix du modèle" : selectedProductCanBeAdded ? "À partir de" : "Tarif"}
+              {hasOptions ? "Prix du modèle" : selectedProductCanBeAdded ? "Prix unitaire" : "Tarif"}
             </span>
             <strong>{displayedPrice}</strong>
           </p>
           {selectedOption?.bgn && (
             <p className="product-option-note">Prix catalogue : {selectedOption.bgn}</p>
           )}
+          {selectedProductCanBeAdded && (
+            <div className="product-purchase-panel">
+              <label className="product-quantity-field">
+                <span>Quantité</span>
+                <input
+                  aria-describedby="product-total-price"
+                  inputMode="numeric"
+                  max={maxCartQuantity}
+                  min="1"
+                  onBlur={normalizeRequestedQuantity}
+                  onChange={updateRequestedQuantity}
+                  type="number"
+                  value={requestedQuantity}
+                />
+              </label>
+              <p className="product-total-price" id="product-total-price" aria-live="polite">
+                <span>Total</span>
+                <strong>{totalPrice}</strong>
+              </p>
+              {activeDiscount && (
+                <p className="product-discount-note">
+                  Remise quantité : -{formatDiscountPercent(activeDiscount.percent)}
+                </p>
+              )}
+            </div>
+          )}
           <div className="product-detail-actions">
             {selectedProductCanBeAdded ? (
               <button
                 className="button button-primary product-detail-cart-button"
                 type="button"
-                onClick={() => onAddToCart(selectedCartSlug)}
+                onClick={addSelectedProductToCart}
               >
                 <ShoppingCart size={18} />
                 Ajouter au panier
@@ -461,6 +532,10 @@ export function ProductDetailPage({ cartItems, currentPath, onAddToCart, onNavig
       </div>
     </section>
   );
+}
+
+function formatDiscountPercent(percent) {
+  return Number.isInteger(percent) ? `${percent}%` : `${String(percent).replace(".", ",")}%`;
 }
 
 function getProductOptionSearchText(product) {

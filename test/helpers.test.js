@@ -18,6 +18,7 @@ import {
 } from "../server/helpers.js";
 import { normalizeMemberInput } from "../server/members/service.js";
 import { normalizeCategoryInput, normalizeProductInput } from "../server/products/service.js";
+import { normalizePromoCodeInput } from "../server/promoCodes/service.js";
 
 async function withEnv(overrides, callback) {
   const previousValues = new Map(
@@ -157,6 +158,11 @@ test("normalizeProductInput nettoie et valide un produit admin", () => {
       { label: "250", amount: "10226" },
       { label: "", amount: "" },
     ],
+    quantityDiscounts: [
+      { minQuantity: "10", percent: "12,5" },
+      { minQuantity: "5", percent: "8" },
+      { minQuantity: "", percent: "" },
+    ],
     featured: true,
     active: false,
     sortOrder: "30",
@@ -185,6 +191,16 @@ test("normalizeProductInput nettoie et valide un produit admin", () => {
         price: "102,26 €",
         bgn: "",
         description: "",
+      },
+    ],
+    quantityDiscounts: [
+      {
+        minQuantity: 5,
+        percent: 8,
+      },
+      {
+        minQuantity: 10,
+        percent: 12.5,
       },
     ],
     imageKey: "axialFan",
@@ -265,6 +281,39 @@ test("normalizeProductInput rejette les entrées invalides", () => {
       }),
     /prix de chaque variante/i,
   );
+  assert.throws(
+    () =>
+      normalizeProductInput({
+        name: "Fan",
+        category: "Extraction",
+        amount: "1000",
+        quantityDiscounts: [{ minQuantity: "1", percent: "10" }],
+      }),
+    /quantité minimale/i,
+  );
+  assert.throws(
+    () =>
+      normalizeProductInput({
+        name: "Fan",
+        category: "Extraction",
+        amount: "1000",
+        quantityDiscounts: [{ minQuantity: "5", percent: "100" }],
+      }),
+    /pourcentage/i,
+  );
+  assert.throws(
+    () =>
+      normalizeProductInput({
+        name: "Fan",
+        category: "Extraction",
+        amount: "1000",
+        quantityDiscounts: [
+          { minQuantity: "5", percent: "5" },
+          { minQuantity: "5", percent: "10" },
+        ],
+      }),
+    /même quantité minimale/i,
+  );
 });
 
 test("normalizeCategoryInput nettoie et valide une catégorie", () => {
@@ -308,5 +357,46 @@ test("normalizeMemberInput rejette les membres invalides", () => {
   assert.throws(
     () => normalizeMemberInput({ firstName: "Marie", lastName: "Martin", email: "marie" }),
     /email valide/i,
+  );
+});
+
+test("normalizePromoCodeInput nettoie et valide un code promo", () => {
+  assert.deepEqual(
+    normalizePromoCodeInput({
+      code: " pro-10 ",
+      percent: "10,5",
+      minimumAmount: "15000",
+      startsAt: "2026-07-01T08:30:00.000Z",
+      endsAt: "2026-07-31T21:59:00.000Z",
+      active: true,
+    }),
+    {
+      code: "PRO-10",
+      percent: 10.5,
+      minimumAmount: 15000,
+      startsAt: "2026-07-01T08:30:00.000Z",
+      endsAt: "2026-07-31T21:59:00.000Z",
+      active: true,
+    },
+  );
+});
+
+test("normalizePromoCodeInput rejette les codes promo invalides", () => {
+  assert.throws(() => normalizePromoCodeInput({ percent: "10" }), /code promo/i);
+  assert.throws(() => normalizePromoCodeInput({ code: "AB", percent: "10" }), /3 à 32/i);
+  assert.throws(() => normalizePromoCodeInput({ code: "PRO10", percent: "100" }), /pourcentage/i);
+  assert.throws(
+    () => normalizePromoCodeInput({ code: "PRO10", percent: "10", minimumAmount: "-1" }),
+    /montant minimum/i,
+  );
+  assert.throws(
+    () =>
+      normalizePromoCodeInput({
+        code: "PRO10",
+        percent: "10",
+        startsAt: "2026-08-01T00:00:00.000Z",
+        endsAt: "2026-07-01T00:00:00.000Z",
+      }),
+    /date de début/i,
   );
 });

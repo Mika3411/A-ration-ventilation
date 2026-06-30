@@ -7,12 +7,19 @@ import { ensureDatabaseReady } from "../database.js";
 import { getRequestOrigin } from "../helpers.js";
 import {
   attachStripeSessionToOrder,
+  buildOrderSnapshot,
   buildStripeOrderMetadata,
   completeOrderFromCheckoutSession,
   createPendingOrder,
 } from "../orders/service.js";
+import { getApplicablePromoCode } from "../promoCodes/service.js";
 import { normalizeCheckoutItems } from "../products/service.js";
 import { checkoutRateLimiter } from "../security/rateLimit.js";
+import {
+  getDiscountedUnitAmount,
+  getPromoDiscountedUnitAmount,
+  getQuantityDiscount,
+} from "../../shared/pricing.js";
 
 export const missingCheckoutDatabaseError =
   "DATABASE_URL doit être configuré en production avant d'ouvrir un paiement Stripe.";
@@ -99,26 +106,68 @@ export function createCheckoutRouter() {
       return;
     }
 
+    let promoCode = null;
+
+    try {
+      if (request.body?.promoCode) {
+        const subtotalSnapshot = buildOrderSnapshot(cartItems);
+        promoCode = await getApplicablePromoCode(
+          request.body.promoCode,
+          subtotalSnapshot.amountSubtotal,
+        );
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Code promo invalide.";
+      response.status(message.includes("introuvable") ? 404 : 400).json({ error: message });
+      return;
+    }
+
     try {
       const customer = await getAuthenticatedCustomer(request);
-      const order = await createPendingOrder({ cartItems, customer });
+      const order = await createPendingOrder({ cartItems, customer, promoCode });
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
-        line_items: cartItems.map(({ product, quantity }) => ({
-          quantity,
-          price_data: {
-            currency: "eur",
-            unit_amount: product.amount,
-            product_data: {
-              name: product.name,
-              description: product.description,
-              metadata: {
-                category: product.category,
-                slug: product.slug,
+        line_items: cartItems.map(({ product, quantity }) => {
+          const discount = getQuantityDiscount(product.quantityDiscounts, quantity);
+          const unitAmount = getDiscountedUnitAmount(
+            product.amount,
+            quantity,
+            product.quantityDiscounts,
+          );
+          const stripeUnitAmount = getPromoDiscountedUnitAmount(unitAmount, promoCode);
+          const promoDescription = promoCode
+            ? `Code promo ${promoCode.code} -${formatDiscountPercent(promoCode.percent)}.`
+            : "";
+
+          return {
+            quantity,
+            price_data: {
+              currency: "eur",
+              unit_amount: stripeUnitAmount,
+              product_data: {
+                name: product.name,
+                description: discount || promoDescription
+                  ? [
+                      product.description,
+                      discount
+                        ? `Remise quantité -${formatDiscountPercent(discount.percent)}.`
+                        : "",
+                      promoDescription,
+                    ]
+                      .filter(Boolean)
+                      .join(" ")
+                  : product.description,
+                metadata: {
+                  category: product.category,
+                  slug: product.slug,
+                  discountPercent: discount ? String(discount.percent) : "",
+                  promoCode: promoCode?.code || "",
+                  promoDiscountPercent: promoCode ? String(promoCode.percent) : "",
+                },
               },
             },
-          },
-        })),
+          };
+        }),
         success_url: `${origin}/boutique?paiement=succes&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/boutique?paiement=annule`,
         billing_address_collection: "required",
@@ -156,4 +205,8 @@ async function getProductionCheckoutDatabaseError() {
   } catch {
     return missingCheckoutDatabaseError;
   }
+}
+
+function formatDiscountPercent(percent) {
+  return Number.isInteger(percent) ? `${percent}%` : `${String(percent).replace(".", ",")}%`;
 }

@@ -71,7 +71,7 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
     assert.equal(response.status, 200);
     assert.equal(Array.isArray(body.products), true);
     assert.equal(Array.isArray(body.categories), true);
-    assert.equal(body.products.length, 77);
+    assert.equal(body.products.length, 83);
     assert.deepEqual(
       body.products.map((product) => product.slug),
       [
@@ -152,6 +152,12 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
         "controleur-pression-gmax-epc-1a",
         "controleur-pression-gmax-epc-13-manometre-integre",
         "controleur-pression-gmax-epc-10-affichage-numerique",
+        "controleur-pression-gmax-epc-12-affichage-numerique",
+        "interrupteur-pression-combine-trois-voies-gmax-krs-7-manometre",
+        "interrupteur-pression-mecanique-gmax-pc-9",
+        "interrupteur-pression-mecanique-gmax-krs-5",
+        "panneau-securite-pompe-eau-gmax-c1-mp1",
+        "panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-075-4",
       ],
     );
     const priceBySlug = new Map(body.products.map((product) => [product.slug, product.price]));

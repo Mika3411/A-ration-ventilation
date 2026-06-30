@@ -301,7 +301,7 @@ button {
 
 .cart-checkout-panel {
   display: grid;
-  grid-template-columns: minmax(150px, 0.64fr) minmax(260px, 1.5fr) auto auto;
+  grid-template-columns: minmax(150px, 0.56fr) minmax(240px, 1.25fr) minmax(230px, 0.9fr) auto auto;
   gap: 16px;
   align-items: center;
   padding: 16px;
@@ -329,6 +329,118 @@ button {
   color: var(--muted);
   font-size: 13px;
   font-weight: 800;
+}
+
+.cart-promo-form {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.cart-promo-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.cart-promo-form label > div {
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--orange);
+}
+
+.cart-promo-form input {
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 850;
+  outline: 0;
+  text-transform: uppercase;
+}
+
+.cart-promo-form button[type="submit"] {
+  min-height: 42px;
+  padding: 0 13px;
+  border: 1px solid var(--orange);
+  border-radius: 8px;
+  background: rgba(255, 122, 31, 0.14);
+  color: var(--orange);
+  font-weight: 900;
+}
+
+.cart-promo-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.cart-promo-applied,
+.cart-promo-pending,
+.cart-promo-warning,
+.cart-promo-error,
+.cart-promo-success {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.cart-promo-applied,
+.cart-promo-pending {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 122, 31, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 122, 31, 0.12);
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.cart-promo-pending {
+  border-color: var(--line);
+  background: var(--soft);
+}
+
+.cart-promo-applied button,
+.cart-promo-pending button {
+  width: 28px;
+  min-height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.cart-promo-warning,
+.cart-promo-error,
+.cart-promo-success {
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.cart-promo-warning,
+.cart-promo-error {
+  color: #ffb199;
+}
+
+.cart-promo-success {
+  color: #93e6b1;
 }
 
 .cart-checkout-head strong {
@@ -380,6 +492,13 @@ button {
   line-height: 1.2;
 }
 
+.cart-line small {
+  width: fit-content;
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 850;
+}
+
 .cart-quantity-controls {
   display: grid;
   grid-template-columns: 32px 32px 32px;
@@ -410,8 +529,34 @@ button {
 
 .cart-checkout-total {
   display: grid;
-  gap: 4px;
-  min-width: 92px;
+  grid-template-columns: auto auto;
+  gap: 4px 10px;
+  min-width: 118px;
+  align-items: baseline;
+}
+
+.cart-checkout-total span {
+  grid-column: 1;
+}
+
+.cart-checkout-total em,
+.cart-checkout-total small,
+.cart-checkout-total strong {
+  grid-column: 2;
+  text-align: right;
+}
+
+.cart-checkout-total em,
+.cart-checkout-total small {
+  color: var(--ink);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.cart-checkout-total small {
+  color: var(--orange);
 }
 
 .cart-checkout-total strong {
@@ -967,7 +1112,7 @@ button {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: 22px;
 }
 
@@ -1033,11 +1178,12 @@ button {
 .product-card-price {
   margin: 0;
   color: var(--orange);
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 900;
   line-height: 1.08;
   overflow-wrap: normal;
-  white-space: normal;
+  white-space: nowrap;
+  text-wrap: balance;
 }
 
 .product-card-options {
@@ -1167,6 +1313,77 @@ button {
   font-weight: 800;
 }
 
+.product-purchase-panel {
+  display: grid;
+  grid-template-columns: minmax(120px, 150px) minmax(0, 240px);
+  gap: 12px;
+  align-items: end;
+  max-width: 420px;
+}
+
+.product-quantity-field {
+  display: grid;
+  gap: 8px;
+  font-weight: 850;
+}
+
+.product-quantity-field span,
+.product-total-price span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.product-quantity-field input {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 122, 31, 0.08);
+  color: var(--ink);
+  font: inherit;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.product-quantity-field input:focus {
+  border-color: var(--orange);
+  outline: 3px solid rgba(255, 122, 31, 0.2);
+}
+
+.product-total-price {
+  display: grid;
+  gap: 4px;
+  min-height: 54px;
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 122, 31, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 122, 31, 0.12);
+}
+
+.product-total-price strong {
+  color: var(--orange);
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.product-discount-note {
+  grid-column: 1 / -1;
+  width: fit-content;
+  margin: -2px 0 0;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 122, 31, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 122, 31, 0.1);
+  color: var(--orange);
+  font-size: 13px;
+  font-weight: 900;
+}
+
 .product-detail-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1240,6 +1457,7 @@ button {
 .admin-product-list svg,
 .admin-category-manager svg,
 .admin-members-panel svg,
+.admin-promo-panel svg,
 .admin-form-head svg {
   color: var(--orange);
 }
@@ -1248,6 +1466,7 @@ button {
 .admin-product-list h2,
 .admin-category-manager h2,
 .admin-members-panel h2,
+.admin-promo-panel h2,
 .admin-form-head h2 {
   margin: 0;
   color: var(--ink);
@@ -1256,6 +1475,7 @@ button {
 .admin-login-panel label,
 .admin-category-form label,
 .admin-member-form label,
+.admin-promo-form label,
 .admin-product-form label {
   display: grid;
   gap: 8px;
@@ -1351,6 +1571,7 @@ button {
 .admin-product-search input,
 .admin-product-sort select,
 .admin-member-form input,
+.admin-promo-form input,
 .admin-product-form input,
 .admin-product-form select,
 .admin-product-form textarea {
@@ -1377,6 +1598,7 @@ button {
 .admin-product-search input:focus,
 .admin-product-sort select:focus,
 .admin-member-form input:focus,
+.admin-promo-form input:focus,
 .admin-product-form input:focus,
 .admin-product-form select:focus,
 .admin-product-form textarea:focus {
@@ -1417,7 +1639,8 @@ button {
 .admin-member-list small,
 .admin-member-list em,
 .admin-product-list small,
-.admin-product-list em {
+.admin-product-list em,
+.admin-promo-list small {
   color: var(--muted);
   font-size: 13px;
   font-weight: 800;
@@ -1481,6 +1704,8 @@ button {
 .admin-member-detail,
 .admin-member-form,
 .admin-member-orders,
+.admin-promo-list,
+.admin-promo-form,
 .admin-product-form {
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1875,6 +2100,105 @@ button {
   grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
   gap: 18px;
   align-items: start;
+}
+
+.admin-promo-panel {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 18px;
+}
+
+.admin-promo-shell {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.74fr) minmax(0, 1.26fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.admin-promo-list,
+.admin-promo-form {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+}
+
+.admin-promo-list {
+  align-content: start;
+}
+
+.admin-promo-list > button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 76px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--soft);
+  color: var(--ink);
+  text-align: left;
+}
+
+.admin-promo-list > button.is-selected {
+  border-color: rgba(255, 107, 33, 0.5);
+  background: rgba(255, 122, 31, 0.16);
+}
+
+.admin-promo-list > button span {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.admin-promo-list strong,
+.admin-promo-list small,
+.admin-promo-list em {
+  overflow-wrap: anywhere;
+}
+
+.admin-promo-list em {
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: rgba(255, 122, 31, 0.14);
+  color: var(--orange);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.admin-promo-preview {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid rgba(255, 122, 31, 0.34);
+  border-radius: var(--radius);
+  background: rgba(255, 122, 31, 0.12);
+}
+
+.admin-promo-preview div {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-promo-preview span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.admin-promo-preview strong {
+  color: var(--ink);
+  font-size: 22px;
+}
+
+.admin-promo-preview p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 850;
 }
 
 .admin-member-list {
@@ -2285,6 +2609,26 @@ button {
   grid-template-columns: minmax(160px, 1.1fr) minmax(130px, 0.7fr) minmax(130px, 0.7fr) minmax(180px, 1.2fr);
   gap: 12px;
   align-items: start;
+}
+
+.admin-discount-grid {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.65fr) minmax(150px, 0.65fr) minmax(240px, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.admin-discount-grid p {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 122, 31, 0.24);
+  border-radius: 8px;
+  background: rgba(255, 122, 31, 0.1);
+  color: var(--orange);
+  font-weight: 900;
 }
 
 .admin-variant-empty {
@@ -3473,6 +3817,7 @@ button {
   .admin-layout,
   .admin-members-head,
   .admin-members-shell,
+  .admin-promo-shell,
   .about-layout,
   .customer-shell,
   .delivery-layout,
@@ -3559,7 +3904,9 @@ button {
   }
 
   .catalog-head,
+  .cart-promo-form,
   .admin-form-grid,
+  .admin-discount-grid,
   .admin-variant-grid,
   .about-panel,
   .contact-intro-grid,
@@ -3619,6 +3966,7 @@ button {
 
   .product-detail-copy,
   .product-detail-price,
+  .product-purchase-panel,
   .product-detail-actions {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -3635,6 +3983,7 @@ button {
   }
 
   .product-detail-cart-button,
+  .product-purchase-panel,
   .product-detail-actions .product-quantity {
     width: 100%;
   }

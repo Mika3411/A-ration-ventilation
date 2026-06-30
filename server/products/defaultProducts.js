@@ -2797,6 +2797,96 @@ const pressureControlGmaxEpc10Product = {
   sortOrder: 97,
 };
 
+const pressureControlGmaxEpc12Product = {
+  name: "Contrôleur de pression Gmax EPC-12 avec affichage numérique",
+  slug: "controleur-pression-gmax-epc-12-affichage-numerique",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Contrôleur de pression Gmax EPC-12 avec affichage numérique, conçu pour automatiser la mise en marche et l'arrêt d'une pompe selon la pression. Il propose deux modes de fonctionnement et protège l'installation contre la surpression. La pression de démarrage est réglée en usine à 1,5 bar et peut être ajustée dans les limites prévues. Après la première mise en service sur un système amorcé, l'appareil mémorise la pression maximale fournie par la pompe. Les seuils de démarrage peuvent être réglés de 0,5 à 6,7 bar, avec un réglage séparé des limites basse et haute et un écart minimal de 1 bar. Pour utiliser le second mode, l'installation doit disposer d'un réservoir d'expansion placé après le contrôleur. Raccords filetés mâles 1 pouce, puissance 2,2 kW, fréquence 50-60 Hz, tension 220-240 V, courant maximal 30 A, pression d'usine 1,5 bar et pression maximale 7,5 bar.",
+  imageKey: "pressureControlGmaxEpc12",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 98,
+};
+
+const pressureSwitchGmaxKrs7Product = {
+  name: "Interrupteur de pression combiné à trois voies Gmax KRS-7 avec manomètre",
+  slug: "interrupteur-pression-combine-trois-voies-gmax-krs-7-manometre",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Interrupteur de pression mécanique combiné à trois voies Gmax KRS-7 avec manomètre, conçu pour automatiser la mise en marche et l'arrêt d'une pompe selon la pression. Les réglages d'usine démarrent la pompe à 1,35 bar et l'arrêtent à 2,75 bar; la plage de réglage permet d'ajuster le fonctionnement entre 1,1 et 5,5 bar. Prêt à être installé directement à la sortie de la pompe, il intègre un manomètre de contrôle et dispose d'une entrée et de deux sorties 1 pouce pour raccorder le réservoir d'expansion et l'alimentation de la pompe. Installation verticale uniquement. Raccord 1 pouce, fréquence 50-60 Hz, tension 220-240 V, courant maximal 16 A, pression maximale 5,5 bar et température d'eau jusqu'à 55 °C.",
+  imageKey: "pressureSwitchGmaxKrs7",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 99,
+};
+
+const pressureSwitchGmaxPc9Product = {
+  name: "Interrupteur de pression mécanique Gmax PC-9",
+  slug: "interrupteur-pression-mecanique-gmax-pc-9",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Interrupteur de pression mécanique Gmax PC-9 conçu pour commander automatiquement la mise en marche et l'arrêt d'une pompe selon la pression. Les réglages d'usine démarrent la pompe à 1,4 bar et l'arrêtent à 2,8 bar; la plage de réglage permet d'ajuster le démarrage à partir de 1,05 bar et l'arrêt jusqu'à 5,6 bar. Ce modèle simple et pratique ne dispose pas de protection intégrée contre le fonctionnement à sec; une protection complémentaire est recommandée lorsque la source d'eau peut manquer. Raccord 1/4 pouce, fréquence 50-60 Hz, tension 110-240 V, pression maximale 5,6 bar et température d'eau jusqu'à 55 °C.",
+  imageKey: "pressureSwitchGmaxPc9",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 100,
+};
+
+const pressureSwitchGmaxKrs5Product = {
+  name: "Interrupteur de pression mécanique Gmax KRS-5",
+  slug: "interrupteur-pression-mecanique-gmax-krs-5",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Interrupteur de pression mécanique Gmax KRS-5 conçu pour automatiser la mise en marche et l'arrêt d'une pompe électrique selon la pression du circuit. Les réglages d'usine démarrent la pompe à 1,35 bar et l'arrêtent à 2,75 bar; la plage de réglage permet d'ajuster le démarrage à partir de 1,1 bar et l'arrêt jusqu'à 5,5 bar. Simple et pratique, il ne dispose pas de protection intégrée contre le fonctionnement à sec; une protection complémentaire est recommandée lorsque la source d'eau peut manquer. Raccord 1/4 pouce, fréquence 50-60 Hz, tension 220-240 V, pression maximale 5,5 bar et température d'eau jusqu'à 55 °C.",
+  imageKey: "pressureSwitchGmaxKrs5",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 101,
+};
+
+const waterPumpSafetyPanelGmaxC1Mp1Product = {
+  name: "Panneau de sécurité pour pompe à eau Gmax C1-MP1",
+  slug: "panneau-securite-pompe-eau-gmax-c1-mp1",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Panneau de sécurité pour pompe à eau Gmax C1-MP1 conçu pour protéger une pompe en cas de manque d'eau ou de risque de blocage lié aux impuretés. Le contrôle se fait par électrodes installées dans le puits, en tenant compte du niveau d'eau et de l'intensité de fonctionnement calibrée. Il commande une seule pompe centrifuge, auto-amorçante ou submersible, avec une puissance de 0,37 à 2,2 kW. Puissance 0,37-2,2 kW, fréquence 50 Hz, tension 220 V et courant maximal 15 A.",
+  imageKey: "waterPumpSafetyPanelGmaxC1Mp1",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 102,
+};
+
+const waterPumpProtectionPanelGmaxC3Mp1075To4Product = {
+  name: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1 0,75-4 kW",
+  slug: "panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-075-4",
+  category: "Pompes à eau",
+  amount: 0,
+  price: "Prix sur demande",
+  description: "Panneau de protection pour pompes à eau triphasées Gmax C3-MP1 0,75-4 kW conçu pour protéger une pompe triphasée en cas de manque d'eau ou de risque de blocage lié aux impuretés. Le contrôle se fait par électrodes installées dans le puits, selon le niveau d'eau et l'intensité de fonctionnement calibrée. Il commande une seule pompe triphasée centrifuge, auto-amorçante ou submersible. Puissance 0,75-4 kW, fréquence 50 Hz, tension 380 V et courant maximal 11,2 A.",
+  imageKey: "waterPumpProtectionPanelGmaxC3Mp1075To4",
+  imageUrl: "",
+  imageData: "",
+  featured: true,
+  active: true,
+  sortOrder: 103,
+};
+
 export const defaultShopProducts = [
   {
     name: "Ventilateurs axiaux",
@@ -3067,6 +3157,12 @@ export const defaultShopProducts = [
   pressureControlGmaxEpc1AProduct,
   pressureControlGmaxEpc13Product,
   pressureControlGmaxEpc10Product,
+  pressureControlGmaxEpc12Product,
+  pressureSwitchGmaxKrs7Product,
+  pressureSwitchGmaxPc9Product,
+  pressureSwitchGmaxKrs5Product,
+  waterPumpSafetyPanelGmaxC1Mp1Product,
+  waterPumpProtectionPanelGmaxC3Mp1075To4Product,
   {
     name: "Régulateurs",
     slug: "regulateurs",
@@ -3166,6 +3262,12 @@ export const allowedImageKeys = new Set([
   "pressureControlGmaxEpc1A",
   "pressureControlGmaxEpc13",
   "pressureControlGmaxEpc10",
+  "pressureControlGmaxEpc12",
+  "pressureSwitchGmaxKrs7",
+  "pressureSwitchGmaxPc9",
+  "pressureSwitchGmaxKrs5",
+  "waterPumpSafetyPanelGmaxC1Mp1",
+  "waterPumpProtectionPanelGmaxC3Mp1075To4",
   "electricMotor",
   "electricMotor11Kw2800Aluminum",
   "electricMotor22Kw",

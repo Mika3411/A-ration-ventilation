@@ -7,9 +7,16 @@ import {
   slugify,
 } from "../helpers.js";
 import { allowedImageKeys, defaultShopCategories, defaultShopProducts } from "./defaultProducts.js";
+import {
+  maxCartQuantity,
+  maxDiscountPercent,
+  minDiscountQuantity,
+  normalizeQuantityDiscounts,
+} from "../../shared/pricing.js";
 
 const maxProductImageDataLength = 1_500_000;
 const productImageDataPattern = /^data:image\/(png|jpe?g|webp|gif);base64,[a-z0-9+/=]+$/i;
+const defaultShopProductSlugs = new Set(defaultShopProducts.map((product) => product.slug));
 
 let memoryShopProducts = defaultShopProducts.map((product, index) => ({
   id: index + 1,
@@ -94,6 +101,7 @@ export async function createProduct(productInput) {
         description,
         amount,
         options,
+        quantity_discounts,
         image_key,
         image_url,
         image_data,
@@ -101,7 +109,7 @@ export async function createProduct(productInput) {
         active,
         sort_order
       )
-      VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11, $12)
+      VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7::jsonb, $8, $9, $10, $11, $12, $13)
       RETURNING *
     `,
     [
@@ -111,6 +119,7 @@ export async function createProduct(productInput) {
       productInput.description,
       productInput.amount,
       JSON.stringify(productInput.options),
+      JSON.stringify(productInput.quantityDiscounts),
       productInput.imageKey,
       productInput.imageUrl,
       productInput.imageData,
@@ -153,14 +162,15 @@ export async function updateProduct(slug, productInput) {
         description = $3,
         amount = $4,
         options = $5::jsonb,
-        image_key = $6,
-        image_url = $7,
-        image_data = $8,
-        featured = $9,
-        active = $10,
-        sort_order = $11,
+        quantity_discounts = $6::jsonb,
+        image_key = $7,
+        image_url = $8,
+        image_data = $9,
+        featured = $10,
+        active = $11,
+        sort_order = $12,
         updated_at = NOW()
-      WHERE slug = $12
+      WHERE slug = $13
       RETURNING *
     `,
     [
@@ -169,6 +179,7 @@ export async function updateProduct(slug, productInput) {
       productInput.description,
       productInput.amount,
       JSON.stringify(productInput.options),
+      JSON.stringify(productInput.quantityDiscounts),
       productInput.imageKey,
       productInput.imageUrl,
       productInput.imageData,
@@ -183,13 +194,40 @@ export async function updateProduct(slug, productInput) {
 }
 
 export async function deleteProduct(slug) {
+  const isDefaultProduct = defaultShopProductSlugs.has(slug);
+
   if (!dbPool) {
-    const initialLength = memoryShopProducts.length;
+    const productIndex = memoryShopProducts.findIndex((product) => product.slug === slug);
+
+    if (productIndex === -1) return false;
+
+    if (isDefaultProduct) {
+      memoryShopProducts = memoryShopProducts.map((product, index) =>
+        index === productIndex
+          ? { ...product, active: false, updatedAt: new Date().toISOString() }
+          : product,
+      );
+      return true;
+    }
+
     memoryShopProducts = memoryShopProducts.filter((product) => product.slug !== slug);
-    return memoryShopProducts.length !== initialLength;
+    return true;
   }
 
   await ensureDatabaseReady();
+
+  if (isDefaultProduct) {
+    const result = await dbPool.query(
+      `
+        UPDATE shop_products
+        SET active = FALSE, updated_at = NOW()
+        WHERE slug = $1
+      `,
+      [slug],
+    );
+    return result.rowCount > 0;
+  }
+
   const result = await dbPool.query("DELETE FROM shop_products WHERE slug = $1", [slug]);
   return result.rowCount > 0;
 }
@@ -468,6 +506,7 @@ export function normalizeProductInput(body) {
   const imageKey = allowedImageKeys.has(requestedImageKey) ? requestedImageKey : "ductFan";
   const amount = Number.parseInt(body?.amount, 10);
   const options = normalizeProductInputOptions(body?.options, name);
+  const quantityDiscounts = normalizeProductInputQuantityDiscounts(body?.quantityDiscounts);
   const sortOrder = Number.parseInt(body?.sortOrder, 10);
 
   if (!name) {
@@ -492,6 +531,7 @@ export function normalizeProductInput(body) {
     description,
     amount,
     options,
+    quantityDiscounts,
     imageKey,
     imageUrl,
     imageData,
@@ -499,6 +539,51 @@ export function normalizeProductInput(body) {
     active: body?.active !== false,
     sortOrder: Number.isInteger(sortOrder) ? sortOrder : 0,
   };
+}
+
+function normalizeProductInputQuantityDiscounts(discounts) {
+  if (!Array.isArray(discounts)) return [];
+
+  const usedQuantities = new Set();
+
+  return discounts
+    .map((discount) => {
+      const rawMinQuantity = String(discount?.minQuantity ?? discount?.quantity ?? "").trim();
+      const rawPercent = String(discount?.percent ?? discount?.discountPercent ?? "").trim();
+
+      if (!rawMinQuantity && !rawPercent) return null;
+
+      const minQuantity = Number.parseInt(rawMinQuantity, 10);
+      const percent = Number.parseFloat(rawPercent.replace(",", "."));
+
+      if (
+        !Number.isInteger(minQuantity) ||
+        minQuantity < minDiscountQuantity ||
+        minQuantity > maxCartQuantity
+      ) {
+        throw new ProductInputError(
+          `La quantité minimale d'une remise doit être entre ${minDiscountQuantity} et ${maxCartQuantity}.`,
+        );
+      }
+
+      if (!Number.isFinite(percent) || percent <= 0 || percent > maxDiscountPercent) {
+        throw new ProductInputError(
+          `La remise doit être un pourcentage supérieur à 0 et inférieur à 100.`,
+        );
+      }
+
+      if (usedQuantities.has(minQuantity)) {
+        throw new ProductInputError("Deux remises ne peuvent pas utiliser la même quantité minimale.");
+      }
+
+      usedQuantities.add(minQuantity);
+      return {
+        minQuantity,
+        percent: Math.round(percent * 100) / 100,
+      };
+    })
+    .filter(Boolean)
+    .sort((first, second) => first.minQuantity - second.minQuantity);
 }
 
 export function normalizeProductImageData(value) {
@@ -703,6 +788,7 @@ function serializeProductRow(row) {
     text: row.description,
     amount: row.amount,
     price: getProductDisplayPrice(row),
+    quantityDiscounts: normalizeQuantityDiscounts(row.quantity_discounts),
     imageKey: row.image_key,
     imageUrl: row.image_url,
     imageData: row.image_data || "",
@@ -725,6 +811,7 @@ function serializeMemoryProduct(product) {
     text: product.description,
     amount: product.amount,
     price: getProductDisplayPrice(product),
+    quantityDiscounts: normalizeQuantityDiscounts(product.quantityDiscounts),
     imageKey: product.imageKey,
     imageUrl: product.imageUrl,
     imageData: product.imageData || "",

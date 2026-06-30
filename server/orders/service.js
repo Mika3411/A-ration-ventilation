@@ -2,30 +2,65 @@ import crypto from "node:crypto";
 
 import { dbPool, ensureDatabaseReady } from "../database.js";
 import { cleanSingleLine, formatEuroAmount } from "../helpers.js";
+import {
+  getDiscountedLineTotal,
+  getDiscountedUnitAmount,
+  getPromoDiscountedUnitAmount,
+  getQuantityDiscount,
+  normalizePromoCodeRecord,
+} from "../../shared/pricing.js";
 
-export function buildOrderSnapshot(cartItems) {
-  const items = cartItems.map(({ product, quantity }) => ({
-    slug: product.slug,
-    name: product.name,
-    category: product.category,
-    description: product.description,
-    amount: product.amount,
-    price: product.price,
-    quantity,
-    lineTotal: product.amount * quantity,
-  }));
+export function buildOrderSnapshot(cartItems, promoCode = null) {
+  const normalizedPromoCode = normalizePromoCodeRecord(promoCode);
+  const items = cartItems.map(({ product, quantity }) => {
+    const discount = getQuantityDiscount(product.quantityDiscounts, quantity);
+    const unitAmount = getDiscountedUnitAmount(product.amount, quantity, product.quantityDiscounts);
+    const promoUnitAmount = normalizedPromoCode
+      ? getPromoDiscountedUnitAmount(unitAmount, normalizedPromoCode)
+      : unitAmount;
+    const lineSubtotal = getDiscountedLineTotal(product.amount, quantity, product.quantityDiscounts);
+    const lineTotal = promoUnitAmount * quantity;
+
+    return {
+      slug: product.slug,
+      name: product.name,
+      category: product.category,
+      description: product.description,
+      amount: product.amount,
+      price: product.price,
+      quantity,
+      discount,
+      unitAmount,
+      promoUnitAmount,
+      lineSubtotal,
+      promoDiscountAmount: Math.max(0, lineSubtotal - lineTotal),
+      lineTotal,
+    };
+  });
+  const amountSubtotal = items.reduce((total, item) => total + item.lineSubtotal, 0);
+  const promoDiscountAmount = items.reduce((total, item) => total + item.promoDiscountAmount, 0);
   const amountTotal = items.reduce((total, item) => total + item.lineTotal, 0);
 
-  return { items, amountTotal };
+  return {
+    items,
+    amountSubtotal,
+    promoCode: normalizedPromoCode,
+    promoDiscountAmount,
+    amountTotal,
+  };
 }
 
-export async function createPendingOrder({ cartItems, customer }) {
+export async function createPendingOrder({ cartItems, customer, promoCode = null }) {
   const publicId = crypto.randomUUID();
-  const { items, amountTotal } = buildOrderSnapshot(cartItems);
+  const { items, amountSubtotal, promoCode: orderPromoCode, promoDiscountAmount, amountTotal } =
+    buildOrderSnapshot(cartItems, promoCode);
 
   if (!dbPool) {
     return {
       publicId,
+      amountSubtotal,
+      promoCode: orderPromoCode,
+      promoDiscountAmount,
       amountTotal,
       items,
       persisted: false,
@@ -62,6 +97,9 @@ export async function createPendingOrder({ cartItems, customer }) {
   return {
     ...order,
     publicId: order.id,
+    amountSubtotal,
+    promoCode: orderPromoCode,
+    promoDiscountAmount,
     persisted: true,
   };
 }
@@ -237,6 +275,10 @@ export function buildStripeOrderMetadata({ order, customer }) {
     customerId: customer?.id || "",
     customerEmail: customer?.email || "",
     cart: cart.length <= 500 ? cart : "",
+    amountSubtotal: String(order.amountSubtotal || order.amountTotal || 0),
+    promoCode: order.promoCode?.code || "",
+    promoDiscountPercent: order.promoCode ? String(order.promoCode.percent) : "",
+    promoDiscountAmount: String(order.promoDiscountAmount || 0),
     amountTotal: String(order.amountTotal),
     orderItems: orderItems.length <= 500 ? orderItems : "",
   };

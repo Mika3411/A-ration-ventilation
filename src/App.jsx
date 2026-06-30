@@ -27,6 +27,7 @@ import {
 import { RouteView } from "./router/AppRouter.jsx";
 
 import { useRouter } from "./router/useRouter.js";
+import { getPromoCartSummary, normalizePromoCode } from "../shared/pricing.js";
 
 export default function App() {
   const { currentPath, navigate } = useRouter();
@@ -36,6 +37,10 @@ export default function App() {
   const [cartItems, setCartItems] = useState(readStoredCartItems);
   const [checkoutStatus, setCheckoutStatus] = useState("idle");
   const [checkoutMessage, setCheckoutMessage] = useState("");
+  const [promoCode, setPromoCode] = useState(null);
+  const [promoMessage, setPromoMessage] = useState("");
+  const [promoMessageType, setPromoMessageType] = useState("success");
+  const [promoStatus, setPromoStatus] = useState("idle");
   const [paymentNotice, setPaymentNotice] = useState(getInitialPaymentNotice);
   const [lastAddedProduct, setLastAddedProduct] = useState("");
   const purchasableProducts = useMemo(() => getPurchasableProducts(products), [products]);
@@ -45,6 +50,8 @@ export default function App() {
   );
   const productCategories = useMemo(() => getProductCategories(products, categories), [categories, products]);
   const cartLines = useMemo(() => getCartLines(products, cartItems), [cartItems, products]);
+  const promoSummary = useMemo(() => getPromoCartSummary(cartLines, promoCode), [cartLines, promoCode]);
+  const activePromoCode = promoSummary.discountAmount > 0 ? promoCode : null;
   const cartCount = useMemo(
     () => Object.values(cartItems).reduce((total, quantity) => total + quantity, 0),
     [cartItems],
@@ -89,6 +96,7 @@ export default function App() {
 
     if (paymentNotice.type === "success") {
       setCartItems({});
+      setPromoCode(null);
     }
 
     const cleanUrl = `${window.location.pathname}${window.location.hash}`;
@@ -118,13 +126,18 @@ export default function App() {
     }
   }, [currentPath, productCategories, products]);
 
-  function handleAddToCart(productSlug) {
+  function handleAddToCart(productSlug, quantityToAdd = 1) {
     const product = productBySlug.get(productSlug);
     if (!product) return;
 
+    const safeQuantityToAdd = Math.min(
+      Math.max(Number.parseInt(quantityToAdd, 10) || 1, 1),
+      99,
+    );
+
     setCartItems((items) => ({
       ...items,
-      [productSlug]: Math.min((items[productSlug] || 0) + 1, 99),
+      [productSlug]: Math.min((items[productSlug] || 0) + safeQuantityToAdd, 99),
     }));
     setLastAddedProduct(product.name);
     setCheckoutMessage("");
@@ -150,7 +163,57 @@ export default function App() {
 
   function handleClearCart() {
     setCartItems({});
+    setPromoCode(null);
+    setPromoMessage("");
     setCheckoutMessage("");
+  }
+
+  async function handleApplyPromoCode(code) {
+    const normalizedCode = normalizePromoCode(code);
+
+    if (!normalizedCode) {
+      setPromoCode(null);
+      setPromoMessageType("error");
+      setPromoMessage("Indiquez un code promo.");
+      return;
+    }
+
+    setPromoStatus("loading");
+    setPromoMessage("");
+
+    try {
+      const response = await fetch("/api/promo-codes/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          code: normalizedCode,
+          items: getCheckoutItems(products, cartItems),
+        }),
+      });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload.promoCode) {
+        throw new Error(payload.error || "Code promo invalide.");
+      }
+
+      setPromoCode(payload.promoCode);
+      setPromoStatus("idle");
+      setPromoMessageType("success");
+      setPromoMessage(`Code ${payload.promoCode.code} appliqué.`);
+      setCheckoutMessage("");
+    } catch (error) {
+      setPromoCode(null);
+      setPromoStatus("idle");
+      setPromoMessageType("error");
+      setPromoMessage(error instanceof Error ? error.message : "Code promo invalide.");
+    }
+  }
+
+  function handleRemovePromoCode() {
+    setPromoCode(null);
+    setPromoMessage("");
   }
 
   async function handleCheckout() {
@@ -165,6 +228,7 @@ export default function App() {
         },
         body: JSON.stringify({
           items: getCheckoutItems(products, cartItems),
+          promoCode: activePromoCode?.code || "",
         }),
       });
       const payload = await response.json().catch(() => ({}));
@@ -192,11 +256,18 @@ export default function App() {
         cartLines={cartLines}
         checkoutMessage={checkoutMessage}
         checkoutStatus={checkoutStatus}
+        onApplyPromoCode={handleApplyPromoCode}
         onCheckout={handleCheckout}
         onClearCart={handleClearCart}
         onDecreaseItem={handleDecreaseCartItem}
         onIncreaseItem={handleAddToCart}
+        onRemovePromoCode={handleRemovePromoCode}
         paymentNotice={paymentNotice}
+        promoCode={promoCode}
+        promoMessage={promoMessage}
+        promoMessageType={promoMessageType}
+        promoStatus={promoStatus}
+        promoSummary={promoSummary}
       />
       <div className="sr-only" role="status" aria-live="polite">
         {lastAddedProduct

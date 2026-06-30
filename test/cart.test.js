@@ -8,6 +8,7 @@ import {
   sanitizeCartItems,
 } from "../src/panier/cart.js";
 import { formatEuroWithCents } from "../src/utils/format.js";
+import { buildOrderSnapshot } from "../server/orders/service.js";
 
 const products = [
   { slug: "ventilateurs-axiaux", name: "Ventilateurs axiaux", amount: 24900 },
@@ -65,9 +66,120 @@ test("getCartLines calcule les lignes et totaux du panier", () => {
     {
       product: products[0],
       quantity: 2,
+      discount: null,
+      unitAmount: 24900,
       lineTotal: 49800,
     },
   ]);
+});
+
+test("getCartLines applique les remises quantité", () => {
+  const discountedProduct = {
+    slug: "gaine-spiro",
+    name: "Gaine spiro",
+    amount: 10000,
+    quantityDiscounts: [
+      { minQuantity: 5, percent: 10 },
+      { minQuantity: 10, percent: 15 },
+    ],
+  };
+
+  assert.deepEqual(getCartLines([discountedProduct], { "gaine-spiro": 6 }), [
+    {
+      product: discountedProduct,
+      quantity: 6,
+      discount: { minQuantity: 5, percent: 10 },
+      unitAmount: 9000,
+      lineTotal: 54000,
+    },
+  ]);
+});
+
+test("buildOrderSnapshot applique les remises quantité côté commande", () => {
+  const product = {
+    slug: "gaine-spiro",
+    name: "Gaine spiro",
+    category: "Conduits",
+    description: "Conduit rond.",
+    amount: 10000,
+    price: "100 €",
+    quantityDiscounts: [{ minQuantity: 5, percent: 10 }],
+  };
+
+  assert.deepEqual(buildOrderSnapshot([{ product, quantity: 5 }]), {
+    amountSubtotal: 45000,
+    promoCode: null,
+    promoDiscountAmount: 0,
+    amountTotal: 45000,
+    items: [
+      {
+        slug: "gaine-spiro",
+        name: "Gaine spiro",
+        category: "Conduits",
+        description: "Conduit rond.",
+        amount: 10000,
+        price: "100 €",
+        quantity: 5,
+        discount: { minQuantity: 5, percent: 10 },
+        unitAmount: 9000,
+        promoUnitAmount: 9000,
+        lineSubtotal: 45000,
+        promoDiscountAmount: 0,
+        lineTotal: 45000,
+      },
+    ],
+  });
+});
+
+test("buildOrderSnapshot applique un code promo après les remises quantité", () => {
+  const product = {
+    slug: "gaine-spiro",
+    name: "Gaine spiro",
+    category: "Conduits",
+    description: "Conduit rond.",
+    amount: 10000,
+    price: "100 €",
+    quantityDiscounts: [{ minQuantity: 5, percent: 10 }],
+  };
+
+  assert.deepEqual(
+    buildOrderSnapshot([{ product, quantity: 5 }], {
+      code: "PRO10",
+      percent: 10,
+      minimumAmount: 10000,
+      active: true,
+    }),
+    {
+      amountSubtotal: 45000,
+      promoCode: {
+        code: "PRO10",
+        percent: 10,
+        minimumAmount: 10000,
+        startsAt: "",
+        endsAt: "",
+        active: true,
+      },
+      promoDiscountAmount: 4500,
+      amountTotal: 40500,
+      items: [
+        {
+          slug: "gaine-spiro",
+          name: "Gaine spiro",
+          category: "Conduits",
+          description: "Conduit rond.",
+          amount: 10000,
+          price: "100 €",
+          quantity: 5,
+          discount: { minQuantity: 5, percent: 10 },
+          unitAmount: 9000,
+          promoUnitAmount: 8100,
+          lineSubtotal: 45000,
+          promoDiscountAmount: 4500,
+          lineTotal: 40500,
+        },
+      ],
+    },
+  );
 });
 
 test("getCheckoutItems ne garde que slug et quantity", () => {
@@ -106,6 +218,8 @@ test("getCartLines transforme une option produit en ligne achetable", () => {
         optionLabel: "150-B",
       },
       quantity: 2,
+      discount: null,
+      unitAmount: 8436,
       lineTotal: 16872,
     },
   ]);
