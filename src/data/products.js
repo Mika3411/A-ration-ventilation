@@ -126,6 +126,60 @@ import waterPumpExpansionTankHorizontalGmax50L from "../assets/product-water-pum
 
 import waterPumpExpansionTankHorizontalGmax60L from "../assets/product-water-pump-expansion-tank-horizontal-gmax-60l.jpg";
 
+import waterPumpExpansionTankHorizontalGmax80L from "../assets/product-water-pump-expansion-tank-horizontal-gmax-80l.jpg";
+
+import waterPumpExpansionTankHorizontalGmax100L from "../assets/product-water-pump-expansion-tank-horizontal-gmax-100l.jpg";
+
+import waterPumpExpansionTankVerticalGmax8L from "../assets/product-water-pump-expansion-tank-vertical-gmax-8l.jpg";
+
+import waterPumpExpansionTankVerticalGmax12L from "../assets/product-water-pump-expansion-tank-vertical-gmax-12l.jpg";
+
+import waterPumpExpansionTankVerticalGmax24L from "../assets/product-water-pump-expansion-tank-vertical-gmax-24l.jpg";
+
+import waterPumpExpansionTankVerticalGmax35L from "../assets/product-water-pump-expansion-tank-vertical-gmax-35l.jpg";
+
+import waterPumpExpansionTankVerticalGmax50L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankVerticalGmax80L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankVerticalGmax100L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankVerticalGmax150L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankVerticalGmax200L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankVerticalGmax300L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankVerticalGmax500L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankVerticalGmax1000L from "../assets/product-water-pump-expansion-tank-vertical-gmax-50l.jpg";
+
+import waterPumpExpansionTankMembraneGmax24L from "../assets/product-water-pump-expansion-tank-membrane-gmax-24l.jpg";
+
+import waterPumpExpansionTankMembraneGmax35To50L from "../assets/product-water-pump-expansion-tank-membrane-gmax-35-50l.jpg";
+
+import waterPumpExpansionTankMembraneGmax60L from "../assets/product-water-pump-expansion-tank-membrane-gmax-60l.jpg";
+
+import waterPumpExpansionTankMembraneGmax80L from "../assets/product-water-pump-expansion-tank-membrane-gmax-80l.jpg";
+
+import waterPumpExpansionTankMembraneGmax100L from "../assets/product-water-pump-expansion-tank-membrane-gmax-100l.jpg";
+
+import waterPumpExpansionTankMembraneGmax150L from "../assets/product-water-pump-expansion-tank-membrane-gmax-150l.jpg";
+
+import waterPumpExpansionTankMembraneGmax200L from "../assets/product-water-pump-expansion-tank-membrane-gmax-150l.jpg";
+
+import waterPumpExpansionTankMembraneGmax300L from "../assets/product-water-pump-expansion-tank-membrane-gmax-300l.jpg";
+
+import waterPumpExpansionTankMembraneGmax500L from "../assets/product-water-pump-expansion-tank-membrane-gmax-300l.jpg";
+
+import waterPumpExpansionTankMembraneGmax1000L from "../assets/product-water-pump-expansion-tank-membrane-gmax-1000l.jpg";
+
+import waterPumpExpansionTankFlangeGmax1Inch from "../assets/product-water-pump-expansion-tank-flange-gmax-1-inch.jpg";
+
+import gasolinePumpCouplingGmax2Inch from "../assets/product-gasoline-pump-coupling-gmax-2-inch.jpg";
+
+import gasolinePumpCouplingGmax3Inch from "../assets/product-gasoline-pump-coupling-gmax-3-inch.jpg";
+
 import pumpInverterControlGmaxIpc01 from "../assets/product-pump-inverter-control-gmax-ipc-01.jpg";
 
 import pressureControlGmaxEpc4 from "../assets/product-pressure-control-gmax-epc-4.jpg";
@@ -248,6 +302,33 @@ export const productImageByKey = {
   waterPumpExpansionTankHorizontalGmax24L,
   waterPumpExpansionTankHorizontalGmax50L,
   waterPumpExpansionTankHorizontalGmax60L,
+  waterPumpExpansionTankHorizontalGmax80L,
+  waterPumpExpansionTankHorizontalGmax100L,
+  waterPumpExpansionTankVerticalGmax8L,
+  waterPumpExpansionTankVerticalGmax12L,
+  waterPumpExpansionTankVerticalGmax24L,
+  waterPumpExpansionTankVerticalGmax35L,
+  waterPumpExpansionTankVerticalGmax50L,
+  waterPumpExpansionTankVerticalGmax80L,
+  waterPumpExpansionTankVerticalGmax100L,
+  waterPumpExpansionTankVerticalGmax150L,
+  waterPumpExpansionTankVerticalGmax200L,
+  waterPumpExpansionTankVerticalGmax300L,
+  waterPumpExpansionTankVerticalGmax500L,
+  waterPumpExpansionTankVerticalGmax1000L,
+  waterPumpExpansionTankMembraneGmax24L,
+  waterPumpExpansionTankMembraneGmax35To50L,
+  waterPumpExpansionTankMembraneGmax60L,
+  waterPumpExpansionTankMembraneGmax80L,
+  waterPumpExpansionTankMembraneGmax100L,
+  waterPumpExpansionTankMembraneGmax150L,
+  waterPumpExpansionTankMembraneGmax200L,
+  waterPumpExpansionTankMembraneGmax300L,
+  waterPumpExpansionTankMembraneGmax500L,
+  waterPumpExpansionTankMembraneGmax1000L,
+  waterPumpExpansionTankFlangeGmax1Inch,
+  gasolinePumpCouplingGmax2Inch,
+  gasolinePumpCouplingGmax3Inch,
   pumpInverterControlGmaxIpc01,
   pressureControlGmaxEpc4,
   pressureControlGmaxEpc1A,
@@ -354,6 +435,114 @@ export const productImageOptions = [
   {
     label: "Vase d'expansion horizontal Gmax 60 L",
     value: "waterPumpExpansionTankHorizontalGmax60L",
+  },
+  {
+    label: "Vase d'expansion horizontal Gmax 80 L",
+    value: "waterPumpExpansionTankHorizontalGmax80L",
+  },
+  {
+    label: "Vase d'expansion horizontal Gmax 100 L",
+    value: "waterPumpExpansionTankHorizontalGmax100L",
+  },
+  {
+    label: "Récipient à expansion verticale Gmax 8 L",
+    value: "waterPumpExpansionTankVerticalGmax8L",
+  },
+  {
+    label: "Cuve à expansion verticale Gmax 12 L",
+    value: "waterPumpExpansionTankVerticalGmax12L",
+  },
+  {
+    label: "Vase à expansion verticale Gmax 24 L",
+    value: "waterPumpExpansionTankVerticalGmax24L",
+  },
+  {
+    label: "Vase à expansion verticale Gmax 35 L",
+    value: "waterPumpExpansionTankVerticalGmax35L",
+  },
+  {
+    label: "Vase à expansion verticale Gmax 50 L",
+    value: "waterPumpExpansionTankVerticalGmax50L",
+  },
+  {
+    label: "Vase à expansion verticale Gmax 80 L",
+    value: "waterPumpExpansionTankVerticalGmax80L",
+  },
+  {
+    label: "Vase à expansion verticale Gmax 100 L",
+    value: "waterPumpExpansionTankVerticalGmax100L",
+  },
+  {
+    label: "Vase à expansion verticale Gmax 150 L",
+    value: "waterPumpExpansionTankVerticalGmax150L",
+  },
+  {
+    label: "Cuve à expansion verticale Gmax 200 L",
+    value: "waterPumpExpansionTankVerticalGmax200L",
+  },
+  {
+    label: "Vase à expansion verticale Gmax 300 L",
+    value: "waterPumpExpansionTankVerticalGmax300L",
+  },
+  {
+    label: "Récipient à expansion verticale Gmax 500 L",
+    value: "waterPumpExpansionTankVerticalGmax500L",
+  },
+  {
+    label: "Cuve à expansion verticale Gmax 1000 L",
+    value: "waterPumpExpansionTankVerticalGmax1000L",
+  },
+  {
+    label: "Membrane du récipient d'expansion Gmax 24 L",
+    value: "waterPumpExpansionTankMembraneGmax24L",
+  },
+  {
+    label: "Membrane pour récipient d'expansion Gmax 35-50 L",
+    value: "waterPumpExpansionTankMembraneGmax35To50L",
+  },
+  {
+    label: "Membrane pour récipient d'expansion Gmax 60 L",
+    value: "waterPumpExpansionTankMembraneGmax60L",
+  },
+  {
+    label: "Membrane du récipient d'expansion Gmax 80 L",
+    value: "waterPumpExpansionTankMembraneGmax80L",
+  },
+  {
+    label: "Membrane du récipient d'expansion Gmax 100 L",
+    value: "waterPumpExpansionTankMembraneGmax100L",
+  },
+  {
+    label: "Membrane du récipient d'expansion Gmax 150 L",
+    value: "waterPumpExpansionTankMembraneGmax150L",
+  },
+  {
+    label: "Membrane du récipient de dilatation Gmax 200 L",
+    value: "waterPumpExpansionTankMembraneGmax200L",
+  },
+  {
+    label: "Membrane pour récipient d'expansion Gmax 300 L",
+    value: "waterPumpExpansionTankMembraneGmax300L",
+  },
+  {
+    label: "Membrane du récipient d'expansion Gmax 500 L",
+    value: "waterPumpExpansionTankMembraneGmax500L",
+  },
+  {
+    label: "Membrane du récipient d'expansion Gmax 1000 L",
+    value: "waterPumpExpansionTankMembraneGmax1000L",
+  },
+  {
+    label: "Bride pour cuve d'expansion Gmax 1 pouce",
+    value: "waterPumpExpansionTankFlangeGmax1Inch",
+  },
+  {
+    label: "Raccord pour pompe à essence Gmax 2 pouces",
+    value: "gasolinePumpCouplingGmax2Inch",
+  },
+  {
+    label: "Raccord pour pompe à essence Gmax 3 pouces",
+    value: "gasolinePumpCouplingGmax3Inch",
   },
   { label: "Contrôleur à onduleur pour pompe Gmax IPC-01", value: "pumpInverterControlGmaxIpc01" },
   { label: "Contrôleur de pression Gmax EPC-4", value: "pressureControlGmaxEpc4" },
