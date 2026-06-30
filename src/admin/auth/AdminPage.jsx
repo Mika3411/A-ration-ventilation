@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { LogIn } from "lucide-react";
 
-import { PageHero } from "../../layout/PageHero.jsx";
 import { AdminDashboard } from "../dashboard/AdminDashboard.jsx";
 import { fetchAdminSession, loginAdmin, logoutAdmin } from "./adminAuthApi.js";
 
@@ -62,10 +61,6 @@ export function AdminPage({ onProductsChanged }) {
 
   return (
     <>
-      <PageHero
-        title="Administration boutique"
-        text="Gérez les produits, les catégories, les membres et les informations client de la boutique."
-      />
       <section className="section admin-section">
         <div className="container">
           {authStatus === "checking" && (

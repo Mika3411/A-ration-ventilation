@@ -1419,6 +1419,7 @@ button {
 }
 
 .admin-section {
+  padding-top: clamp(28px, 4vw, 52px);
   background:
     linear-gradient(180deg, rgba(255, 122, 31, 0.09) 0%, rgba(8, 7, 6, 0) 42%),
     #0b0807;
@@ -1807,22 +1808,22 @@ button {
 
 .admin-category-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 8px;
-  max-height: min(300px, 36vh);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 10px;
+  max-height: min(460px, 62vh);
   overflow-y: auto;
   margin: 0;
-  padding: 0 4px 0 0;
+  padding: 0 6px 0 0;
   list-style: none;
 }
 
 .admin-category-list li {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-  min-height: 54px;
-  padding: 8px;
+  gap: 12px;
+  align-items: start;
+  min-height: 82px;
+  padding: 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--soft);
@@ -1831,11 +1832,13 @@ button {
 .admin-category-list li > span {
   display: grid;
   gap: 4px;
+  align-content: start;
   min-width: 0;
 }
 
 .admin-category-list strong,
 .admin-category-list small {
+  line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
@@ -1849,6 +1852,10 @@ button {
   display: flex;
   gap: 6px;
   align-items: center;
+}
+
+.admin-category-actions {
+  align-self: center;
 }
 
 .admin-category-actions button {
