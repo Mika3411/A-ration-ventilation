@@ -42,6 +42,14 @@ export async function seedDefaultShopProducts(pool) {
 }
 
 export async function seedDefaultShopCategories(pool) {
+  const existingCategories = await pool.query(`
+    SELECT COUNT(*)::int AS count
+    FROM shop_categories
+  `);
+  const categoryCount = Number.parseInt(existingCategories.rows[0]?.count, 10) || 0;
+
+  if (categoryCount > 0) return;
+
   for (const [index, category] of defaultShopCategories.entries()) {
     await pool.query(
       `

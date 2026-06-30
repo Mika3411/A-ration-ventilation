@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createDatabasePoolConfig } from "../server/database.js";
 import { initializeDatabase } from "../server/database/initialize.js";
+import { seedDefaultShopCategories } from "../server/database/seeds.js";
 
 test("database pool garde les URLs Render internes sans TLS en mode auto", () => {
   const config = createDatabasePoolConfig("postgres://user:pass@dpg-test-a/app", {
@@ -126,4 +127,30 @@ test("database initialization exécute schéma, migrations et seed dans l'ordre"
   assert.ok(customerVerificationDataMigrationIndex < categorySeedIndex);
   assert.ok(dataMigrationIndex < categorySeedIndex);
   assert.ok(categorySeedIndex < missingCategorySeedIndex);
+});
+
+test("category seed ne recrée pas les catégories supprimées sur une base existante", async () => {
+  const queries = [];
+  const pool = {
+    async query(sql, params = []) {
+      const normalizedSql = String(sql).replace(/\s+/g, " ").trim();
+      queries.push({
+        sql: normalizedSql,
+        params,
+      });
+
+      if (normalizedSql.includes("SELECT COUNT(*)::int AS count FROM shop_categories")) {
+        return { rows: [{ count: 3 }], rowCount: 1 };
+      }
+
+      return { rows: [], rowCount: 0 };
+    },
+  };
+
+  await seedDefaultShopCategories(pool);
+
+  assert.equal(
+    queries.some((query) => query.sql.includes("INSERT INTO shop_categories")),
+    false,
+  );
 });
