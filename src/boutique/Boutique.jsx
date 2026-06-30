@@ -13,7 +13,9 @@ import {
   normalizeCartQuantity,
 } from "../../shared/pricing.js";
 
-const catalogProductsPerPage = 8;
+const desktopCatalogProductsPerPage = 9;
+const compactCatalogProductsPerPage = 8;
+const compactCatalogMediaQuery = "(max-width: 1120px)";
 
 export function FeaturedGallery({ cartItems, currentPath, onAddToCart, onNavigate, products }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -227,6 +229,7 @@ export function Catalog({
     : "Toutes";
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
+  const catalogProductsPerPage = useCatalogProductsPerPage();
 
   const filteredProducts = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -544,6 +547,40 @@ function getProductOptionSearchText(product) {
   return product.options
     .map((option) => `${option.label} ${option.price} ${option.bgn}`)
     .join(" ");
+}
+
+function useCatalogProductsPerPage() {
+  const [productsPerPage, setProductsPerPage] = useState(getCatalogProductsPerPage);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return undefined;
+
+    const mediaQuery = window.matchMedia(compactCatalogMediaQuery);
+    const updateProductsPerPage = () => {
+      setProductsPerPage(
+        mediaQuery.matches ? compactCatalogProductsPerPage : desktopCatalogProductsPerPage,
+      );
+    };
+
+    updateProductsPerPage();
+    mediaQuery.addEventListener("change", updateProductsPerPage);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateProductsPerPage);
+    };
+  }, []);
+
+  return productsPerPage;
+}
+
+function getCatalogProductsPerPage() {
+  if (typeof window === "undefined" || !window.matchMedia) {
+    return desktopCatalogProductsPerPage;
+  }
+
+  return window.matchMedia(compactCatalogMediaQuery).matches
+    ? compactCatalogProductsPerPage
+    : desktopCatalogProductsPerPage;
 }
 
 export function BoutiquePage({
