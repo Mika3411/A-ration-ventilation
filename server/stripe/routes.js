@@ -6,6 +6,7 @@ import { getAuthenticatedCustomer } from "../auth/customerAuth.js";
 import { ensureDatabaseReady } from "../database.js";
 import { getRequestOrigin } from "../helpers.js";
 import {
+  attachStripeInvoiceToOrder,
   attachStripeSessionToOrder,
   buildOrderSnapshot,
   buildStripeOrderMetadata,
@@ -58,10 +59,29 @@ export function createStripeWebhookRouter() {
       if (event.type === "checkout.session.completed") {
         const session = event.data.object;
         const order = await completeOrderFromCheckoutSession(session);
+        const invoice = await getSessionInvoice(session);
+
+        if (invoice) {
+          await attachStripeInvoiceToOrder(invoice, {
+            orderPublicId: order?.id || session.metadata?.orderId || "",
+            stripeSessionId: session.id,
+          });
+        }
 
         console.log("Stripe checkout completed:", {
           sessionId: session.id,
           orderId: order?.id || session.metadata?.orderId || "",
+        });
+      }
+
+      if (event.type === "invoice.finalized" || event.type === "invoice.paid") {
+        const invoice = event.data.object;
+        const order = await attachStripeInvoiceToOrder(invoice);
+
+        console.log("Stripe invoice linked:", {
+          invoiceId: invoice.id,
+          orderId: order?.id || invoice.metadata?.orderId || "",
+          eventType: event.type,
         });
       }
 
@@ -125,6 +145,7 @@ export function createCheckoutRouter() {
     try {
       const customer = await getAuthenticatedCustomer(request);
       const order = await createPendingOrder({ cartItems, customer, promoCode });
+      const metadata = buildStripeOrderMetadata({ order, customer });
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
         line_items: cartItems.map(({ product, quantity }) => {
@@ -180,7 +201,18 @@ export function createCheckoutRouter() {
         automatic_tax: {
           enabled: process.env.STRIPE_AUTOMATIC_TAX === "true",
         },
-        metadata: buildStripeOrderMetadata({ order, customer }),
+        invoice_creation: {
+          enabled: true,
+          invoice_data: {
+            description: `Commande ${order.publicId || order.id}`,
+            metadata,
+          },
+        },
+        tax_id_collection: {
+          enabled: true,
+        },
+        ...(customer?.email ? { customer_email: customer.email } : {}),
+        metadata,
       });
 
       await attachStripeSessionToOrder(order.publicId || order.id, session);
@@ -209,4 +241,27 @@ async function getProductionCheckoutDatabaseError() {
 
 function formatDiscountPercent(percent) {
   return Number.isInteger(percent) ? `${percent}%` : `${String(percent).replace(".", ",")}%`;
+}
+
+async function getSessionInvoice(session) {
+  const invoice = session.invoice;
+  const invoiceId = getStripeObjectId(invoice);
+
+  if (!invoiceId || !stripe) return null;
+  if (invoice && typeof invoice === "object" && "hosted_invoice_url" in invoice) {
+    return invoice;
+  }
+
+  try {
+    return await stripe.invoices.retrieve(invoiceId);
+  } catch (error) {
+    console.error("Stripe invoice retrieval failed:", error);
+    return { id: invoiceId, metadata: session.metadata || {} };
+  }
+}
+
+function getStripeObjectId(value) {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  return value.id || "";
 }

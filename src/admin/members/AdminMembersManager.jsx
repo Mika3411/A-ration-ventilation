@@ -1,5 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { Building2, CalendarClock, Mail, Phone, Save, Search, ShoppingBag, UserRound } from "lucide-react";
+import {
+  Building2,
+  CalendarClock,
+  FileText,
+  Mail,
+  Phone,
+  Save,
+  Search,
+  ShoppingBag,
+  UserRound,
+} from "lucide-react";
 
 import { formatAdminDate } from "../utils/format.js";
 import { emptyAdminMemberForm, getAdminMemberForm, getAdminMemberPayload } from "./memberForm.js";
@@ -339,6 +349,17 @@ export function AdminMembersManager() {
                           <small>
                             {order.items.length} article{order.items.length > 1 ? "s" : ""}
                           </small>
+                          {(order.invoicePdfUrl || order.invoiceUrl) && (
+                            <a
+                              className="admin-invoice-link"
+                              href={order.invoicePdfUrl || order.invoiceUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <FileText size={14} />
+                              Facture
+                            </a>
+                          )}
                         </div>
                       </li>
                     ))}

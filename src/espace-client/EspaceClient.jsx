@@ -5,6 +5,7 @@ import {
   ClipboardList,
   Eye,
   EyeOff,
+  FileText,
   KeyRound,
   LogIn,
   LogOut,
@@ -770,6 +771,17 @@ function CustomerOrders({ orders, status }) {
                 </div>
                 <small>{formatCustomerDate(order.completedAt || order.createdAt)}</small>
               </div>
+              {(order.invoicePdfUrl || order.invoiceUrl) && (
+                <a
+                  className="customer-invoice-link"
+                  href={order.invoicePdfUrl || order.invoiceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FileText size={16} />
+                  Télécharger la facture
+                </a>
+              )}
               <ul>
                 {(order.items || []).map((item) => (
                   <li key={`${order.id}-${item.slug}`}>

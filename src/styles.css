@@ -2428,6 +2428,29 @@ button {
   overflow-wrap: anywhere;
 }
 
+.admin-invoice-link,
+.customer-invoice-link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 122, 31, 0.32);
+  border-radius: 8px;
+  color: var(--orange-2);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admin-invoice-link:hover,
+.admin-invoice-link:focus-visible,
+.customer-invoice-link:hover,
+.customer-invoice-link:focus-visible {
+  background: rgba(255, 122, 31, 0.1);
+  outline: 0;
+}
+
 .admin-product-list > button {
   display: grid;
   grid-template-columns: 58px 1fr auto;
@@ -3846,6 +3869,10 @@ button {
 .customer-order-summary > div {
   display: grid;
   gap: 4px;
+}
+
+.customer-invoice-link {
+  justify-self: start;
 }
 
 .customer-order ul {

@@ -132,6 +132,43 @@ export async function attachStripeSessionToOrder(orderPublicId, session) {
   return result.rows[0] ? serializeOrderRow(result.rows[0]) : null;
 }
 
+export async function attachStripeInvoiceToOrder(invoice, { orderPublicId = "", stripeSessionId = "" } = {}) {
+  const invoiceDetails = normalizeStripeInvoiceDetails(invoice);
+  if (!dbPool || !invoiceDetails.id) return null;
+
+  const cleanOrderPublicId =
+    cleanSingleLine(orderPublicId, 140) || cleanSingleLine(invoiceDetails.metadata.orderId, 140);
+  const cleanStripeSessionId =
+    cleanSingleLine(stripeSessionId, 180) ||
+    cleanSingleLine(invoiceDetails.metadata.checkoutSessionId, 180);
+
+  if (!cleanOrderPublicId && !cleanStripeSessionId) return null;
+
+  await ensureDatabaseReady();
+  const result = await dbPool.query(
+    `
+      UPDATE orders
+      SET
+        stripe_invoice_id = $1,
+        stripe_invoice_url = COALESCE(NULLIF($2, ''), stripe_invoice_url),
+        stripe_invoice_pdf_url = COALESCE(NULLIF($3, ''), stripe_invoice_pdf_url),
+        updated_at = NOW()
+      WHERE public_id = $4
+        OR ($5 <> '' AND stripe_session_id = $5)
+      RETURNING *
+    `,
+    [
+      invoiceDetails.id,
+      invoiceDetails.url,
+      invoiceDetails.pdfUrl,
+      cleanOrderPublicId,
+      cleanStripeSessionId,
+    ],
+  );
+
+  return result.rows[0] ? serializeOrderRow(result.rows[0]) : null;
+}
+
 export async function completeOrderFromCheckoutSession(session) {
   if (!dbPool) {
     return null;
@@ -319,6 +356,19 @@ function getStripeId(value) {
   return value.id || "";
 }
 
+function normalizeStripeInvoiceDetails(invoice) {
+  const invoiceObject = invoice && typeof invoice === "object" ? invoice : {};
+
+  return {
+    id: getStripeId(invoice),
+    url: cleanSingleLine(invoiceObject.hosted_invoice_url, 500),
+    pdfUrl: cleanSingleLine(invoiceObject.invoice_pdf, 500),
+    metadata: invoiceObject.metadata && typeof invoiceObject.metadata === "object"
+      ? invoiceObject.metadata
+      : {},
+  };
+}
+
 function serializeOrderRow(row) {
   const amountTotal = Number.parseInt(row.amount_total, 10) || 0;
 
@@ -327,6 +377,9 @@ function serializeOrderRow(row) {
     customerId: row.customer_public_id || "",
     customerEmail: row.customer_email || "",
     stripeSessionId: row.stripe_session_id || "",
+    stripeInvoiceId: row.stripe_invoice_id || "",
+    invoiceUrl: row.stripe_invoice_url || "",
+    invoicePdfUrl: row.stripe_invoice_pdf_url || "",
     status: row.status,
     paymentStatus: row.payment_status,
     currency: row.currency,
