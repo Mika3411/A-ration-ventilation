@@ -11,7 +11,7 @@ import { formatEuroWithCents } from "../src/utils/format.js";
 import { buildOrderSnapshot } from "../server/orders/service.js";
 
 const products = [
-  { slug: "ventilateurs-axiaux", name: "Ventilateurs axiaux", amount: 24900 },
+  { slug: "ventilateur-axial-draf", name: "Ventilateur axial DRAF", amount: 9203 },
   {
     slug: "ventilateur-de-canal-yka",
     name: "Ventilateur de canal YKA",
@@ -40,21 +40,21 @@ const products = [
     name: "Clapet rectangulaire à débit constant HCAV-R",
     amount: 0,
   },
-  { slug: "regulateurs", name: "Régulateurs", amount: 12900 },
+  { slug: "regulateur-vitesse-mna", name: "Régulateur de vitesse MNA", amount: 4090 },
 ];
 
 test("sanitizeCartItems garde uniquement les quantités positives bornées", () => {
   assert.deepEqual(
     sanitizeCartItems({
-      "ventilateurs-axiaux": "2",
-      regulateurs: 120,
+      "ventilateur-axial-draf": "2",
+      "regulateur-vitesse-mna": 120,
       ignored: "abc",
       removed: -1,
       zero: 0,
     }),
     {
-      "ventilateurs-axiaux": 2,
-      regulateurs: 99,
+      "ventilateur-axial-draf": 2,
+      "regulateur-vitesse-mna": 99,
     },
   );
   assert.deepEqual(sanitizeCartItems(null), {});
@@ -62,13 +62,13 @@ test("sanitizeCartItems garde uniquement les quantités positives bornées", () 
 });
 
 test("getCartLines calcule les lignes et totaux du panier", () => {
-  assert.deepEqual(getCartLines(products, { "ventilateurs-axiaux": 2, unknown: 4 }), [
+  assert.deepEqual(getCartLines(products, { "ventilateur-axial-draf": 2, unknown: 4 }), [
     {
       product: products[0],
       quantity: 2,
       discount: null,
-      unitAmount: 24900,
-      lineTotal: 49800,
+      unitAmount: 9203,
+      lineTotal: 18406,
     },
   ]);
 });
@@ -183,9 +183,9 @@ test("buildOrderSnapshot applique un code promo après les remises quantité", (
 });
 
 test("getCheckoutItems ne garde que slug et quantity", () => {
-  assert.deepEqual(getCheckoutItems(products, { "ventilateurs-axiaux": 1, regulateurs: 3 }), [
-    { slug: "ventilateurs-axiaux", quantity: 1 },
-    { slug: "regulateurs", quantity: 3 },
+  assert.deepEqual(getCheckoutItems(products, { "ventilateur-axial-draf": 1, "regulateur-vitesse-mna": 3 }), [
+    { slug: "ventilateur-axial-draf", quantity: 1 },
+    { slug: "regulateur-vitesse-mna", quantity: 3 },
   ]);
 });
 

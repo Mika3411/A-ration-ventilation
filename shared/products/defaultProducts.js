@@ -3413,19 +3413,6 @@ const gasolinePumpCouplingGmax3InchProduct = {
 };
 
 export const defaultShopProducts = [
-  {
-    name: "Ventilateurs axiaux",
-    slug: "ventilateurs-axiaux",
-    category: "Ventilation industrielle",
-    amount: 24900,
-    description: "Ventilateurs haute performance pour le renouvellement d'air et l'extraction.",
-    imageKey: "axialFan",
-    imageUrl: "",
-    imageData: "",
-    featured: true,
-    active: true,
-    sortOrder: 10,
-  },
   drafAxialFanProduct,
   ysaAxialFanProduct,
   ksaAxialFanProduct,
@@ -3433,19 +3420,6 @@ export const defaultShopProducts = [
   dtaAxialFanProduct,
   axialFan8kaProduct,
   axialFan4kaProduct,
-  {
-    name: "Ventilateurs de canaux",
-    slug: "ventilateurs-de-canaux",
-    category: "Réseaux de conduits",
-    amount: 18900,
-    description: "Solutions compactes pour installations dans les conduits.",
-    imageKey: "ductFan",
-    imageUrl: "",
-    imageData: "",
-    featured: true,
-    active: true,
-    sortOrder: 20,
-  },
   ykaDuctFanProduct,
   drpktDuctFanProduct,
   fdkfRectangularDuctFanProduct,
@@ -3723,19 +3697,6 @@ export const defaultShopProducts = [
   waterPumpProtectionPanelGmaxC3Mp14To55Product,
   waterPumpProtectionPanelGmaxC3Mp155To75Product,
   waterPumpLevelProbeGmaxProduct,
-  {
-    name: "Régulateurs",
-    slug: "regulateurs",
-    category: "Pilotage",
-    amount: 12900,
-    description: "Régulation de vitesse et contrôle pour optimiser vos installations.",
-    imageKey: "speedController",
-    imageUrl: "",
-    imageData: "",
-    featured: true,
-    active: true,
-    sortOrder: 80,
-  },
 ];
 
 export const defaultShopCategories = Array.from(
@@ -3746,9 +3707,6 @@ export const defaultShopCategories = Array.from(
     "Moteurs électriques 220/380",
     "Pompes à eau",
     "Portes d'entrée et blindées",
-    "Regulateurs",
-    "Ventilateurs axiaux",
-    "Ventilateurs de canaux",
     "Ventilateurs centrifuges",
     "Ventilateurs de restaurant",
     "Ventilateurs de salle de bains",
@@ -3758,7 +3716,6 @@ export const defaultShopCategories = Array.from(
 );
 
 export const allowedImageKeys = new Set([
-  "axialFan",
   "axialFanDraf",
   "axialFanYsa",
   "axialFanKsa",
@@ -3766,7 +3723,6 @@ export const allowedImageKeys = new Set([
   "axialFanDta",
   "axialFan8ka",
   "axialFan4ka",
-  "ductFan",
   "ductFanYka",
   "ductFanPakf",
   "roundInlineDuctFanLkt",
@@ -3811,7 +3767,6 @@ export const allowedImageKeys = new Set([
   "swirlCeilingDiffuserHsswd",
   "linearSlotDiffuserHsd",
   "manualRegulatingDamper",
-  "speedController",
   "speedControllerDha",
   "speedControllerMna",
   "waterPumpGmaxQb60",

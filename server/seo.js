@@ -19,7 +19,6 @@ import { getPublicCategories, getPublicProducts } from "./products/service.js";
 
 const indexHtmlFileName = "index.html";
 const productImageFilePrefixesByKey = {
-  axialFan: "product-axial-fan-",
   axialFanDraf: "product-axial-fan-draf-",
   axialFanYsa: "product-axial-fan-ysa-",
   axialFanKsa: "product-axial-fan-ksa-",
@@ -32,7 +31,6 @@ const productImageFilePrefixesByKey = {
   spiroDuctVentilationGrille: "product-spiro-duct-ventilation-grille-",
   spiroDuct: "product-round-spiro-duct-",
   fixedLouverGrille: "product-fixed-louver-grille-",
-  ductFan: "product-duct-fan-",
   ductFanYka: "product-duct-fan-yka-",
   ductFanPakf: "product-duct-fan-pakf-",
   roundInlineDuctFanLkt: "product-round-inline-duct-fan-lkt-",
@@ -68,7 +66,6 @@ const productImageFilePrefixesByKey = {
     "product-electric-motor-three-phase-3kw-2850-cast-iron-",
   electricMotorThreePhase55Kw2850AluminumCopper:
     "product-electric-motor-three-phase-55kw-2850-aluminum-copper-",
-  speedController: "product-speed-controller-",
 };
 const builtProductImagePathCache = new Map();
 

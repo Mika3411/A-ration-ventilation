@@ -144,7 +144,7 @@ test("normalizeProductInput nettoie et valide un produit admin", () => {
     category: "  Extraction  ",
     description: " Ligne 1\r\nLigne 2 ",
     amount: "12900",
-    imageKey: "axialFan",
+    imageKey: "axialFanDraf",
     imageUrl: " https://example.com/fan.webp ",
     imageData: "data:image/png;base64,aGVsbG8=",
     options: [
@@ -203,7 +203,7 @@ test("normalizeProductInput nettoie et valide un produit admin", () => {
         percent: 12.5,
       },
     ],
-    imageKey: "axialFan",
+    imageKey: "axialFanDraf",
     imageUrl: "https://example.com/fan.webp",
     imageData: "data:image/png;base64,aGVsbG8=",
     featured: true,

@@ -72,7 +72,7 @@ function validatePromoCode(baseUrl, code, forwardedFor) {
     },
     body: JSON.stringify({
       code,
-      items: [{ slug: "ventilateurs-axiaux", quantity: 1 }],
+      items: [{ slug: "ventilateur-axial-draf-200", quantity: 1 }],
     }),
   });
 }
@@ -105,7 +105,7 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
     assert.equal(Array.isArray(body.categories), true);
     assert.equal(body.products.length, expectedPublicProductCount);
     assert.equal(new Set(productSlugs).size, productSlugs.length);
-    assert.ok(productSlugs.includes("ventilateurs-axiaux"));
+    assert.ok(productSlugs.includes("ventilateur-axial-draf"));
     assert.ok(productSlugs.includes("ventilateur-de-canal-yka"));
     assert.ok(productSlugs.includes("pompe-a-eau-peripherique-gmax-qb80"));
     assert.ok(productSlugs.includes("panneau-protection-pompes-eau-triphasees-gmax-c3-mp1-075-4"));
@@ -317,7 +317,6 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
       mnaSpeedControllerProduct.options.map((option) => [option.slug, option]),
     );
 
-    assert.equal(priceBySlug.get("ventilateurs-axiaux"), "249 €");
     assert.equal(priceBySlug.get("ventilateur-axial-draf"), "92,03 €");
     assert.equal(drafProduct.options.length, 4);
     assert.equal(drafOptionBySlug.get("ventilateur-axial-draf-200").price, "92,03 €");
@@ -656,7 +655,6 @@ test("GET /api/products retourne les produits publics par défaut sans Postgres"
     assert.equal(mnaSpeedControllerProduct.options.length, 2);
     assert.equal(mnaSpeedControllerOptionBySlug.get("regulateur-vitesse-mna-1").price, "40,90 €");
     assert.equal(mnaSpeedControllerOptionBySlug.get("regulateur-vitesse-mna-2").price, "61,36 €");
-    assert.ok(body.categories.includes("Ventilation industrielle"));
     assert.ok(body.categories.includes("Conduits spiro et pièces façonnées"));
     assert.ok(body.categories.includes("Moteurs électriques 220/380"));
     assert.ok(body.categories.includes("Moteurs électriques triphasés"));
@@ -677,7 +675,7 @@ test("deleteProduct archive un produit admin sans le laisser public", async () =
       category: "Tests",
       description: "Produit créé pour vérifier l'archivage admin.",
       amount: 1299,
-      imageKey: "ductFan",
+      imageKey: "ductFanYka",
       active: true,
       sortOrder: 9999,
     }),
@@ -1375,7 +1373,7 @@ test("POST /api/checkout échoue fermé en production sans SITE_URL", async () =
             origin: "https://request-origin.example.com",
           },
           body: JSON.stringify({
-            items: [{ slug: "ventilateurs-axiaux", quantity: 1 }],
+            items: [{ slug: "ventilateur-axial-draf-200", quantity: 1 }],
           }),
         });
         const body = await response.json();
@@ -1397,7 +1395,7 @@ test("POST /api/checkout refuse une origine CSRF invalide", async () => {
           origin: "https://attacker.example.com",
         },
         body: JSON.stringify({
-          items: [{ slug: "ventilateurs-axiaux", quantity: 1 }],
+          items: [{ slug: "ventilateur-axial-draf-200", quantity: 1 }],
         }),
       });
       const body = await response.json();
@@ -1424,7 +1422,7 @@ test("POST /api/checkout refuse la production sans base persistante", async () =
             origin: "https://shop.example.com",
           },
           body: JSON.stringify({
-            items: [{ slug: "ventilateurs-axiaux", quantity: 1 }],
+            items: [{ slug: "ventilateur-axial-draf-200", quantity: 1 }],
           }),
         });
         const body = await response.json();

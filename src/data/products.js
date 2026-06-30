@@ -1,5 +1,3 @@
-import axialFan from "../assets/product-axial-fan.jpg";
-
 import axialFanDraf from "../assets/product-axial-fan-draf.jpg";
 
 import axialFanYsa from "../assets/product-axial-fan-ysa.jpg";
@@ -13,8 +11,6 @@ import axialFanDta from "../assets/product-axial-fan-dta.jpg";
 import axialFan8ka from "../assets/product-axial-fan-8ka.jpg";
 
 import axialFan4ka from "../assets/product-axial-fan-4ka.jpg";
-
-import ductFan from "../assets/product-duct-fan.jpg";
 
 import ductFanYka from "../assets/product-duct-fan-yka.jpg";
 
@@ -103,8 +99,6 @@ import swirlCeilingDiffuserHsswd from "../assets/product-swirl-ceiling-diffuser-
 import linearSlotDiffuserHsd from "../assets/product-linear-slot-diffuser-hsd.jpg";
 
 import manualRegulatingDamper from "../assets/product-manual-regulating-damper.jpg";
-
-import speedController from "../assets/product-speed-controller.jpg";
 
 import speedControllerDha from "../assets/product-speed-controller-dha.jpg";
 
@@ -238,7 +232,6 @@ import {
 } from "../../shared/products/defaultProducts.js";
 
 export const productImageByKey = {
-  axialFan,
   axialFanDraf,
   axialFanYsa,
   axialFanKsa,
@@ -246,7 +239,6 @@ export const productImageByKey = {
   axialFanDta,
   axialFan8ka,
   axialFan4ka,
-  ductFan,
   ductFanYka,
   ductFanPakf,
   roundInlineDuctFanLkt,
@@ -291,7 +283,6 @@ export const productImageByKey = {
   swirlCeilingDiffuserHsswd,
   linearSlotDiffuserHsd,
   manualRegulatingDamper,
-  speedController,
   speedControllerDha,
   speedControllerMna,
   waterPumpGmaxQb60,
@@ -357,7 +348,6 @@ export const productImageByKey = {
 };
 
 export const productImageOptions = [
-  { label: "Ventilateur axial", value: "axialFan" },
   { label: "Ventilateur axial DRAF", value: "axialFanDraf" },
   { label: "Ventilateur axial YSA", value: "axialFanYsa" },
   { label: "Ventilateur axial KSA", value: "axialFanKsa" },
@@ -365,7 +355,6 @@ export const productImageOptions = [
   { label: "Ventilateur axial DTA", value: "axialFanDta" },
   { label: "Ventilateur axial 8KA", value: "axialFan8ka" },
   { label: "Ventilateur axial 4KA", value: "axialFan4ka" },
-  { label: "Ventilateur de canal", value: "ductFan" },
   { label: "Ventilateur de canal YKA", value: "ductFanYka" },
   { label: "Ventilateur de canal PAKF", value: "ductFanPakf" },
   { label: "Ventilateur de conduit rond LKT", value: "roundInlineDuctFanLkt" },
@@ -413,7 +402,6 @@ export const productImageOptions = [
   { label: "Diffuseur plafonnier tourbillonnaire HSWD", value: "swirlCeilingDiffuserHsswd" },
   { label: "Diffuseur linéaire HSD", value: "linearSlotDiffuserHsd" },
   { label: "Clapet de réglage manuel", value: "manualRegulatingDamper" },
-  { label: "Régulateur", value: "speedController" },
   { label: "Régulateur de vitesse DHA", value: "speedControllerDha" },
   { label: "Régulateur de vitesse MNA", value: "speedControllerMna" },
   { label: "Pompe à eau périphérique Gmax QB60", value: "waterPumpGmaxQb60" },
@@ -613,7 +601,7 @@ export const productImageOptions = [
 export const defaultProducts = defaultShopProducts.map(normalizeProduct);
 
 export function resolveProductImage(product) {
-  return product.imageData || product.imageUrl || productImageByKey[product.imageKey] || ductFan;
+  return product.imageData || product.imageUrl || productImageByKey[product.imageKey] || ductFanYka;
 }
 
 export function normalizeProduct(product) {
@@ -631,7 +619,7 @@ export function normalizeProduct(product) {
     description: product.description || product.text || "",
     options,
     quantityDiscounts: normalizeQuantityDiscounts(product.quantityDiscounts),
-    imageKey: product.imageKey || "ductFan",
+    imageKey: product.imageKey || "ductFanYka",
     imageUrl: product.imageUrl || "",
     imageData: product.imageData || "",
     image: resolveProductImage(product),

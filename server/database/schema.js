@@ -28,7 +28,7 @@ export async function createDatabaseSchema(pool) {
       amount INTEGER NOT NULL CHECK (amount >= 0),
       options JSONB NOT NULL DEFAULT '[]'::jsonb,
       quantity_discounts JSONB NOT NULL DEFAULT '[]'::jsonb,
-      image_key TEXT NOT NULL DEFAULT 'ductFan',
+      image_key TEXT NOT NULL DEFAULT 'ductFanYka',
       image_url TEXT NOT NULL DEFAULT '',
       image_data TEXT NOT NULL DEFAULT '',
       featured BOOLEAN NOT NULL DEFAULT FALSE,

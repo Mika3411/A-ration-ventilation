@@ -28,7 +28,7 @@ async function withTempDist(callback) {
     await fs.mkdir(path.join(distPath, "assets"));
     await fs.writeFile(path.join(distPath, "index.html"), htmlTemplate);
     await fs.writeFile(path.join(distPath, "assets", "app.js"), "console.log('ok');");
-    await fs.writeFile(path.join(distPath, "assets", "product-axial-fan-test.jpg"), "image");
+    await fs.writeFile(path.join(distPath, "assets", "product-axial-fan-draf-test.jpg"), "image");
 
     return await callback(distPath);
   } finally {
@@ -87,7 +87,7 @@ test("GET routes HTML injectent des metas SEO spécifiques", async () => {
           "/categories/ventilateurs-axiaux",
           "/contact",
           "/admin",
-          "/boutique/ventilateurs-axiaux",
+          "/boutique/ventilateur-axial-draf",
         ].map(async (route) => {
           const response = await fetch(`${baseUrl}${route}`);
           return [route, response, await response.text()];
@@ -108,8 +108,8 @@ test("GET routes HTML injectent des metas SEO spécifiques", async () => {
       assert.equal(getTitle(htmlByRoute.get("/contact")), "Contact - Aération Ventilation");
       assert.equal(getTitle(htmlByRoute.get("/admin")), "Administration boutique - Aération Ventilation");
       assert.equal(
-        getTitle(htmlByRoute.get("/boutique/ventilateurs-axiaux")),
-        "Ventilateurs axiaux - Aération Ventilation",
+        getTitle(htmlByRoute.get("/boutique/ventilateur-axial-draf")),
+        "Ventilateur axial DRAF - Aération Ventilation",
       );
 
       assert.match(
@@ -125,8 +125,8 @@ test("GET routes HTML injectent des metas SEO spécifiques", async () => {
         /réponse écrite/,
       );
       assert.match(
-        getMetaContent(htmlByRoute.get("/boutique/ventilateurs-axiaux"), "description"),
-        /Ventilateurs haute performance/,
+        getMetaContent(htmlByRoute.get("/boutique/ventilateur-axial-draf"), "description"),
+        /Ventilateur axial DRAF/,
       );
       assert.equal(getMetaContent(htmlByRoute.get("/admin"), "robots"), "noindex, nofollow");
 
@@ -148,7 +148,7 @@ test("GET routes HTML injectent une canonical absolue basée sur SITE_URL", asyn
         const contactHtml = await contactResponse.text();
         const categoryResponse = await fetch(`${baseUrl}/categories/ventilateurs-axiaux`);
         const categoryHtml = await categoryResponse.text();
-        const productResponse = await fetch(`${baseUrl}/boutique/ventilateurs-axiaux`);
+        const productResponse = await fetch(`${baseUrl}/boutique/ventilateur-axial-draf`);
         const productHtml = await productResponse.text();
 
         assert.equal(homeResponse.status, 200);
@@ -181,11 +181,11 @@ test("GET routes HTML injectent une canonical absolue basée sur SITE_URL", asyn
         assert.equal(productResponse.status, 200);
         assert.equal(
           getLinkHref(productHtml, "canonical"),
-          "https://www.aeration-ventilation.fr/boutique/ventilateurs-axiaux",
+          "https://www.aeration-ventilation.fr/boutique/ventilateur-axial-draf",
         );
         assert.equal(
           getMetaPropertyContent(productHtml, "og:url"),
-          "https://www.aeration-ventilation.fr/boutique/ventilateurs-axiaux",
+          "https://www.aeration-ventilation.fr/boutique/ventilateur-axial-draf",
         );
       });
     });
@@ -228,24 +228,24 @@ test("GET routes HTML injectent les données structurées JSON-LD adaptées", as
           ["Accueil", "Boutique", "Ventilateurs axiaux"],
         );
 
-        const productResponse = await fetch(`${baseUrl}/boutique/ventilateurs-axiaux`);
+        const productResponse = await fetch(`${baseUrl}/boutique/ventilateur-axial-draf`);
         const productHtml = await productResponse.text();
         const productGraph = getJsonLdGraph(productHtml);
         const product = findJsonLdNode(productGraph, "Product");
         const productBreadcrumb = findJsonLdNode(productGraph, "BreadcrumbList");
 
         assert.equal(productResponse.status, 200);
-        assert.equal(product.name, "Ventilateurs axiaux");
-        assert.equal(product.url, "https://www.aeration-ventilation.fr/boutique/ventilateurs-axiaux");
+        assert.equal(product.name, "Ventilateur axial DRAF");
+        assert.equal(product.url, "https://www.aeration-ventilation.fr/boutique/ventilateur-axial-draf");
         assert.equal(product.offers.priceCurrency, "EUR");
-        assert.equal(product.offers.price, "249.00");
+        assert.equal(product.offers.price, "92.03");
         assert.equal(product.offers.availability, "https://schema.org/InStock");
         assert.deepEqual(product.image, [
-          "https://www.aeration-ventilation.fr/assets/product-axial-fan-test.jpg",
+          "https://www.aeration-ventilation.fr/assets/product-axial-fan-draf-test.jpg",
         ]);
         assert.deepEqual(
           productBreadcrumb.itemListElement.map((item) => item.name),
-          ["Accueil", "Boutique", "Ventilateurs axiaux"],
+          ["Accueil", "Boutique", "Ventilateur axial DRAF"],
         );
 
         const adminResponse = await fetch(`${baseUrl}/admin`);
@@ -378,7 +378,7 @@ test("GET fichiers SEO essentiels ne tombent pas dans le fallback SPA", async ()
       );
       assert.match(
         sitemapXml,
-        new RegExp(`<loc>${escapeRegExp(baseUrl)}/boutique/ventilateurs-axiaux</loc>`),
+        new RegExp(`<loc>${escapeRegExp(baseUrl)}/boutique/ventilateur-axial-draf</loc>`),
       );
       assert.doesNotMatch(sitemapXml, /<loc>.*\/admin<\/loc>/);
       assert.doesNotMatch(sitemapXml, /<loc>.*\/espace-client<\/loc>/);
@@ -419,7 +419,7 @@ test("GET routes inconnues renvoient une vraie 404 HTML noindex", async () => {
       const missingProductHtml = await missingProductResponse.text();
       const missingCategoryResponse = await fetch(`${baseUrl}/categories/categorie-inexistante`);
       const missingCategoryHtml = await missingCategoryResponse.text();
-      const existingProductResponse = await fetch(`${baseUrl}/boutique/ventilateurs-axiaux`);
+      const existingProductResponse = await fetch(`${baseUrl}/boutique/ventilateur-axial-draf`);
       const existingCategoryResponse = await fetch(`${baseUrl}/categories/ventilateurs-axiaux`);
 
       assert.equal(missingPageResponse.status, 404);

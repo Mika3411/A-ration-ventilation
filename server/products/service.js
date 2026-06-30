@@ -490,7 +490,7 @@ export function normalizeProductInput(body) {
   const imageUrl = cleanSingleLine(body?.imageUrl, 500);
   const imageData = normalizeProductImageData(body?.imageData);
   const requestedImageKey = cleanSingleLine(body?.imageKey, 40);
-  const imageKey = allowedImageKeys.has(requestedImageKey) ? requestedImageKey : "ductFan";
+  const imageKey = allowedImageKeys.has(requestedImageKey) ? requestedImageKey : "ductFanYka";
   const amount = Number.parseInt(body?.amount, 10);
   const options = normalizeProductInputOptions(body?.options, name);
   const quantityDiscounts = normalizeProductInputQuantityDiscounts(body?.quantityDiscounts);

@@ -22,4 +22,12 @@ export async function runDatabaseDataMigrations(pool) {
     WHERE slug LIKE 'ventilateur-de-canal-yka-%'
       AND slug <> 'ventilateur-de-canal-yka'
   `);
+
+  await pool.query(
+    `
+      DELETE FROM shop_products
+      WHERE slug = ANY($1::text[])
+    `,
+    [["ventilateurs-axiaux", "ventilateurs-de-canaux", "regulateurs"]],
+  );
 }
